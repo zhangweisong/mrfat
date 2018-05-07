@@ -1,0 +1,25 @@
+.cont{
+	padding: 0 0.64rem;
+}
+.cont li{
+	min-height: 3.68rem;
+	border-bottom: 1px #ebebeb solid;
+}
+.cont li p:nth-of-type(1){
+	font-size: 1.12rem;
+	padding: 1rem 0;
+	line-height: 1.68rem;
+	float: left;
+}
+.cont li p:nth-of-type(2){
+	font-size: 1.12rem;
+	padding: 1rem 0;
+	line-height: 1.68rem;
+	margin-left: 4.4rem;
+}
+.cont li img{
+	width: 10.4rem;
+	height: 8.16rem;
+	padding: 1rem 0;
+	margin-left: 0.8rem;
+}

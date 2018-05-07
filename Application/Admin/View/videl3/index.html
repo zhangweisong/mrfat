@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>病虫防治列表</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css"> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a href="###">三农服务</a></li>
+                    <li> > </li>
+                    <li><a href="{:U('videl3/index')}">病虫防治</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <!--查询-->
+                <div class="query">
+                    <form name="seachform" id="seachform" action="{:U('videl3/index')}"  method="post" class="form">
+                        <div class="form_input mg_trb">
+                            <label class="text">病虫防治标题</label>
+                            <input type="text" style="width:120px;" name="info[sk_title]" value="{$sk_title}" placeholder="病虫防治标题" maxlength="50"/>
+                        </div> 
+                        <div class="select mg_trb">
+                            <span class="text">一级分类</span>
+                            <select name="info[sk_two]" onchange="get_erji(this)" style="width:120px;"> 
+                                <option value="0" >--请选择--</option>
+                                    <?php foreach($class1 AS $v):?>
+                                    <option value="{$v['skc_id']}" <?php if($v['skc_id']==$sk_two){echo "selected";}?>>{$v['skc_title']}</option> 
+                                    <?php endforeach;?> 
+                            </select>
+                        </div>
+                        <div class="select mg_trb">
+                            <span class="text">二级分类</span>
+                            <select id='sk_three' name="info[sk_three]" style="width:120px;"> 
+                                <option value="0" >--请选择--</option>
+                                    <?php foreach($class2 AS $v):?>
+                                    <option value="{$v['skc_id']}" <?php if($v['skc_id']==$sk_three){echo "selected";}?>>{$v['skc_title']}</option> 
+                                    <?php endforeach;?> 
+                            </select>
+                        </div> 
+                        <div class="form_input mg_trb form-date">
+                            <label class="text">添加时间</label>
+                            <input type="text" class="laydate-icon layer-date" name="info[starttime]"  value="{$starttime}"  id="start" placeholder="开始时间" readonly/>
+                            <span>--</span>
+                            <input type="text" class="laydate-icon layer-date" name="info[endtime]"  value="{$endtime}"  id="end" placeholder="结束时间" readonly/>
+                        </div>
+                        <div class="button mg_trb" onclick="location.href = '{:U(\'index\')}'">
+                            <i class="fa fa-refresh ico"></i>
+                            <input type="button" value="刷新" class="but chongzhi" />
+                        </div>
+                        <div class="button mg_trb chaxun">
+                            <i class="fa fa-search ico"></i>
+                            <input type="submit" value="查询" class="but " style="position: absolute; background: none;z-index: 2;"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="tianjia">
+                    <a class="tianjia_but" href="{:U('add')}">
+                        <i class="fa fa-plus"></i>
+                        新增病虫防治
+                    </a>
+                </div>
+                <div class="table_box">
+                    <table class="table" border="" cellspacing="" cellpadding=""> 
+                        <thead>
+                            <tr>
+                                <th>编号</th> 
+                                <th>标题</th>
+                                <th>一级分类</th>
+                                <th>二级分类</th>  
+                                <th>封面图</th>
+                                <th>添加时间</th>
+                                <th>点击次数</th>  
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="listinfo" id="content">
+                            <tr>
+                                <td>{$content.sk_id}</td> 
+                                <td>{$content.sk_title}</td> 
+                                <td>{$content.aname}</td>
+                                <td>{$content.bname}</td>
+                                <td >
+                                    <img style="width:60px;height:60px;" src="{$content.sk_img}" /> 
+                                </td>
+                                <td>{$content.sk_addtime}</td>
+                                <td>{$content.sk_view}</td>  
+                                <td> 
+                                    <a href="{:U('videl3/edit',array('sk_id'=>$content['sk_id']))}"  class="but chaxun">
+                                        <i class="fa fa-edit"></i>
+                                        编辑
+                                    </a>
+                                    <a href="{:U('videl3/delete',array('sk_id'=>$content['sk_id']))}" onclick="{
+                                                if (confirm('确认删除?')) {
+                                                    return true;
+                                                }
+                                                return false;
+                                            }"  class="but chongzhi">
+                                        <i class="fa fa-trash-o"></i>
+                                        删除
+                                    </a>
+                                </td>
+                            </tr> 
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                {$pageshow}
+            </div>
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $(".right_min").height($(window).height());
+    });
+    //二级分类 
+    function get_erji(obj) {
+        $("#erji").html("<option value='0' >--请选择--</option> ");
+        var yiji_id = $(obj).val()
+        if (yiji_id == 0)
+            return;
+        $.getJSON("{:U('goods/get_erji')}&yiji_id=" + yiji_id, function (data) {
+            var html = "";
+            for (var i = 0; i < data.length; i++) {
+                html += "<option value=" + data[i].subclassify_id + ">" + data[i].subclassify_name + "</option>";
+            }
+            $("#erji").append(html);
+        });
+    }
+</script>  
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function () { 
+        $('input, textarea').placeholder();
+    });
+</script>
+<script type="text/javascript">
+
+    //二级分类 
+    function get_erji(obj) {
+        $("#sk_three").html("<option value='0' >--请选择--</option> ");
+        var yiji_id = $(obj).val()  
+        if(yiji_id == "")
+            return;
+        $.get("{:U('get_erji')}&yiji_id=" + yiji_id, function (data) {
+            var html = "<option value='0' >--请选择--</option> ";
+            for (var i = 0; i < data.length; i++) { 
+                html += "<option value=" + data[i].skc_id + ">" + data[i].skc_title + "</option>";
+            }
+            $("#sk_three").html(html);
+        });
+    }   
+	$(function(){
+		$(".right_min").height($(window).height());
+	});
+	//显示开关1显示；2隐藏
+	function checkedswitchs(obj,goods_id,field){ 
+		if($(obj).is(':checked')){	//true
+			console.log("显示"+goods_id);
+			$.getJSON("{:U('goods/ajax_on')}&goods_id="+goods_id+"&field="+field,function(){
+			});
+		}else{	//false
+			console.log("隐藏"+goods_id);
+			$.getJSON("{:U('goods/ajax_off')}&goods_id="+goods_id+"&field="+field,function(){
+			});
+			
+		}
+	}
+</script>
+<script src="__PUBLIC__/admin/js/layer/layer.js"></script>
+<script>  
+$(".right_min").height($(window).height());
+    var body_w=$(".right_min").width()-100;
+    var body_h=$(".right_min").height()-50;
+    function xiangqing(a){ 
+        layer.open({
+            type: 2,
+            title: false,
+            skin:"layui-layer-molv",
+            shade: [0.5, '#000000'],
+            scrollbar:false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area : [body_w+"px",body_h+"px"],
+            content: '{:U("goods/info")}&goods_id='+a
+        });
+    }
+	 
+</script>
+        <script src="__PUBLIC__/admin/js/layer/layer.js"></script> 
+        <script src="__PUBLIC__/admin/js/laydate/laydate.js"></script>
+        <script>
+            var start = {
+                elem: "#start",
+                format: "YYYY-MM-DD",
+                min: "2000-06-16",
+                max: "2099-06-16",
+                istime: false,
+                istoday: false,
+                choose: function (datas) {
+                    end.min = datas;
+                    end.start = datas
+                }
+            };
+            var end = {
+                elem: "#end",
+                format: "YYYY-MM-DD",
+                min: "2000-06-16",
+                max: "2099-06-16",
+                istime: false,
+                istoday: false,
+                choose: function (datas) {
+                    start.max = datas
+                }
+            };
+            laydate(start);
+            laydate(end);
+        </script>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>修改分类</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+    <link href="__PUBLIC__/validform/Validform.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="__PUBLIC__/validform/Validform_v5.3.2.js"></script>
+    
+</head>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+			
+            <li> > </li>
+            <li><a href="javascript:void(0);">系统设置</a></li>
+            <li> > </li>
+            <li><a href="{:U('category/index')}">分类设置</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">修改分类</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <div class="form_box">
+            <form name="myform" id="myform" action="{:U('category/edit',array('category_id' => $category['category_id']))}" method="post">
+                <div class="form-item">
+                    <label class="form-label">分类名称</label>
+                    <div class="form-text form-input-block">
+                        <input name="category_name" id="productcategory_name" type="text" class="dfinput" ajaxurl="{:U('category/existedit',array('category_id' => $category['category_id']))}" datatype="*2-20" errormsg="分类名称字数在2~10位之间！" nullmsg="请输入分类名称!" placeholder="请输入分类名称" maxlength="10" value="{$category.category_name}"/>
+                        <i class="Validform_checktip"></i>
+                    </div>
+                </div>
+<!--
+                <div class="form-item">
+                    <label class="form-label">排序</label>
+                    <div class="form-select form-input-block">
+                        <select name="category_sort" class="dfinput" datatype="*" errormsg="请选选择排列序号!" >
+                            <option value="">--请选选择排列序号--</option>
+                            <volist name="classOrder" id="data" >
+                                <option value="{$key}" <if condition="$key eq $category.sort ">selected</if> >{$data}</option>
+                            </volist>
+                        </select>
+                        <i class="Validform_checktip"></i>
+                    </div>
+                </div>
+                -->
+                <div class="form-item">
+                    <label class="form-label">状态</label>
+                    <div class="form-radio form-input-block">
+                        <div class="skin-section">
+                            <ul>
+                                <li>
+                                    <input type="radio" name="status" value="1" <if condition="$category.status eq 1 ">	checked</if> >
+                                    <span>显示</span>
+                                </li>
+                                <li>
+                                    <input  type="radio" name="status" value="2" <if condition="$category.status eq 2 ">	checked</if> >
+                                    <span>隐藏</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <div class="form-button form-input-block">
+                        <input class="chaxun but" type="submit" value="提交"/>
+                        <button class="but chongzhi" type="button" onclick="location.href='{:U('category/index')}'">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+
+        $('.skin-section input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        $('input').on('ifChecked', function(event){
+            //alert($(this).val());
+        });
+    });
+</script>
+<script>
+    $(function(){
+        $("#myform").Validform({
+            //tiptype:2
+            tiptype:function(msg,o,cssctl){
+                var objtip=o.obj.siblings(".Validform_checktip");
+                cssctl(objtip,o.type);
+                objtip.text(msg);
+            }
+        });
+    });
+</script>
+

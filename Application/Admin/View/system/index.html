@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>参数设置</title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+		<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="right_min">
+			<div class="crumbs_nav">
+				<i class="iconfont icon-shouye"></i>
+				<ul>
+					<li><a href="{:U('index/welcome')}">首页</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">系统设置</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">参数设置</a></li>
+					
+				</ul>
+			</div>
+			<div class="min">
+				<!--添加成员-->
+				<!--
+				<div class="tianjia">
+					<a class="tianjia_but" href="{:U('system/addinfo')}">
+						<i class="fa fa-plus"></i>
+						添加配置
+					</a>
+					<span style="color:red;font-size:12px;">备注：系统配置就是系统内部固定且重要参数值，如（客服电话，网站地址）会涉及后台程序逻辑请谨慎操作！！！</span>
+				</div>
+				-->
+				<div class="table_box">
+					<table class="table" border="" cellspacing="" cellpadding="">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>配置key</th>
+								<th>配置值</th>
+								<th>配置详情</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<volist name="listinfo" id="admin">
+							<tr>
+								<td>{$admin.set_id}</td>
+								<td>{$admin.set_key}</td>
+								<td><?php echo mb_substr($admin['set_value'],0,40,'utf-8'); if(strlen($admin['set_value'])>40){echo '...';}?></td>
+								<td>{$admin.set_remark}</td>
+								<td>
+								<a href="{:U('system/editinfo',array('set_id'=>$admin['set_id']))}"  class="but chaxun">
+								<i class="fa fa-edit"></i>
+								编辑</a>
+								</td>
+							</tr>
+							</volist>
+						</tbody>
+					</table>
+				</div>				
+				{$pageshow}
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	$(function(){
+		$(".right_min").height($(window).height());
+	});
+	
+</script>

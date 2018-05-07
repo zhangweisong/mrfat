@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>我的积分</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/wodejifen.css" />
+	</head>
+    <style>
+	    .li_myxx_zt{height: 30px; line-height: 30px; background: #f5f5f5;}
+		.li_myxx_zt p{ text-align:center; font-size:12px; color:#cacaca;}
+		.sousuokuang_box{padding: 0 10px; height: 45px; background: #ef404c}
+	</style>
+	<body>
+		<div class="header">
+			<a href="{:U('index/index')}">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>我的积分</p>
+		</div>
+		<div class="cont flexbb">
+			<div>
+				<p>{$Intinfo.agcy_points}</p>
+				<p >我的积分</p>
+			</div>
+			<div>
+				<button  onclick="window.location.href='{:U('integral/jifenduihuan')}'">积分兑换</button>
+				<div class="links flex">
+					<a href="{:U('integral/jifenguize')}">查看积分规则</a>
+					<a href="{:U('integral/duihuanjilu')}">兑换记录</a>
+				</div>
+			</div>
+		</div>
+		<p class="tit">积分变更记录</p>
+		<div class="table">
+			<div class="title flex">
+				<div>时间</div>
+				<div>来源</div>
+				<div>积分</div>
+			</div>
+			<?php if(count($data)):?>
+				<?php foreach($data as $k=>$v):?>
+					<div class="list flex">
+						<div>{$v.jifen_change_addtime}</div>
+						<?php if($v['jifen_state']==1):?>
+							<div>兑换商品</div>
+							<div>-{$v.jifen_goods_point}</div>
+						<?php else: ?>
+							<div>平台赠送</div>
+							<div>+{$v.jifen_goods_point}</div>
+						<?php endif;?>
+					</div>
+				<?php endforeach;?>
+			<?php else:?>
+				<div class="meiyouneirong" style="display:block;margin-top:10%;">
+				<i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+				<p>暂无变更记录</p>
+				</div>
+			<?php endif;?>
+		</div>
+		
+		<div class="li_myxx_zt" id="li_myxx_zt" style="display:none" >
+		<p>亲，到底了~</p> 
+		</div>
+		<div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+			<img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+		</div> 
+		<button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button> 
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-1.10.2.min.js"></script>
+	</body>
+</html>
+<script>
+//数据列表
+    function htmlinfo(info){   
+        var html=""; 
+        for(var i=0;i<info.length;i++){
+			html+='<div class="list flex">';  
+			html+='<div>'+info[i]['jifen_change_addtime']+'</div>'; 
+			if(info[i]['jifen_state']==1){
+				html+='<div>兑换商品</div>';
+				html+='<div>-'+info[i]['jifen_goods_point']+'</div>';
+			}else{
+			    html+='<div>平台赠送</div>';
+				html+='<div>'+info[i]['jifen_goods_point']+'</div>';
+			}
+			html+='</div>';
+        }
+        return html;     
+    }
+	//滚动加载  
+    $(window).scroll(function () { 
+        getData();
+    });
+    var totalheight = 0;     //定义一个总的高度变量
+    function getData() {
+         totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()); 
+         //浏览器的高度加上滚动条的高度 （页面总高度）  
+        if ($(document).height() <= totalheight) {          
+            //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+            //加载
+            $("#loadings").fadeIn(); 
+            //根据条件获取对应的项目条数
+            getmore();//使用模板加载更多
+            //加载完毕          
+            $("#loadings").fadeOut(); 
+        }
+    }
+
+	//加载更多 
+    function getmore(){      
+        var page=parseInt($("#more").attr("data"))+1; 
+        $('#more').attr("data",page);//重置当前页数  
+        $.getJSON("{:U('integral/index')}&p="+page,function(data){  
+           var info = data.data;    
+           if(info.length>0){
+                var html = htmlinfo(info);
+                $(".table").append(html);
+           }else{
+                $("#loadings").fadeOut(); 
+                $(".li_myxx_zt").show();          
+           }
+        }) 
+    }
+</script>

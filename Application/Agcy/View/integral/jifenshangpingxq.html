@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>积分商品详情</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/jifenshangpingxq.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/swiper-3.4.2.min.css" />
+	</head>
+    
+	<body>
+		<div class="header">
+			<a href="{:U('integral/jifenduihuan')}">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>积分商品详情</p>
+		</div>
+		<!--积分兑换的商品详情-->
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+			    <?php foreach ($arr as $k=>$v):?>
+				<div class="swiper-slide">
+					<img src="{$v}" />
+				</div>
+				<?php endforeach;?>
+			</div>
+		</div>
+		<div class="title">
+			<p>{$data.jifen_goods_name}</p>
+			<p>所需积分：{$data.jifen_goods_price}</p>
+		</div>
+		<div class="cont">
+			<p class="tit">商品信息</p>
+			{$data.jifen_goods_remark}
+		</div>
+		<?php if($data['jifen_goods_price']<=$Intinfo['agcy_points']):?>
+			<button class="btnn" onclick="location.href='{:U('integral/duihuanchenggong',array('jifen_goods_id'=> $data['jifen_goods_id'],'jifen_goods_price'=>$data['jifen_goods_price']))}'">立即兑换</button>
+		<?php else :?>
+			<button class="btnn" style="background:#bdbdbd">积分不足</button>
+		<?php endif;?>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-3.1.1.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/swiper-3.4.2.jquery.min.js" ></script>
+		<script>
+		    var mySwiper = new Swiper ('.swiper-container', {
+				autoplay:3000,
+		    });
+		</script>
+	</body>
+
+</html>

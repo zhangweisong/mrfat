@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>分类设置</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+</head>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+			
+            <li> > </li>
+            <li><a href="javascript:void(0);">系统设置</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">文章分类设置</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <!--查询-->
+
+        <div class="query">
+            <form  name="seachform" id="seachform"  action="{:U('category/index')}"  method="post" class="form"  >
+                <div class="form_input mg_trb">
+                    <label class="text">快速检索</label>
+                    <input type="text" name="info[category_name]" id="productcategory_name" value="{$category_name}"  placeholder="请输入分类名称"  maxlength="15"/>
+                </div>
+                <div class="select mg_trb">
+                    <span class="text">分类状态</span>
+                    <select name="info[status]">
+                        <option value="">--请选择分类状态--</option>
+                        <volist name="status1" id="data">
+                            <option value="{$key}" <if condition="$key eq $status">selected</if>>{$data}</option>
+                        </volist>
+                    </select>
+                </div>
+                <div class="button mg_trb" onclick="location.href='{:U('category/index')}'">
+                    <i class="fa fa-refresh ico"></i>
+                    <input type="button" value="刷新" class="but chongzhi" />
+                </div>
+
+                <div class="button mg_trb chaxun">
+                    <i class="fa fa-search ico"></i>
+                    <input type="submit" value="查询" class="but " style="    position: absolute; background: none;z-index: 2;" />
+                </div>
+            </form>
+        </div>       
+        <div class="tianjia">
+            <a class="tianjia_but" href="{:U('category/add')}">
+                <i class="fa fa-plus"></i>
+                添加分类
+            </a>
+        </div>
+        <div class="table_box">
+            <table class="table" border="" cellspacing="" cellpadding="">
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>分类名称</th>                  
+                    <!--<th>分类排序</th>-->
+                    <th>分类状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="category" id="info">
+                    <tr>
+                        <td>{$info.category_id}</td>
+                        <td>{$info.category_name}</td>                        
+                        <!--<td>{$info.sort}</td>--> 
+						<td>
+
+							<label class="switch-btn circle-style" style="margin: 0 auto;">
+								<input class="checked-switch" type="checkbox" onchange="checkedswitchs(this,{$info['category_id']},'status')"
+								<if condition="$info['status'] eq 1">checked</if> />
+								<span class="text-switch" data-yes="启用" data-no="禁用"></span>
+								<span class="toggle-btn"></span> 
+							</label>
+						</td> 
+                        <td>
+							<?php if($info['category_id']!="1"):?>
+                            <a href="{:U('category/edit',array('category_id'=>$info['category_id']))}" class="but chaxun">
+                                <i class="fa fa-edit"></i>
+                                编辑</a>
+							<?php else:?>
+							<a  class="but chaxun" onclick="go()">
+                                <i class="fa fa-edit"></i>
+                                编辑</a>
+							<?php endif;?>	
+                        </td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </div>
+        {$pageshow}
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+    });
+    //显示开关1开启；2关闭
+	function checkedswitchs(obj,category_id,field){ 	 
+		if($(obj).is(':checked')){	//true
+			
+			$.getJSON("{:U('category/ajax_on')}&category_id="+category_id+"&field="+field,function(){
+			});
+		}else{	//false
+			
+			$.getJSON("{:U('category/ajax_off')}&category_id="+category_id+"&field="+field,function(res){ 
+				if(res.flag=="-1"){
+					alert("此文章分类为单页，不能编辑！");
+					window.location.href="{:U('category/index')}";
+				}
+			});
+			
+		}
+	}
+	
+	function go(){
+		alert("此文章分类为单页，不能编辑！");
+	}
+</script>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+    });
+</script>
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $('input, textarea').placeholder();
+    });
+</script>

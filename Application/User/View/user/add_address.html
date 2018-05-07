@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>添加收货地址</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" href="__PUBLIC__/user/css/area.css" />
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<style type="text/css">
+			body{background: #fff;}
+			.bgm{
+				background:url(__PUBLIC__/user/images/5-130H2191536.gif);
+				height: 30%;
+			    background-size: 100% 100%;
+			    width: 20%;
+			    margin:auto;
+			    margin-top:5%;
+			}
+			.load{
+				text-align: center;
+				font-size: 14px;
+				
+			}
+			.lb_div{
+				width:100%;
+				height:100%;
+				padding-top:10%;
+				/*display:none;*/
+			}
+		</style>
+		<div class="">
+        	<div class="zhuce">
+            	<form action="guanlidizhi.html" method="post">
+                	<div class="form_text"><input type="text" name="username" id="username" value="" placeholder="收货人" maxlength="20"></div>
+                	<div class="form_text"><input type="text" name="" id="phone" value="" placeholder="手机号" onkeyup="this.value=this.value.replace(/\D/gi,&quot;&quot;)" maxlength="11"></div>
+                	<div class="form_text"><input id="expressArea" type="text" name="" value="" placeholder=" 省，市，区/县" readOnly="true"></div>
+                	<div class="form_text"><input type="text" name="detail" value=""  id="detail" placeholder="详细地址 街道，小区，楼牌"  maxlength="100"></div>
+                	<div class="botton_bg">
+                		<span class="bot" onclick="xksxShow(this)">添加</span>
+                	</div>
+                </form>
+            </div>
+		</div>
+        <!--选择地区弹层-->
+        <section id="areaLayer" class="express-area-box">
+            <header>
+                <h3>选择地区</h3>
+                <a id="backUp" class="back" href="javascript:void(0)" title="返回"></a>
+                <a id="closeArea" class="close" href="javascript:void(0)" title="关闭"></a>
+            </header>
+            <article id="areaBox">
+            	<div class="lb_div">
+	            	<p class="load">加载中...</p> 
+	            </div>
+                <ul id="areaList" class="area-list">
+                </ul>
+            </article>
+        </section>
+        <!--遮罩层-->
+        <div id="areaMask" class="mask"></div>
+		<div class="zhezhao"></div>
+		<div class="jizhejvbao_tankuang">
+			<div class="ct">
+				<p>添加成功</p>
+				<div class="botton_bg">
+					<span onclick="xksxHide()" class="bot">确定</span>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script type="text/javascript">
+var url="{:U('province/province')}";
+var province='';
+var p_id='';
+var p_name='';
+$.get(url, function(res){
+	province=res;
+	$(".lb_div").hide();
+	intProvince();
+});
+var expressArea, areaCont, areaList = $("#areaList"), areaTop = areaList.offset().top;
+
+/*初始化省份*/
+function intProvince() {
+	areaCont = "";
+	for(item in province){
+		areaCont+='<li onClick="selectP(' + province[item]['p_id'] + ',\''+province[item]['p_name']+'\');">' + province[item]['p_name'] + '</li>';
+	}
+	areaList.html(areaCont);
+	$("#areaBox").scrollTop(0);
+	$("#backUp").removeAttr("onClick").hide();
+}
+
+
+/*选择省份*/
+function selectP(p,str) {
+	areaCont = "";
+	areaList.html("");
+	$(".lb_div").show();
+	p_id=p;
+	p_name=str;
+	var url="{:U('province/city')}";
+	$.ajax({
+		url:url,
+		method:'get',
+		data:{
+			id:p
+		},
+		success:function(res){
+			city=res;
+			for(item in city){
+				areaCont += '<li onClick="selectC(' +city[item]['c_id'] + ',\''+city[item]['c_name']+'\');">' + city[item]['c_name'] + '</li>';
+			}
+			$(".lb_div").hide();
+			areaList.html(areaCont);
+			$("#areaBox").scrollTop(0);
+			expressArea=str+'-';
+			$("#backUp").attr("onClick", "intProvince();").show();
+		}
+	});
+}
+/*选择城市*/
+function selectC(c,str) {
+	areaCont = "";
+	$(".lb_div").show();
+	var url="{:U('province/area')}";
+	$.ajax({
+		url:url,
+		method:'get',
+		data:{
+			id:c
+		},
+		success:function(res){
+			area=res;
+			for(item in area){
+				areaCont += '<li onClick="selectD(' +area[item]['a_id'] + ',\''+area[item]['a_name']+'\');">' + area[item]['a_name'] + '</li>';
+			}
+			$(".lb_div").hide();
+			areaList.html(areaCont);
+			$("#areaBox").scrollTop(0);
+			expressArea+=str+'-';
+			$("#backUp").attr("onClick", "selectP(" + p_id +",'"+p_name+"');");
+		}
+	});
+}
+
+/*选择区县*/
+function selectD(d,str) {
+	clockArea();
+	expressArea += str;
+	$("#expressArea").val(expressArea);
+}
+
+/*关闭省市区选项*/
+function clockArea() {
+	$("#areaMask").fadeOut();
+	$("#areaLayer").animate({"bottom": "-100%"});
+	intProvince();
+}
+
+$(function() {
+	/*打开省市区选项*/
+	$("#expressArea").click(function() {
+		$("#areaMask").fadeIn();
+		$("#areaLayer").animate({"bottom": 0});
+	});
+	/*关闭省市区选项*/
+	$("#areaMask, #closeArea").click(function() {
+		clockArea();
+	});
+});
+
+</script>
+<script type="text/javascript">
+        var flag = {$flag}; 
+        var bookorder = {$bookorder}; 
+		function xksxShow(a){
+			var username=$('#username').val(),phone=$('#phone').val(),expressArea=$('#expressArea').val(),detail=$('#detail').val();
+			if($.trim(username)==''){
+				layer.msg('收货人不能为空！',{icon:5,time:1000});
+				$("#username").focus();
+				return;
+			}
+			if($.trim(phone)==''){
+				layer.msg('手机号不能为空！',{icon:5,time:1000});
+				$("#phone").focus();
+				return;
+			}
+			var reg=/^[1][3,4,5,7,8][0-9]{9}$/;  
+	         if (!reg.test($.trim(phone))) {  
+		          layer.msg('手机号格式错误！',{icon:5,time:1000});
+				  $("#phone").focus();
+	              return;  
+	        } 
+			if($.trim(expressArea)==''){
+				layer.msg('请选择省市区!',{icon:5,time:1000});
+				return;
+			}
+			if($.trim(detail)==''){
+				layer.msg('请输入详细地址！',{icon:5,time:1000});
+				$("#detail").focus();
+				return;
+			}
+			$(a).removeAttr('onclick');
+			var url="{:U('user/add_address')}";
+			$.ajax({
+				url:url,
+				method:'post',
+				data:{
+					username:username,
+					phone:phone,
+					expressArea:expressArea,
+					detail:detail
+				},
+				success:function(res){
+					if(res.data==2){
+						//添加成功
+						//$('.zhezhao').fadeTo(200,1);
+                        if(flag==1){
+                            layer.msg('添加成功',{icon:6,time:1000},function(){
+                                window.location.href="{:U('book/pay')}&bookorder="+bookorder;
+                            }); 
+                        }else{
+                            layer.msg('添加成功',{icon:6,time:1000},function(){
+                                window.location.href="{:U('user/my_address')}";
+                            }); 
+                        }
+						
+						//$('.jizhejvbao_tankuang').show();
+					}else{
+						$(a).attr('onclick','xksxShow(this)');
+						layer.msg(res.msg,{icon:5,time:1000});
+					}
+				}
+			});
+			
+		}
+		// function xksxHide(){
+		// 	$('.zhezhao').fadeOut(300);
+		// 	$('.jizhejvbao_tankuang').hide();
+			
+		// }
+</script>

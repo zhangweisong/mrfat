@@ -1,0 +1,114 @@
+.cont{
+	padding: 0 0.64rem;
+}
+.time1{
+	width: 100%;
+	margin: 1rem 0;
+}
+.time1 p{
+	font-size: 1.12rem;
+	line-height: 2.72rem;
+	color: #363636;
+}
+.time1 button{
+	width: 9.36rem;
+	/*height: 2.72rem;*/
+	background: none;
+	border: 1px solid #dcdcdc;
+	border-radius: 0.4rem;
+    font-size: 1rem;
+}
+.time2{
+	width: 17rem;
+	margin: 1rem 0;
+}
+.time2 p{
+	font-size: 1.12rem;
+	line-height: 2.72rem;
+	color: #363636;
+}
+.time2 input{
+	width: 9.36rem;
+	padding: 0 0.5rem;
+	height: 2.72rem;
+	background: none;
+	border: 1px solid #dcdcdc;
+	border-radius: 0.4rem;
+}
+.time3{
+	width: 17rem;
+	margin: 1rem 0;
+}
+.time3 p{
+	font-size: 1.12rem;
+	line-height: 2.72rem;
+	color: #363636;
+}
+.time3 input{
+	width: 9.36rem;
+	padding: 0 0.5rem;
+	height: 2.72rem;
+	background: none;
+	border: 1px solid #dcdcdc;
+	border-radius: 0.4rem;
+}
+.time5{
+	width: 23rem;
+	margin: 1rem 0;
+}
+.time5 p{
+	font-size: 1.12rem;
+	line-height: 2.72rem;
+	color: #363636;
+}
+.time5 input{
+	width: 16.36rem;
+	padding: 0 0.5rem;
+	height: 2.72rem;
+	background: none;
+	border: 1px solid #dcdcdc;
+	border-radius: 0.4rem;
+}
+.radios{
+	margin-left: ;
+}
+.radios>p{
+	font-size: 1.12rem;
+	line-height: 2.72rem;
+	color: #363636;
+	float: left;
+}
+.zts{
+	padding-top: 0.5rem;
+	margin-left: 5rem;
+}
+.zt{
+	width: 8rem;
+	margin-right: 1.5rem;
+	margin-bottom: 0.5rem;
+}
+
+.zt input {
+	width: 1.2rem;
+	height: 1.2rem;
+	background: url(../images/fales.png) center no-repeat;
+	background-size: cover;
+	margin-top: 0.2rem;
+}
+
+.zt input[type="radio"] {
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.zt input[type="radio"]:checked {
+	background: url(../images/icon-true.png) center no-repeat;
+	background-size: cover;
+}
+.zt p{
+	font-size: 0.96rem;
+	line-height: 1.6rem;
+}
+input{
+    caret-color:red;
+}

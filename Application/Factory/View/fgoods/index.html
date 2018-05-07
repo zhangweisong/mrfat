@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>商品管理</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css"> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 	        
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a href="###">商品管理</a></li>
+                    <li> > </li>
+                    <li><a href="{:U('fgoods/index')}">商品列表</a></li> 
+                </ul>
+            </div>
+            <div class="min">
+                <!--查询-->
+                <div class="query">
+                    <form name="seachform" id="seachform" action="{:U('fgoods/index')}"  method="post" class="form">
+                        <div class="form_input mg_trb">
+                            <label class="text">商品名称</label>
+                            <input type="text" name="info[keyword]" value="{$keyword}" placeholder="商品名称" maxlength="50"/>
+                        </div>
+                        <div class="select mg_trb">
+                            <span class="text">状态</span>
+                            <select name="info[fgoods_state]">
+                                <option value="">--请选择--</option> 
+                                <option value="0" <?php if($fgoods_state==="0"){echo 'selected';}?>>未审核</option> 
+                                <option value="1" <?php if($fgoods_state==="1"){echo 'selected';}?>>已通过</option>  
+                                <option value="2" <?php if($fgoods_state==="2"){echo 'selected';}?>>驳回</option>  
+                            </select>
+                        </div>
+                        <div class="select mg_trb">
+                            <span class="text">一级分类</span>
+                            <select name="info[yiji]" id="yiji">
+                                <option value="">--选择一级分类--</option>
+                                <volist name="yiji" id="vo">
+                                <option value="{$vo.f_classify_id}" <if condition="$vo.f_classify_id eq $yi_ji ">selected</if>>{$vo.f_classify_name}</option>
+                                </volist>
+                            </select>
+                        </div>
+                        <div class="select mg_trb">
+                            <span class="text">二级分类</span>
+                            <select name="info[erji]" id="erji">
+                                <option value="">--选择二级分类--</option> 
+                                <volist name="er_ji" id="data">
+                                    <option value="{$data.f_classify_id}" <if condition="$data.f_classify_id eq $erji ">selected</if>>{$data.f_classify_name}</option>
+                                </volist>
+                            </select>
+                        </div>
+                        
+                        <div class="button mg_trb" onclick="location.href = '{:U(\'fgoods/index\')}'">
+                            <i class="fa fa-refresh ico"></i>
+                            <input type="button" value="刷新" class="but chongzhi" />
+                        </div>
+                        <div class="button mg_trb chaxun">
+                            <i class="fa fa-search ico"></i>
+                            <input type="submit" value="查询" class="but " style="position: absolute; background: none;z-index: 2;"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="tianjia"> 
+                    <a class="tianjia_but" href="{:U('fgoods/add')}">
+                        <i class="fa fa-plus"></i>
+                        新增商品
+                    </a>
+                </div>
+                <div class="table_box">
+                    <table class="table" border="" cellspacing="" cellpadding=""> 
+                        <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>商品名称</th>
+                                <th>商品图片</th> 
+                                <th>规格</th> 
+                                <th>价格/元每吨</th>
+                                <th>库存/吨</th>
+                                <th>商品状态</th>
+                                <th>状态</th> 
+                                <th>类别</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="listinfo" id="fgoods">
+                            <tr>
+                                <td>{$fgoods.fgoods_id}</td>
+                                <td>{$fgoods.fgoods_name}</td>
+                                <?php
+                                $images=explode('|',$fgoods['fgoods_images']);
+                                ?>
+                                <td>
+                                    <?php foreach($images as $k=>$v): ?>
+                                    <img src="{$v}" style="width:40px;height:40px;">
+                                    <?php endforeach;?></td>
+
+
+                                <td>{$fgoods.fgoods_spec}</td>	 
+                                <td>{$fgoods.fgoods_tonprice}</td>
+                                <td>{$fgoods.fgoods_stock}</td>	
+                                <td>
+                                    <label class="switch-btn circle-style" style="margin:0 auto;">
+                                        <input class="checked-switch" type="checkbox" <if condition="$fgoods['fgoods_state'] eq 2">disabled="disabled"</if> onchange="checkedswitchs(this,{$fgoods.fgoods_id},'fgoods_state2')"
+                                        <if condition="$fgoods['fgoods_state2'] eq 1">checked</if> />
+                                        <span class="text-switch" data-yes="上架" data-no="下架" ></span> 
+                                        <span class="toggle-btn"></span> 
+                                    </label>
+                                </td>		
+                                <td> 
+                                    <?php if($fgoods['add_person']==1):?>
+                                    ----
+                                    <?php else:?>
+                                    <?php if($fgoods['fgoods_state']==0):?>
+                                    未审核
+                                    <?php elseif($fgoods['fgoods_state']==1):?> 
+                                    已通过
+                                    <?php else:?>
+                                    驳回
+                                    <?php endif;?>
+                                    <?php endif;?>
+                                </td> 		
+                                <td><?=$fgoods['add_person']==1?"平台添加":"厂家添加";?></td> 
+                                <td> 
+                            <if condition="$fgoods.fgoods_state eq 0">
+                                <?php if($fgoods['add_person']!=1):?>
+                                <a href="{:U('fgoods/edit',array('fgoods_id'=>$fgoods['fgoods_id']))}"  class="but chaxun">
+                                    <i class="fa fa-edit"></i>
+                                    编辑
+                                </a>
+                                <a href="{:U('fgoods/delete',array('fgoods_id'=>$fgoods['fgoods_id']))}" onclick="{
+                                            if (confirm('确认删除?')) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }"  class="but chongzhi">
+                                    <i class="fa fa-trash-o"></i>
+                                    删除
+                                </a> 
+                                <?php endif;?>
+                            </if>
+                            <a onclick="xiangQing({$fgoods.fgoods_id})"  class="but chaxun">
+                                <i class="fa fa-eye"></i>
+                                查看详情
+                            </a>
+                            </td>
+                            </tr> 
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                {$pageshow}
+            </div>
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $(".right_min").height($(window).height());
+    });
+</script>  
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function () {
+        $('input, textarea').placeholder();
+    });
+    //上架1下架2
+    function checkedswitchs(obj, fgoods_id, field) {
+        if ($(obj).is(':checked')) {
+            $.getJSON("{:U('fgoods/ajaxable_on')}&id=" + fgoods_id + "&field=" + field, function () {
+            });
+        } else {
+            $.getJSON("{:U('fgoods/ajaxable_off')}&id=" + fgoods_id + "&field=" + field, function () {
+            });
+        }
+    }
+</script>
+<script src="__PUBLIC__/admin/js/layer/layer.js"></script>
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function () {
+        $('input, textarea').placeholder();
+    });
+    $(".right_min").height($(window).height());
+    function xiangQing(fgoods_id) {
+        var body_w = $(".right_min").width() - 200;
+        var body_h = $(".right_min").height() - 100;
+        layer.open({
+            type: 2,
+            title: false,
+            skin: "layui-layer-molv",
+            shade: [0.8, '#000000'],
+            scrollbar: false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area: [body_w + "px", body_h + "px"],
+            content: "{:U('fgoods/fgoods_xq')}&fgoods_id=" + fgoods_id
+        });
+    }
+</script>
+<script>
+    //省份下拉框改变，城市给定其联动的值
+    $("#yiji").change(function(){
+		$("#erji").empty();
+        $("#erji").append("<option value=''>--选择二级分类--</option>");
+        var yiji=$("#yiji").val();
+        $.getJSON("{:U('fgoods/geterji')}&yiji="+yiji,function(result){
+            var data=result.data;
+            $("#erji").empty();
+            $("#erji").append("<option value=''>--选择二级分类--</option>");
+            $.each(data, function(i, v){
+                $("#erji").append("<option value='"+v['f_classify_id']+"'>"+v['f_classify_name']+"</option>");
+            });
+        });
+    });
+</script>

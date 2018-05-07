@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>申请提现</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script src="__PUBLIC__/user/js/bankinput.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<div>
+			<div class="shenqingtixian">
+				<form action="" method="post">
+					<div class="tixianjine">
+						<h4>提现金额</h4>
+						<span>
+							<i>￥：</i>
+							<strong>
+								<input type="text" id="money" value=""  placeholder="当前余额{$balance}" onkeyup="clearNoNum(this)" maxlength="15"/>
+							</strong>
+						</span>
+						<p>温馨提示：最低提现金额<em class="low_num">100</em>元，手续费{$change}%，24小时内到账</p>
+					</div>
+					<div class="form_input">
+						<ul>
+							<li>
+								<span>银行户主姓名：</span>
+								<i>
+									<input type="text" name="" id="account_name" value="{$info.account_name}" maxlength="20"/>
+								</i>
+							</li>
+							<li>
+								<span>银行卡卡号：</span>
+								<i>
+									<input type="text" name="" id="account_no" value="{$info.account_no}" />
+								</i>
+							</li>
+							<li>
+								<span>开户行名称：</span>
+								<i>
+									<input  type="text" id="bank_name" name="" value="{$info.bank_name}" maxlength="30"/>
+								</i>
+							</li>
+							<li>
+								<span>银行预留手机号：</span>
+								<i>
+									<input type="text" id="bank_phone" name=""  value="{$info.bank_phone}" onkeyup="this.value=this.value.replace(/\D/,&quot;&quot;)" maxlength="11"/>
+								</i>
+							</li>
+							<li>
+								<span>身份证号：</span>
+								<i>
+									<input type="text" id="bank_idcard" name="" value="{$info.bank_idcard}" maxlength="18" onkeyup="this.value=this.value.replace(/[\W_]/,&quot;&quot;)"/>
+								</i>
+							</li>
+						</ul>
+					</div>
+					<input type="hidden" id="balance" value="{$balance}">
+					<input type="hidden" id="change" value="{$change}">
+					<div class="botton_bg">
+						<!--<input class="bot" type="submit" value="提交"/>-->
+						<a onclick="shenqingShow(this)" class="bot">提交</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script type="text/javascript">
+$('#account_no').bankInput({min:4,max:25,deimiter:' '}); 
+	function clearNoNum(obj){
+		 obj.value = obj.value.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符  
+	    obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个. 清除多余的  
+	    obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
+	}
+	function shenqingShow(a){
+		var money=parseFloat($("#money").val()),change=parseFloat($("#change").val()),balance=parseFloat($("#balance").val());
+		if($.trim(money)=='' || $.trim(money)==0){
+			layer.msg('请输入金额',{icon:5,time:1000});
+			return;
+		}
+		var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+	     if (!reg.test(money)) {
+	          layer.msg('金额格式错误',{icon:5,time:1000});
+	          return;
+	     }
+		if(money>balance){
+			layer.msg('余额不足',{icon:5,time:1000});
+			return;
+		}
+		if(money<parseFloat($('.low_num').text())){
+			layer.msg('最低提现金额为'+$('.low_num').text(),{icon:5,time:1000});
+			return;
+		}
+		//计算实际到账金额
+		var real_money=money-(change*money*0.01);
+		var account_name=$("#account_name").val(),account_no=$("#account_no").val(),bank_name=$("#bank_name").val(),bank_phone=$("#bank_phone").val(),bank_idcard=$("#bank_idcard").val();
+		if(account_name==''){
+			layer.msg('请输入户主姓名',{icon:5,time:1000});
+			return;
+		}
+		if(account_no==''){
+			layer.msg('请输入银行卡号',{icon:5,time:1000});
+			return;
+		}
+		if(bank_name==''){
+			layer.msg('请输入开户行名称',{icon:5,time:1000});
+			return;
+		}
+		reg=/^[1][3,4,5,7,8][0-9]{9}$/;  
+			if(!reg.test(bank_phone)) {  
+		        layer.msg('手机号格式错误',{icon:5,time:1000});
+				$("#bank_phone").focus();
+	            return;  
+	        }
+	    reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
+		    if(reg.test(bank_idcard) === false) 
+		    { 
+			    layer.msg('身份证输入不合法',{icon:5,time:1000});
+			    return; 
+		    } 
+		var url="{:U('user/start_with')}";
+		$(a).removeAttr("onclick");
+		$.ajax({
+			url:url,
+			method:'post',
+			data:{
+				pop_money:money,
+				pop_name:account_name,
+				pop_code:account_no,
+				pop_account:bank_name,
+				pop_phone:bank_phone,
+				pop_idcard:bank_idcard,
+				pop_truemoney:real_money
+			},
+			success:function(res){
+				if(res.data==2){
+					//成功
+		 			layer.msg('提交成功',{icon:6,time:1000},function(){
+						window.location.href="{:U('user/with_record')}";
+					});
+				}else{
+					$(a).attr("onclick","shenqingShow(this)");
+					layer.msg(res.msg,{icon:5,time:1000});
+				}
+			}
+		});
+		 
+	}
+</script>
+

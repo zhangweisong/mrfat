@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>图书商城</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="css/mian.css"/>
+        <link rel="stylesheet" type="text/css" href="js/Swiper/swiper.min.css"/>
+        <script src="js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<div class="tushushangcheng">
+			<!--banner-->
+	    	<div class="banner">
+			    <div class="swiper-container">
+			        <div class="swiper-wrapper">
+			            <div class="swiper-slide">
+			            	<a href="#">
+			            		<img src="images/banner_1.jpg"/>
+			            	</a>
+			            </div>
+			            <div class="swiper-slide">
+			            	<a href="#">
+			            		<img src="images/banner_1.jpg"/>
+			            	</a>
+			            </div>
+			            <div class="swiper-slide">
+			            	<a href="#">
+			            		<img src="images/banner_1.jpg"/>
+			            	</a>
+			            </div>
+			        </div>
+			        <div class="swiper-pagination"></div>
+			    </div>
+	    	</div>
+	    	<div class="shousuo_fenlei c">
+	    		<a class="xuanzefenlei" href="tushufenlei.html">选择分类</a>
+	    		<div class="form_input">
+	    			<span class="bot">搜索</span>
+	    			<i><input type="text" name="" value="" placeholder="请搜索关键词"/></i>
+	    		</div>
+	    	</div>
+	    	<div class="tushu_list_box">
+	    		<div class="title">
+	    			<ul>
+	    				<li class="link"  datatype="all">
+	    					<span>综合排序</span>
+	    				</li>
+	    				<li datatype="sale">
+	    					<span>销量</span>
+	    					<i data="0"></i>
+	    				</li>
+	    				<li datatype="price">
+	    					<span>价格</span>
+	    					<i data="0"></i>
+	    				</li>
+	    			</ul>
+	    		</div>
+	    		<div class="tushu_list">
+	    			<ul class="c">
+	    				<li>
+	    					<a href="shuji_xq.html">
+	    						<i class="img"><img src="images/tushu_csimg.jpg"/></i>
+	    						<div class="text">
+	    							<h5>默克兽医手册 </h5>
+	    							<div class="jiage">
+	    								<span>￥2563</span>
+	    								<em>￥2563</em>
+	    							</div>
+	    							<div class="xiaoliang">
+	    								<span>销量：25632</span>
+	    								<em></em>
+	    							</div>
+	    						</div>
+	    					</a>
+	    				</li>
+	    				<li>
+	    					<a href="shuji_xq.html">
+	    						<i class="img"><img src="images/tushu_csimg.jpg"/></i>
+	    						<div class="text">
+	    							<h5>默克兽医手册 </h5>
+	    							<div class="jiage">
+	    								<span>￥2563</span>
+	    								<em>￥2563</em>
+	    							</div>
+	    							<div class="xiaoliang">
+	    								<span>销量：25632</span>
+	    								<em></em>
+	    							</div>
+	    						</div>
+	    					</a>
+	    				</li>
+	    			</ul>
+	    		</div>
+				<div class="meiyouneirong">
+					<i><img src="images/li_wdxx_img.png"/></i>
+					<p>没有产品</p>
+				</div>
+		    	<div class="dibufengexian">
+		    		<p>到底了，没有更多了</p>
+		    	</div>
+	    	</div>
+		</div>
+		<div class="gouwuchetubiao">
+			<a href="gouwuche.html">
+				<span></span>
+				<em>5</em>
+			</a>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="js/Swiper/swiper.min.js"></script>
+<script type="text/javascript">
+	window.onload = function() {
+	    var swiper = new Swiper('.banner .swiper-container', {
+	        pagination: '.banner .swiper-pagination',
+	        slidesPerView: 1,
+	        paginationClickable: true,
+	        loop: true,
+	        centeredSlides: true,
+	        autoplay: 3500,
+	        autoplayDisableOnInteraction: false
+	    });	
+	    var liClick="";
+	    $(".title li").click(function(){
+	    	$(this).addClass("link").siblings().removeClass("link link1")
+	    	if($(this).attr('datatype')=="sale"&&liClick!="sale"){
+	    		$(this).find('i').attr('data',0)
+	    		liClick="sale"
+	    	}else if($(this).attr('datatype')=="price"&&liClick!="price"){
+	    		$(this).find('i').attr('data',1)
+	    		liClick="price"
+	    	}else if($(this).attr('datatype')=="all"){
+	    		liClick=""
+	    	}
+	    	if($(this).find('i').attr('data')=="0"){
+	    		$(this).addClass("link").removeClass("link1")
+	    		$(this).find('i').attr('data',1)
+	    	}else if($(this).find('i').attr('data')=="1"){
+	    		$(this).addClass("link1").removeClass("link")
+	    		$(this).find('i').attr('data','0')
+	    	}
+	    })
+	}
+	
+</script>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>答案库</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/expert/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/expert/css/common.css" />
+		<style>
+			.list{
+				padding: 0 0.64rem;
+				border-bottom: 0.6rem solid #f0f0f0;
+				padding-bottom: 1.72rem;
+			}
+			.list p:first-of-type{
+				font-size: 1.2rem;
+				color: #363636;
+				line-height: 140%;
+				padding-top: 1.8rem;
+                word-wrap : break-word;
+			}
+			.list p:last-of-type{
+				font-size: 0.96rem;
+				color: #656565;
+				line-height: 180%;
+				padding-top:1.32rem ;
+                word-wrap : break-word;
+			}
+			.bottom{
+                display:none;
+				padding: 0 0.64rem;
+			}
+			.bottom p{
+				font-size: 0.96rem;
+				padding: 2rem 0;
+				text-align: center;
+				line-height: 180%;
+			}
+            
+		</style>
+	</head>
+
+	<body>
+		<div class="header">
+            <a href="{:U('answer/wentiguanli')}">
+				<img src="__PUBLIC__/expert/images/left.png" />
+			</a>
+			<p>答案库</p>
+		</div>
+        <div id="content">
+            <volist name="expert_problembase" id="data">
+                <div class="list">
+                    <p>{$data.problembase_question}</p>
+                    <p id="problembase_{$data.problembase_id}">{$data.problembase_answers}</p>
+					<button class="btn-o" style="float:right;" data-clipboard-target="#problembase_{$data.problembase_id}">复制</button>
+					<div class="clear"></div>
+                </div>
+            </volist>
+        </div>    
+		<!--<div class="bottom">
+			<p>你还未添加答案库<br />请添加</p>
+		</div>-->
+        <div class="meiyouneirong" style="  :none;margin-top:10%;">
+            <i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+            <p>你还未添加答案库,请添加</p>
+        </div>
+        <!--加载更多-->
+        <div class="li_myxx_zt" id="li_myxx_zt" style="display:none">
+            <p>亲，没有数据了~</p>
+            <input id="select_" value="moren" type="hidden" />	
+        </div>  
+        <div id="loadings" style="width:24px;height:24px;position:fixed;left:58%;top:50%;margin-top:-43px;margin-left:-43px;display:none;z-index:99999;">
+            <img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+        </div>
+        <div class="clear" style="height:5.2rem;"></div>
+        <button style="position:fixed;bottom:0;width:100%;" class="btnn" onclick="add()">添加</button>
+	</body>
+    <style>
+        .li_myxx_zt{height: 30px; line-height: 30px; background:#f5f5f5;}
+        .li_myxx_zt p{ text-align:center; font-size:12px; color:#cacaca;}
+    </style>
+</html>
+<script type="text/javascript" src="__PUBLIC__/expert/js/jquery-3.1.1.min.js" ></script>
+<script type="text/javascript" src="__PUBLIC__/expert/js/screenSize.js" ></script>
+<script type="text/javascript" src="__PUBLIC__/clipboard.min.js" ></script>
+<script src="__PUBLIC__/agcy/js/baiduTemplate.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script id="listinfos" type="text/html">
+	<% if(data.length>0) { %>
+        <%for(var i=0;i < data.length;i++){ %>
+            <div class="list">
+                <p><%=data[i].problembase_question%></p>
+                <p id="problembase_<%=data[i].problembase_id%>"><%=data[i].problembase_answers%></p>
+				<button  class="btn-o" style="float:right;" data-clipboard-target="#problembase_<%=data[i].problembase_id%>">复制</button>
+				<div class="clear"></div>
+            </div>
+        <%}%>
+	<%}%>
+</script> 
+<script>
+	var btns = document.querySelectorAll('button');
+    var clipboard = new Clipboard(btns);
+    clipboard.on('success', function(e) {
+        layer.msg('复制成功',{icon:6,time:1000});
+        console.log(e);
+		//e.clearSelection();
+    });
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+</script>
+<script>
+    var page=1;
+    var length={$length};
+    $(function(){
+        if(length>0){
+            $(".meiyouneirong").hide();
+        }else{
+            $(".meiyouneirong").show();
+        }
+    });
+    
+    //滚动加载  
+    $(window).on('scroll',function(){
+       getData();
+    });
+    var totalheight = 0;     //定义一个总的高度变量
+    function getData() {
+         totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()); 
+         //浏览器的高度加上滚动条的高度 （页面总高度）  
+        if ($(document).height() <= totalheight) {          
+            //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+            //加载
+            $("#loadings").fadeIn(); 
+            //根据条件获取对应的项目条数
+            getmore();//使用模板加载更多
+            //加载完毕          
+            $("#loadings").fadeOut(); 
+        }
+    }  
+
+    //加载更多
+	function getmore(){
+		page+=1; 		
+		$.get("{:U('problembase/index')}&p="+page,function(data){
+            $('#li_myxx_zt').hide();
+            $('#meiyouneirong').hide();
+            //console.log(data);
+            if(data.status>0){  					
+               var list = data;
+                var bt=baidu.template;
+                var html=bt('listinfos',list);
+                $('#content').append(html); 
+				//
+				btns = document.querySelectorAll('button');
+				clipboard = new Clipboard(btns);				
+            }else{
+                //alert('我是有底线的~');
+                $('#li_myxx_zt').show();
+            }           
+		});	
+	}
+    
+    function add(){
+        window.location.href="{:U('problembase/add')}"
+    }
+    
+    //监听返回按钮返回到指定页面
+    var url= '__SELF__'.replace(/&amp;/ig,'&');  //将url中的&字符转换
+    getHistory();
+    window.addEventListener('popstate',function(e){
+        window.location='{:U("answer/wentiguanli")}';
+        //页面不会跳转，所以需要自己修改文件的title
+        document.title='问题管理';
+        getHistory();
+    },false);   
+    function getHistory(){
+        var state={
+           title:'',
+           url:url
+        }
+        window.history.pushState(state,'title',url);
+    } 
+</script>

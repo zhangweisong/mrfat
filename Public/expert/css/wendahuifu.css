@@ -1,0 +1,43 @@
+.content{
+	padding: 1.32rem 0.64rem;
+}
+.content p{
+	font-size: 1.12rem;
+	line-height: 2.4rem;
+	color: #363636;
+	float: left;
+}
+.content textarea{
+	height: 2.35rem;
+	border: 1px solid #dcdcdc;
+	font-size: 1.12rem;
+	padding: 0.5rem;
+	width: 23rem;
+	resize: none;
+	height: 9rem;
+}
+.picture{
+	padding: 1.32rem 0.64rem 0;
+	height: 10rem;
+	position: relative;
+}
+.picture p:first-of-type{
+	font-size: 1.12rem;
+	line-height: 2.4rem;
+	color: #363636;
+	float: left;
+}
+.picture img:first-of-type{
+	width: 9.6rem;
+	height: 7.32rem;
+	position: absolute;
+	top: 1.32rem;
+	left: 4.32rem;
+}
+.picture p:last-of-type{
+	font-size: 1rem;
+	line-height: 1.4rem;
+	color: #a1a1a1;
+	position: absolute;
+	bottom: 0;
+}

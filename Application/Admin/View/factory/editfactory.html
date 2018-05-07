@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>新增</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css"> 
+        <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=ff1329a0011c8ef56f6efb30f3ca9b49"></script>
+        <link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" />
+        <script type="text/javascript" src="__PUBLIC__/kindeditor/kindeditor-min.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/kindeditor/lang/zh-CN.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/admin/js/stringOperate.js"></script> 
+
+        <script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+
+        <link href="__PUBLIC__/validform/Validform.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="__PUBLIC__/validform/Validform_v5.3.2.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/validform/Validform_Datatype.js"></script>   
+        <script type="text/javascript">
+            var editor;
+            KindEditor.ready(function (K) {
+                editor = K.create('textarea[id="shop_content"]', {
+                    uploadJson: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}',
+                    fileManagerJson: '{:U(\'kindeditor/file_manager_json\')}',
+                    allowFileManager: true,
+                    urlType: 'domain',
+                    afterCreate: function () {
+                        this.sync();
+                    },
+                    afterBlur: function () {
+                        this.sync();
+                    }
+                });
+
+                //多图
+                var editor2 = K.editor({
+                    allowFileManager : true
+                });
+                //上传本地图片
+                K('#uploadButton').click(function() {
+                    editor2.loadPlugin('image', function() {
+                        editor2.plugin.imageDialog({
+                            showRemote : false,
+                            clickFn : function(url, title, width, height, border, align) { 
+                                var data = K.formatUrl(url, 'domain'); 
+                                add_album_img(data);
+                                editor2.hideDialog();
+                            }
+                        });
+                    });
+                });
+
+            });
+
+
+
+            //图片插件
+            function add_album_img(imgurl) {
+                var val = StringOperate.add($("#factory_images").val(), imgurl);
+                $("#factory_images").val(val);
+                $("#toollist_pic").append("<li onclick=\"del_album_img(\'" + imgurl + "\',this);\"><a><img src='" + imgurl + "'><i class=\"fa fa-times-circle\"></i></a></li>");
+                $('#imagemore').val("");
+            }
+            function del_album_img(imgurl, obj) {
+                var val = StringOperate.remove($("#factory_images").val(), imgurl);
+                $("#factory_images").val(val);
+                $(obj).remove();//删除元素
+            }
+
+
+
+        </script>
+
+        <style>
+            /*多图上传样式*/
+            .toollist_pic{clear: both;width: 100%;text-align: center;margin-right: 10px; margin-top:10px;}
+            .toollist_pic li{float: left;list-style:none; clear: initial; width:100px;height:100px; overflow:hidden;position: relative;}
+            .toollist_pic li a{display:block; width:100%; height:100%;}
+            .toollist_pic li img{width:100px;height:100px;}
+            .toollist_pic li i{display:block; position:absolute; top:0; right:0; width:20px; height:20px; background:#2cb184; z-index:888; margin:0;}
+            .toollist_pic li .fa-times-circle{ font-size:20px; color:#fff;}
+            .span{display:inline-block; height:34px; line-height:34px;color: #ff0000;font-size:1.8rem;vertical-align: middle;}      
+            .form-button .ke-inline-block.but{margin-top:0;}
+            .form-button .ke-button-common{display:block;width:100%; height:100%; line-height:38px; background:none;}
+            .form-button .ke-button-common.ke-button{color:#fff; font-size:16px;}
+            .form-button .ke-upload-area.ke-form .ke-upload-file{display:block;width:100% !important; height:100%;     cursor: pointer;}
+        </style> 
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a href="###">厂家管理</a></li> 
+                    <li> > </li>
+                    <li><a href="{:U('factory/index')}">厂家管理</a></li>
+                    <li> > </li>
+                    <li><a href="###">编辑厂家</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <div class="form_box">
+                    <form action="{:U('factory/editfactory',array('factory_id'=>$factory['factory_id']))}" method="post" id="myform"> 
+
+                        <div class="message-block message-border-t">
+                            <h4 class="message-left_block">厂家设置</h4>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label">厂家名</label>
+                            <div class="form-text form-input-block">
+                                <input type="text" name="info[factory_name]" value="{$factory.factory_name}"  maxlength="18" datatype="*1-18" errormsg="厂家名称不正确" nullmsg="请输入厂家名称" />
+                                <i class="Validform_checktip"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-item">
+                            <label class="form-label">所属地</label>
+                            <div class="form-select form-input-block ">
+                                <div class="form-input-inline w20 province">
+                                    <select name="info[p_id]" id="p_id" onChange = "geolocation_areacode(this.options[this.selectedIndex].text, 'p'), getcity(this)"  datatype="not0" errormsg="请选择省">
+                                        <option  value="0" >--请选择省--</option>   
+                                        <?php foreach($province AS $v):?>
+                                        <option value="<?=$v['p_id']?>" <?php if($v['p_id']==$factory['p_id']){echo 'selected';}?>><?=$v['p_name']?></option> 
+                                        <?php endforeach;?>
+                                    </select>
+                                    <i class="Validform_checktip"></i>
+                                </div>
+                                <div class="form-input-inline w20 city">
+                                    <select name="info[c_id]" id="c_id" onChange = "geolocation_areacode(this.options[this.selectedIndex].text, 'c'), getarea(this)" datatype="not0" errormsg="请选择市">
+                                        <option value="0"  >--请选择市--</option>  
+                                        <?php foreach($city AS $v):?>
+                                        <option value="<?=$v['c_id']?>" <?php if($v['c_id']==$factory['c_id']){echo 'selected';}?>><?=$v['c_name']?></option> 
+                                        <?php endforeach;?>
+                                    </select>
+                                    <i class="Validform_checktip"></i>
+                                </div>
+                                <div class="form-input-inline w20 area">
+                                    <select name="info[a_id]" id="a_id"  onChange = "geolocation_areacode(this.options[this.selectedIndex].text, 'a')" datatype="not0" errormsg="请选择区县">
+                                        <option value="0" >--请选择区县--</option>  
+                                        <?php foreach($area AS $v):?>
+                                        <option value="<?=$v['a_id']?>"  <?php if($v['a_id']==$factory['a_id']){echo 'selected';}?>><?=$v['a_name']?></option> 
+                                        <?php endforeach;?>
+                                    </select>
+                                    <i class="Validform_checktip"></i>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="form-item">
+                            <label class="form-label">厂家位置</label>
+                            <div class="form-text form-input-block"> 
+                                <div id="container" style="width:500px; height:300px"></div> 
+                            </div>
+                        </div>
+                        <div class="form-item"   style="position: relative;">
+                            <label class="form-label">厂家地址</label>
+                            <div class="form-text form-input-inline w50">
+                                <input type="text" name="info[factory_address]" value="{$factory.factory_address}" id="factory_address" placeholder=""  maxlength="60" datatype='*'/>
+                                <i class="Validform_checktip"></i>
+                            </div>
+                            <div class="form-button form-input-inline">
+                                <input type='button' id='btn' value='搜索' class="but shenhe mg_t0" >
+                                <div id="result" style="width:345px; height:300px;position: absolute;top:32px;left: 200px; z-index:-1" ></div> 
+                            </div>
+                        </div> 
+                        <div class="form-item" style="display:none;">
+                            <label class="form-label">厂家坐标</label>
+                            <div class="form-text form-input-block">
+                                <input readonly type="text" value="{$factory.factory_location}" name="info[factory_location]" id="factory_location" placeholder=""  maxlength="60" /> 
+                            </div>
+                        </div> 
+                      
+						<div class="form-item">
+                            <label class="form-label">厂家登录名</label>
+                            <div class="form-text form-input-block">
+                                <input type="text" class="form-control" name="info[factory_usrnm]" value="{$factory.factory_usrnm}" placeholder="请输入登录名" id="factory_usrnm"  maxlength="20"  datatype="check_usrname" /> 
+                                <i class="Validform_checktip"></i>
+                            </div>
+                        </div> 
+						 <input type="hidden" class="form-control"  value="{$factory.factory_usrnm}"  id="factory_user"    /> 
+                        <div class="form-item">
+                            <label class="form-label">状态</label>
+                            <div class="form-radio form-input-block">
+                                <div class="skin-section">
+                                    <ul>
+                                        <li> 
+                                            <input type="radio" name="info[factory_state]" value="1"   <if condition="1 eq $factory['factory_state'] ">checked</if> >
+                                            <span>启用</span>
+                                        </li>
+                                        <li>
+                                            <input type="radio" name="info[factory_state]" value="0"   <if condition="0 eq $factory['factory_state'] ">checked</if> >
+                                            <span>禁用</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="form-item">
+                            <label class="form-label">厂家图片</label>
+                            <div class="form-text form-input-inline w40">
+                                <input type="text"  name="info[factory_images]" value="{$factory.factory_images}" id="factory_images"  maxlength="255" readonly datatype="*" nullmsg="请上传图片"/>
+                                <i class="Validform_checktip"></i>
+                            </div>
+                            <div class="form-button form-input-inline">
+                                <input class="but shenhe mg_t0 chaxun but" type="button" id="uploadButton"  value="上传" /> 
+                                <input id="imagemore" type="hidden" class="dfinput" />
+                            </div>
+                            <div class="form-text form-input-block w50"><i style="font-size:12px;color:red;">备注：可以上传多张</i></div>
+                            <div class="form-text form-input-block w50">
+                                <ul class="toollist_pic c" id="toollist_pic">
+                                    <?php foreach(explode("|",$factory['factory_images']) AS $k=>$v):?>
+									<?php if($v!=""):?>
+                                    <li onclick="del_album_img('{$v}', this)"><a><img src="{$v}"><i class="fa fa-times-circle"></i></a></li>
+									<?php endif;?> 
+                                    <?php endforeach;?>
+                                </ul>
+                            </div>
+                        </div> 
+                        <div class="form-item">
+                            <label class="form-label">联系人</label>
+                            <div class="form-text form-input-block">
+                                <input type="text" name="info[factory_man]"  value="{$factory.factory_man}"  id="factory_man" maxlength="60" datatype='*'/>
+                                <i class="Validform_checktip"></i>
+                            </div>
+                        </div> 
+                        <div class="form-item">
+                            <label class="form-label">负责人电话</label>
+                            <div class="form-text form-input-block">
+                                <input type="text" name="info[factory_tel]" datatype='m' value="{$factory.factory_tel}" errormsg="负责人电话不正确" nullmsg="请输入负责人电话"  maxlength="11" /> 
+                                <i class="Validform_checktip"></i>
+                            </div>
+                        </div> 
+                        <div class="form-item">
+                            <div class="form-button form-input-block">
+                                <input class="chaxun but" type="submit" value="提交" id="submit"/>
+                                <a  href="{:U('factory/index')}">
+                                    <button class="but chongzhi" type="button">返回</button>
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script> 
+
+            function getcity(obj) {
+                var province_id = $(obj).val()
+                if (province_id == 0) {
+                    return;
+                }
+                $("#c_id").html("<option value='0' >--请选择市--</option>");
+                $("#a_id").html("<option value='0' >--请选择区县--</option>");
+                $.get("{:U('factory/cityofprovince')}", {"p_id": province_id}, function (data) {
+                    var html = "<option value='0' >--请选择市--</option>";
+                    for (var i = 0; i < data.length; i++) {
+                        html += "<option value=" + data[i].c_id + ">" + data[i].c_name + "</option>";
+                    }
+                    $("select#c_id").html(html);
+                });
+            }
+            function getarea(obj) {
+                var city_id = $(obj).val()
+                if (city_id == 0) {
+                    return;
+                }
+                $("#a_id").html("")
+                $.get("{:U('factory/areaofcity')}", {"c_id": city_id}, function (data) {
+                    var html = "<option value='0' >--请选择区县--</option>";
+                    for (var i = 0; i < data.length; i++) {
+                        html += "<option value=" + data[i].a_id + ">" + data[i].a_name + "</option>";
+                    }
+                    $("#a_id").html(html);
+                });
+            } 
+            $(function () {
+                $("#myform").Validform({
+                    //tiptype:2
+                    tiptype: function (msg, o, cssctl) {
+                        var objtip = o.obj.siblings(".Validform_checktip");
+                        cssctl(objtip, o.type);
+                        objtip.text(msg);
+                    },
+                    datatype: {
+                        //传入自定义datatype类型，可以是正则，也可以是函数（函数内会传入一个参数）;
+                        "not0": function (gets, obj, curform, datatype) {
+                            if (gets == "0")
+                                return false;
+                            return true;
+                        },
+                        "check_usrname": function (gets, obj, curform, datatype) { 
+                            if (!gets)
+                                return false;
+                            //验证用户名不能重复
+                            /*
+                             参数gets是获取到的表单元素值，
+                             obj为当前表单元素，
+                             curform为当前验证的表单，
+                             datatype为内置的一些正则表达式的引用。
+                             */
+                            $.ajaxSetup({
+                                async: false
+                            });
+							 
+							var factory_user = $("#factory_user").val();  
+                            var p_id = $("#p_id").val();  //省份名称id
+                            var str = "{:U('factory/checkusername')}&username=" + gets;
+							if(gets==factory_user){
+								return true;
+							}
+                            var flag = false;
+                            var ajaxdata = "";
+                            $.ajax({
+                                type: 'get',
+                                url: str,
+                                cache: false,
+                                success: function (result) {
+                                    ajaxdata = result.msg;
+                                    flag = result.status ? true : false;
+                                },
+                                error: function () {
+                                    ajaxdata = "数据异常，请重新验证";
+                                    flag = false;
+                                },
+                                async: false
+                            });
+                            if (!flag)
+                                return ajaxdata;
+                            return true;
+                        }
+                    }
+                });
+            });
+
+        </script>
+        <script type="text/javascript">
+            $(function () {
+                $(".right_min").height($(window).height());
+
+                $('.skin-section input').iCheck({
+                    checkboxClass: 'icheckbox_square-green',
+                    radioClass: 'iradio_square-green',
+                });
+                $('input').on('ifChecked', function (event) {
+                    var a = $(this).val();
+                    $("#content_isshow").val(a);
+                });
+            });
+
+        </script>
+
+
+        <script>
+            //实例化地图 控制地图显示
+            var map = new AMap.Map("container", {
+                resizeEnable: true,
+                center: [{$factory.factory_location}], //默认钟楼
+                zoom: 11
+            });  
+            marker = new AMap.Marker({
+                position: "{$factory.factory_location}".split(','),
+                title: "{$factory.factory_name}",
+                map: map
+            });
+            //经纬度编码地址
+            AMap.plugin("AMap.Geocoder", function () {
+                var geocoder = new AMap.Geocoder({
+                    city: '029' //城市默认：“全国”
+                })
+
+                map.on('click', function (e) {
+                    $("#factory_location").val(e.lnglat.getLng() + ',' + e.lnglat.getLat());
+                    map.clearMap();
+                    var marker = new AMap.Marker({
+                        map: map,
+                        bubble: true
+                    })
+                    marker.setPosition(e.lnglat);
+                    geocoder.getAddress(e.lnglat, function (status, result) {
+                        if (status == 'complete') {
+                            $("#factory_address").val(result.regeocode.formattedAddress)
+                        } else {
+                            $("#factory_address").val('')
+                            alert('找不到地址，请手动填写');
+                        }
+                    })
+                })
+            })
+            //搜索
+            AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], function () {    //回调函数  
+                //TODO: 使用autocomplete对象调用相关功能
+                var autoOptions = {
+                    city: "", //城市，默认全国
+                    input: "factory_address"//使用联想输入的input的id
+                };
+                autocomplete = new AMap.Autocomplete(autoOptions);
+                //构造地点查询类
+                var placeSearch = new AMap.PlaceSearch({
+                    pageSize: 5,
+                    pageIndex: 1,
+                    city: "029", //城市
+                    map: map,
+                    panel: "result"
+                });
+
+                AMap.event.addListener(autocomplete, "select", function (obj) {
+                    //TODO 针对选中的poi实现自己的功能
+                    placeSearch.search(obj.poi.name, function (status, result) {
+                    });
+                });
+                $("#btn").on('click', function () {
+                    $(".amap-sug-result").hide();
+                    placeSearch.search($("#factory_address").val(), function (status, result) {
+                        $('#result').show();
+                        console.log(result);
+                    });
+                })
+                //隐藏
+                $(document).on('click', function () {
+                    $('#result').hide();
+                    $('#result,.amap-sug-result,#container,#btn').on('click', function (e) {
+                        e.stopPropagation();
+                    })
+                })
+                $("#factory_address").on('blur', function () {
+                    $('#result').show();
+					$('#result').css('z-index',999);
+                })
+            });
+            function geolocation_areacode(str, m) {
+                if (str == "0")
+                    return;
+                if (m == "a") {
+        //            var xian = $("#a_id").find("option:selected").attr("data");
+        //            map.clearMap();
+        //            var arr = xian.split(",");
+        //            alert("1")
+        //            map.setCenter(new AMap.LngLat(arr[0], arr[1]));
+        //            new AMap.Marker({
+        //                map: map,
+        //                position: new AMap.LngLat(arr[0], arr[1])
+        //            });
+                } else {
+                    map.setCity(str);
+                }
+            }
+        //根据省市（不包括区县）
+            //map.setCity("深圳");
+        // 设置缩放级别和中心点
+            // map.setZoomAndCenter(14, [116.205467, 39.907761]);
+        </script>
+        <style> /*去掉高德地图LOGO*/
+            .amap-logo {
+                right: 0 !important;
+                left: auto !important;
+                display: none;
+            }
+
+            .amap-copyright {
+                right: 70px !important;
+                left: auto !important;
+            }  
+        </style>
+    </body>
+</html> 

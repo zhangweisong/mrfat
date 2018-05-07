@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>编辑病虫防治</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+        <link href="__PUBLIC__/validform/Validform.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="__PUBLIC__/validform/Validform_v5.3.2.js"></script>
+        <link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" />
+        <script type="text/javascript" src="__PUBLIC__/kindeditor/kindeditor-min.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/kindeditor/lang/zh-CN.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/admin/js/stringOperate.js"></script>  
+        <script type="text/javascript">
+            var editor;
+            KindEditor.ready(function (K) {
+                editor = K.create('textarea[id="sk_content"]', {
+                    uploadJson: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}',
+                    fileManagerJson: '{:U(\'kindeditor/file_manager_json\')}',
+                    allowFileManager: true,
+                    urlType: 'domain',
+                    afterCreate: function () {
+                        this.sync();
+                    },
+                    afterBlur: function () {
+                        this.sync();
+                    }
+                });
+
+                //多图 
+                var uploadbutton = K.uploadbutton({
+                    button: K('#uploadButton')[0],
+                    fieldName: 'imgFile',
+                    url: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}',
+                    afterUpload: function (data) {
+                        if (data.error === 0) {
+                            var url = K.formatUrl(data.url, 'domain');
+                            K('#imagemore').val(url);
+                            add_album_img(url);
+                        } else {
+                            alert(data.message);
+                        }
+                    },
+                    afterError: function (str) {
+                        alert('自定义错误信息: ' + str);
+                    }
+                });
+                uploadbutton.fileBox.change(function (e) {
+                    uploadbutton.submit();
+                });
+        });
+
+
+
+        //图片插件
+        function add_album_img(imgurl) {
+            var val = imgurl;
+            $("#goods_image").val(imgurl);
+            $("#toollist_pic").html("<li onclick=\"del_album_img(\'" + imgurl + "\',this);\"><a><img src='" + imgurl + "'><i class=\"fa fa-times-circle\"></i></a></li>");
+            $('#imagemore').val("");
+        }
+        function del_album_img(imgurl, obj) {
+            var val = StringOperate.remove($("#goods_image").val(), imgurl);
+            $("#goods_image").val(val);
+            $(obj).remove();//删除元素
+        }
+
+        </script>
+
+        <style>
+            /*多图上传样式*/
+            .toollist_pic{clear: both;width: 100%;text-align: center;margin-right: 10px; margin-top:10px;}
+            .toollist_pic li{float: left;list-style:none; clear: initial; width:100px;height:100px; overflow:hidden;position: relative;}
+            .toollist_pic li a{display:block; width:100%; height:100%;}
+            .toollist_pic li img{width:100px;height:100px;}
+            .toollist_pic li i{display:block; position:absolute; top:0; right:0; width:20px; height:20px; background:#2cb184; z-index:888; margin:0;}
+            .toollist_pic li .fa-times-circle{ font-size:20px; color:#fff;}
+            .span{display:inline-block; height:34px; line-height:34px;color: #ff0000;font-size:1.8rem;vertical-align: middle;}      
+            .form-button .ke-inline-block.but{margin-top:0;}
+            .form-button .ke-button-common{display:block;width:100%; height:100%; line-height:38px; background:none;}
+            .form-button .ke-button-common.ke-button{color:#fff; font-size:16px;}
+            .form-button .ke-upload-area.ke-form .ke-upload-file{display:block;width:100% !important; height:100%;     cursor: pointer;}
+        </style>
+
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a href="###">三农服务</a></li>
+                    <li> > </li>
+                    <li><a href="{:U('videl3/index')}">病虫防治</a></li>
+                    <li> > </li>
+                    <li><a href="###">编辑病虫防治</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <div class="form_box">
+                    <form action="{:U('edit',['sk_id'=>$current['sk_id']])}" method="post" id="myform" > 
+                        <div class="form-item">
+                            <label class="form-label">一级分类</label>
+                            <div class="form-select form-input-block">
+                                <select name="info[sk_two]" id="sk_two" onchange="get_erji(this)" class="dfinput" datatype="not0" > 
+                                    <option value="0" >--请选择--</option>
+                                    <?php foreach($class1 AS $v):?>
+                                    <option value="{$v['skc_id']}" <?php if($v['skc_id']==$current['sk_two']){echo "selected";}?>>{$v['skc_title']}</option> 
+                                    <?php endforeach;?>
+                                </select>
+                                <i class="Validform_checktip"></i>
+                            </div>
+
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label">二级分类</label>
+                            <div class="form-select form-input-block">
+                                <select name="info[sk_three]" id="sk_three"  class="dfinput" datatype="not0" >
+                                    <option value="0" >--请选择--</option>
+                                    <?php foreach($class2 AS $v):?>
+                                    <option value="{$v['skc_id']}" <?php if($v['skc_id']==$current['sk_three']){echo "selected";}?>>{$v['skc_title']}</option> 
+                                    <?php endforeach;?>
+                                </select>
+                                <i class="Validform_checktip"></i>
+                            </div>
+                        </div>   
+                        <div class="form-item">
+                            <label class="form-label">标题</label>
+                            <div class="form-text form-input-block">
+                                <input type="text" name="info[sk_title]" value="{$current.sk_title}"  maxlength="30"  class="dfinput" datatype="*" />
+                                <i class="Validform_checktip"></i>    
+                            </div>
+                        </div> 
+                        <div class="form-item">
+                            <label class="form-label">封面图</label>
+                            <div class="form-text form-input-inline w40">
+                                <input type="text"  name="info[sk_img]" value="{$current.sk_img}"   id="goods_image"   readonly value="" datatype="*" errormsg="请上传图片"/>
+                                 <i class="Validform_checktip"></i>
+                            </div>
+                            <div class="form-button form-input-inline">
+                                <input class="but shenhe mg_t0" type="button" id="uploadButton"  class="chaxun but" value="上传" />
+                                <input name="image" id="imagemore" type="hidden" class="dfinput" value="" readonly />
+                            </div>  
+                            <div class="form-text form-input-block w50">
+                                <ul class="toollist_pic c" id="toollist_pic">
+                                    <li onclick="del_album_img('{$current.sk_img}',this);"><a><img src='{$current.sk_img}'><i class="fa fa-times-circle"></i></a></li>
+                                </ul>
+                            </div>
+                        </div> 
+                           
+                        <div class="form-item">
+                            <label class="form-label">内容</label>
+                            <div class="form-textarea form-input-block">
+                                <textarea datatype="*" name="info[sk_content]" id='sk_content'  style="height:300px;width:600px" >{$current.sk_content}</textarea> 
+                                <i class="Validform_checktip"></i>
+                            </div>
+                        </div>  
+                        <div class="form-item">
+                            <div class="form-button form-input-block">
+                                <input class="chaxun but" type="submit" value="提交" id="submit"/>
+                                <a  href="{:U('index')}">
+                                    <button class="but chongzhi" type="button">返回</button>
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html> 
+
+<script type="text/javascript"> 
+    //二级分类 
+    function get_erji(obj) {
+        $("#sk_three").html("<option value='0' >--请选择--</option> ");
+        var yiji_id = $(obj).val()  
+        if(yiji_id == "")
+            return;
+        $.get("{:U('get_erji')}&yiji_id=" + yiji_id, function (data) {
+            var html = "<option value='0' >--请选择--</option> ";
+            for (var i = 0; i < data.length; i++) { 
+                html += "<option value=" + data[i].skc_id + ">" + data[i].skc_title + "</option>";
+            }
+            $("#sk_three").html(html);
+        });
+    }   
+</script>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height()); 
+        $('.skin-section input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        $('input').on('ifChecked', function(event){
+            //alert($(this).val());
+        });
+    }); 
+    $(function(){
+        $("#myform").Validform({ 
+            tiptype:function(msg,o,cssctl){
+                var objtip=o.obj.siblings(".Validform_checktip");
+                cssctl(objtip,o.type);
+                objtip.text(msg);
+            },
+            datatype: {
+            //传入自定义datatype类型，可以是正则，也可以是函数（函数内会传入一个参数）;
+                "not0": function (gets, obj, curform, datatype) {
+                     if (gets >0)
+                        return true;
+                    return false;
+                }, 
+            }
+
+        });
+    });
+</script>  

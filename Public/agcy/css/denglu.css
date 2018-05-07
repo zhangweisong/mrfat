@@ -1,0 +1,43 @@
+.logo{
+	height: 7rem;
+	display: block;
+	margin: 3rem auto 2.28rem;
+}
+.tit{
+	font-size: 1.36rem;
+	text-align: center;
+	color: #363636;
+	margin-bottom: 4rem;
+}
+.cont {
+	background: #fff;
+	margin-bottom: 2rem;
+}
+
+.cont ul {
+	padding: 0 0.64rem;
+}
+
+.cont ul li {
+	border: 1px solid #f5f5f5;
+	border-radius: 0.3rem;
+	min-height: 2rem;
+	padding: 0 0.75rem;
+	position: relative;
+	margin-bottom: 0.55rem;
+}
+
+.cont ul li img {
+	width: 0.96rem;
+	position: absolute;
+	bottom: 1rem;
+}
+
+.cont ul li input {
+	height: 3.2rem;
+	color: #3d4149;
+	font-size: 1.12rem;
+	border: none;
+	margin-left: 2rem;
+	width: 18rem;
+}

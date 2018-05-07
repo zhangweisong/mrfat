@@ -1,0 +1,122 @@
+.top{
+	padding: 0.64rem;
+	border-bottom: 0.64rem solid #f0f0f0;
+	height: 4.4rem;
+}
+.top input{
+	height: 2.72rem;
+	width: 13.8rem;
+	line-height: 2.72rem;
+	border-radius: 0.4rem;
+	border: #dcdcdc 1px solid;
+	margin-top: 0.84rem;
+	font-size: 0.96rem;
+	padding: 0 0.5rem;
+}
+.top button{
+	width: 6.08rem;
+	background: #3ab849;
+	color: #ffffff;
+	border: none;
+	margin-top: 0.84rem;
+	height: 2.72rem;
+	line-height: 2.72rem;
+	font-size: 0.96rem;
+	border-radius: 0.4rem;
+}
+.top a{
+	font-size: 1.12rem;
+	line-height: 4rem;
+}
+.tit{
+	height: 3.2rem;
+	border-bottom: 1px solid #F5F5F5;
+}
+.tit a{}
+.tit a p{
+	font-size: 1.12rem;
+	line-height: 3.2rem;
+}
+.tit a img{
+	height: 1rem;
+	margin-top: 1.1rem;
+	margin-left: 0.5rem;
+}
+.list{
+	height: 11.2rem;
+	position: relative;
+	padding: 0 0.64rem;
+	border-bottom: #e6e6e6 1px solid;
+}
+.list img{
+	width: 6.8rem;
+	height: 7.4rem;
+	position: absolute;
+	top: 0.8rem;
+}
+.list p:nth-of-type(1){
+	font-size: 1.12rem;
+	color: #363636;
+	position: absolute;
+	top: 1.2rem;
+	left:7.8rem ;
+}
+.list p:nth-of-type(2){
+	font-size: 0.96rem;
+	color: #ef404c;
+	position: absolute;
+	top: 3.4rem;
+	left:7.8rem ;
+}
+.list p:nth-of-type(3){
+	font-size: 0.96rem;
+	color: #939393;
+	position: absolute;
+	top: 3.4rem;
+	right:0.64rem ;
+}
+.list p:nth-of-type(4){
+	font-size: 0.96rem;
+	color: #939393;
+	position: absolute;
+	top: 5.2rem;
+	left:7.8rem ;
+}
+.list p:nth-of-type(5){
+	font-size: 0.96rem;
+	color: #939393;
+	position: absolute;
+	top: 6.92rem;
+	left:7.8rem ;
+}
+.list p:nth-of-type(6){
+	font-size: 0.96rem;
+	color: #3ab849;
+	position: absolute;
+	bottom: 1.04rem;
+	right:0.64rem ;
+}
+.list button:nth-of-type(1){
+	font-size: 0.96rem;
+	color: #FFFFFF;
+	width: 5.2rem;
+	height: 1.6rem;
+	background: #3ab849;
+	position: absolute;
+	bottom: 0.72rem;
+	left:1.44rem;
+	border:none;
+	border-radius: 0.4rem;
+}
+.list button:nth-of-type(2){
+	font-size: 0.96rem;
+	color: #FFFFFF;
+	width: 5.2rem;
+	height: 1.6rem;
+	background: #ef404c;
+	position: absolute;
+	bottom: 0.72rem;
+	right:1.44rem;
+	border:none;
+	border-radius: 0.4rem;
+}

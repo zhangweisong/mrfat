@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>产品形态</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(function () {
+        $('input, textarea').placeholder();
+        });
+    </script> 
+</head>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">系统设置</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">产品形态</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <!--查询-->
+
+        <div class="query">
+            <form  name="seachform" id="seachform"  action="{:U('Product/index')}"  method="post" class="form"  >
+                <div class="form_input mg_trb">
+                    <label class="text">快速检索</label>
+                    <input type="text" name="info[gs_title]" id="gs_title" value="{$gs_title}"  placeholder="请输入产品形态名称"  maxlength="15"/>
+                </div>
+				<div class="select mg_trb">
+					<span class="text">状态</span>
+					<select name="info[classify_isable]" style="width:190px;">
+						<option value="">--请选择状态--</option>
+						<volist name="classify_isable" id="data">
+						<option value="{$key}" <if condition="$key eq $classify_ ">selected</if>>{$data}</option>
+						</volist>
+					</select>
+				</div>
+                <div class="button mg_trb" onclick="location.href='{:U('Product/index')}'">
+                    <i class="fa fa-refresh ico"></i>
+                    <input type="button" value="刷新" class="but chongzhi" />
+                </div>
+				
+                <div class="button mg_trb chaxun">
+							<i class="fa fa-search ico"></i>
+							<input type="submit" value="查询" class="but " style="    position: absolute; background: none;z-index: 2;" />
+				</div>
+            </form>
+        </div>
+        <!--添加幻灯-->
+        <div class="tianjia">
+            <a class="tianjia_but" href="{:U('Product/Productadd')}">
+                <i class="fa fa-plus"></i>
+                添加产品形态
+            </a>
+        </div>
+        <div class="table_box">
+            <table class="table" border="" cellspacing="" cellpadding="">
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>产品形态名称</th>
+                    <th>产品形态图片</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="focusInfo" id="focus">
+                    <tr>
+                        <td>{$focus.gs_id}</td>
+                        <td>{$focus.gs_title}</td>
+                         <td style="width:  200px;"><img style="height: 50px;width:80px;"  src="{$focus.gs_image}"/></td>
+                        <td>
+                            <label class="switch-btn circle-style" style="margin: 0 auto;">
+                                <input class="checked-switch" type="checkbox" onchange="checkedswitchs(this, {$focus.gs_id}, 'isshow')"
+                                       <if condition="$focus['gs_isable'] eq 1">checked</if> />
+                                <span class="text-switch" data-yes="启用" data-no="禁用"></span> 
+                                <span class="toggle-btn"></span> 
+                            </label>
+                        </td>
+                        <td>
+                            <a href="{:U('Product/Productedit',array('gs_id'=>$focus['gs_id']))}" class="but chaxun">
+                                <i class="fa fa-edit"></i>
+                                编辑</a>
+                                <a href="{:U('Product/Productdel',array('gs_id'=>$focus['gs_id']))}" onclick="{if(confirm('确认删除?')){return true;}return false;}" class="but chongzhi">
+                                    <i class="fa fa-trash-o"></i>
+                                    删除</a>
+                        </td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </div>
+        {$pageshow}
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+    $('input, textarea').placeholder();
+    });
+    //显示开关1显示；2隐藏
+    function checkedswitchs(obj, id, field){
+    if ($(obj).is(':checked')){ //true
+    console.log("开启" + id);
+    $.getJSON("{:U('Product/ajax_on')}&gs_id=" + id + "&field=" + field, function(){
+    });
+    } else{ //false
+    console.log("关闭" + id);
+    $.getJSON("{:U('Product/ajax_off')}&gs_id=" + id + "&field=" + field, function(){
+    });
+    }
+    }
+</script>

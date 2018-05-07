@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>专家列表</title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+		<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="right_min">
+			<div class="crumbs_nav">
+				<i class="iconfont icon-shouye"></i>
+				<ul>
+					<li><a href="{:U('index/welcome')}">首页</a></li>
+					<li> > </li>
+					<li><a href="#">专家管理</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">专家列表</a></li>
+				</ul>
+			</div>
+			<div class="min">
+                <!--查询-->
+				<div class="query">
+					<form name="seachform" id="seachform" action="{:U('expert/index')}"  method="post" class="form">
+						<div class="form_input mg_trb">
+							<label class="text">快速检索</label>
+							<input type="text" name="info[keyword]" id="keyword" value="{$keyword}" placeholder="真实姓名/昵称/手机号" maxlength="15"/>
+						</div>
+                        <div class="select mg_trb">
+							<span class="text">专家职称</span>
+							<select  id="expert_pessional" name="info[expert_pessional]">
+								<option value="">请选择专家职称</option>
+								<volist name="expert_pessionals" id="data">
+								<option value="{$key}" <if condition="$key eq $expert_pessional ">selected</if>>{$data}</option>
+								</volist>
+							</select>
+						</div>
+                        <div class="select mg_trb">
+							<span class="text">认证状态</span>
+							<select  id="expert_isapprove" name="info[expert_isapprove]">
+								<option value="">请选择认证状态</option>
+								<volist name="expert_isapproves" id="data">
+								<option value="{$key}" <if condition="$key eq $expert_isapprove ">selected</if>>{$data}</option>
+								</volist>
+							</select>
+						</div>
+						<div class="select mg_trb">
+							<span class="text">专家状态</span>
+							<select  id="expert_state" name="info[expert_state]">
+								<option value="">请选择专家状态</option>
+								<volist name="expert_states" id="data">
+								<option value="{$key}" <if condition="$key eq $expert_state ">selected</if>>{$data}</option>
+								</volist>
+							</select>
+						</div>
+                        <div class="form_input mg_trb form-date">
+                            <label class="text">注册时间</label>
+                            <input type="text" class="laydate-icon layer-date" name="info[starttime]"  value="{$starttime}"  id="start" placeholder="开始时间" readonly/>
+                            <input type="text" class="laydate-icon layer-date" name="info[endtime]"  value="{$endtime}"  id="end" placeholder="结束时间" readonly/>
+                        </div>
+                        
+						<div class="button mg_trb" onclick="location.href='{:U('expert/index')}'">
+							<i class="fa fa-refresh ico"></i>
+							<input type="button" value="刷新" class="but chongzhi" />
+						</div>
+						<div class="button mg_trb chaxun">
+							<i class="fa fa-search ico"></i>
+							<input type="submit" value="查询" class="but " style="    position: absolute; background: none;z-index: 2;" />
+						</div>
+					</form>
+				</div>
+				<!--添加角色-->
+				<div class="tianjia">
+					<a class="tianjia_but" href="{:U('expert/add')}">
+						<i class="fa fa-plus"></i>
+						添加
+					</a>
+				</div>
+				<div class="table_box">
+					<table class="table" border="" cellspacing="" cellpadding="">
+						<thead>
+							<tr>
+								<!--<th>用户名</th>-->
+                                <th>专家头像</th>
+								<th>真实姓名</th>
+								<th>专家职称</th>
+                                <th>昵称</th>
+								<th>手机号码</th>
+								<!--<th>奖励金</th>-->
+								<th>活跃值</th>
+								<!--<th>认证状态</th>-->
+								<th>专家状态</th>
+								<th>注册时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+						<volist name="listinfo" id="listinfo">
+						<tr>
+							<!--<td>{$listinfo.expert_username}</td>-->
+                            <td>
+                                <if condition="$listinfo['expert_avator'] neq '' ">
+                                <img src='{$listinfo.expert_avator}' width="50" height="50"/>
+                                </if>
+                                <if condition="$listinfo['expert_avator'] eq '' ">
+                                    --
+                                </if>
+                            </td>
+                            <td>{$listinfo.expert_realname}</td>
+                            <td>{$listinfo.sclassify_name}</td>
+                            <td>{$listinfo.expert_nickname}</td>
+                            <td>{$listinfo.expert_phone}</td>
+                           <!-- <td>{$listinfo.expert_money}</td>-->
+                            <td>{$listinfo.expert_activevalue}</td>
+                            <!--<td>{$expert_isapproves[$listinfo['expert_isapprove']]}-->
+                            </td>
+                            <td>
+                                <label class="switch-btn circle-style" style="margin: 0 auto;">
+                                    <input class="checked-switch" type="checkbox" onchange="checkedswitchs(this,{$listinfo.expert_id},'expert_state')"
+                                    <if condition="$listinfo['expert_state'] eq 1">checked</if> />
+                                    <span class="text-switch" data-yes="启用" data-no="禁用"></span>
+                                    <span class="toggle-btn"></span> 
+                                </label>
+                            </td>
+                            <td>
+                                <if condition="$listinfo['expert_addtime'] neq 0 ">
+                                   {$listinfo.expert_addtime|date='Y-m-d h:i:s',###}
+                                <else/>
+                                    --
+                                </if>
+                            </td>
+							<td>
+                                <!--<if condition="$listinfo['expert_isapprove'] eq 1">
+                                    <a href="{:U('expert/renzheng',array('expert_id'=>$listinfo['expert_id']))}" class="but chaxun">
+                                    <i class="fa fa-edit"></i>
+                                    认证</a>
+                                </if>-->
+                                <p onclick="xiangQing({$listinfo['expert_id']})" class="but chaxun">
+                                    <i class="fa fa-eye"></i>
+                                    查看详情
+                                </p>
+                                <a href="{:U('expert/edit',array('expert_id'=>$listinfo['expert_id']))}" class="but chaxun">
+                                <i class="fa fa-edit"></i>
+                                编辑</a>
+                                <a href="{:U('expert/repassword',array('expert_id'=>$listinfo['expert_id']))}" class="but chaxun" onclick="{if (confirm('你确定要重置密码为a123456吗?')){return true; }return false; }">
+                                    <i class="fa fa-lock"></i>
+                                    重置密码
+                                </a>
+                            
+							</td>
+						</tr> 
+						</volist>
+						
+						</tbody>
+					</table>
+				</div>
+				{$pageshow}
+			</div>
+		</div>
+	</body>
+</html>
+<script src="__PUBLIC__/admin/js/layer/layer.js"></script>
+<script type="text/javascript">
+    $(".right_min").height($(window).height());
+    var body_w=$(".right_min").width()-200;
+    var body_h=$(".right_min").height()-100;
+    //用户详情
+    function xiangQing(expert_id) {
+       // alert(expert_id);
+        layer.open({
+            type: 2,
+            title: false,
+            skin: "layui-layer-molv",
+            shade: [0.8, '#000000'],
+            scrollbar: false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area: [body_w + "px", body_h + "px"],
+            content: "{:U('expert/xiangqing')}&expert_id=" + expert_id
+        });
+    }
+</script>
+<script src="__PUBLIC__/admin/js/laydate/laydate.js"></script>
+<script>
+    //laydate({elem: "#hello", event: "focus"});
+    var start = {
+        elem: "#start",
+        format: "YYYY-MM-DD",
+        min: "2000-01-01",
+        max: "2100-01-01",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            end.min = datas;
+            end.start = datas
+        }
+    };
+    var end = {
+        elem: "#end",
+        format: "YYYY-MM-DD",
+        min: "2000-01-01",
+        max: "2100-01-01",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            start.max = datas
+        }
+    };
+    laydate(start);
+    laydate(end);
+</script>
+<script type="text/javascript">
+	$(function(){
+		$(".right_min").height($(window).height());
+	});
+	//显示开关1显示；2隐藏
+	function checkedswitchs(obj,expert_id,field){
+		if($(obj).is(':checked')){	//true
+			console.log("显示"+expert_id);
+			$.getJSON("{:U('expert/ajaxable_on')}&expert_id="+expert_id+"&field="+field,function(){
+			});
+		}else{	//false
+			console.log("隐藏"+expert_id);
+			$.getJSON("{:U('expert/ajaxable_off')}&expert_id="+expert_id+"&field="+field,function(){
+			});
+			
+		}
+	}
+</script>

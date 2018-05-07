@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>商品管理</title>
+    <!--说明文字编码-->
+    <meta http-equiv="Content-type" content="text/html" charset="utf-8">
+    <!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+    <!--控制状态栏显示样式-->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--解决uc字体变大问题-->
+    <meta name="wap-font-scale" content="no">
+    <!--手机号码不被显示为拨号链接-->
+    <meta content="telephone=no" name="format-detection" />
+    <!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+    <link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+    <link rel="stylesheet" href="__PUBLIC__/agcy/css/shangpinguanli.css" />
+    <style>
+        .li_myxx_zt{height: 30px; line-height: 30px; background: #f5f5f5;}
+        .li_myxx_zt p{ text-align:center; font-size:12px; color:#cacaca;}
+        .sousuokuang_box{padding: 0 10px; height: 45px; background: #ef404c}
+    </style>
+</head>
+
+<body>
+<div class="header">
+    <a href="{:U('index/index')}">
+        <img src="__PUBLIC__/agcy/images/left.png" />
+    </a>
+    <p>商品管理</p>
+</div>
+<div class="btnss flexbb">
+    <button onclick='window.location.href="{:U('product/productclassify')}"'><img src="__PUBLIC__/agcy/images/b1.png" /><p>商品分类</p></button>
+    <button onclick='window.location.href="{:U('activity/cuxiaohuodong')}"'><img src="__PUBLIC__/agcy/images/b3.png" /><p>促销活动</p></button>
+    <button onclick='window.location.href="{:U('product/addproduct')}"'><img src="__PUBLIC__/agcy/images/b4.png" /><p>添加商品</p></button>
+</div>
+<div class="search flexbb">
+    <div class="sear flex">
+        <input type="text" id="keywords" value="{$keywords}" placeholder="输入商品名称" />
+    </div>
+    <button onclick="searchGoods()">快速检索</button>
+</div>
+<div class="cont" id="content">
+    <p class="tit">全部商品列表</p>
+    <volist name="product" id="prod">
+        <div class="list">
+            <div class="tu" style="background-image: url({$prod.goods_image});">
+                <!--<img src="__PUBLIC__/agcy/images/ms.png" />-->
+            </div>
+            <p class="omit2">{$prod.agcy_goods_name}
+            <if condition="$prod.agcy_goods_yes eq 2">
+                【代理商品】
+            </if>
+            <if condition="$prod.agcy_goods_states eq 1">
+                <a style="color:red">未审核</a>
+            </if>
+            <if condition="$prod.agcy_goods_states eq 2">
+                <a style="color:blue">已审核</a>
+            </if>
+            <if condition="$prod.agcy_goods_states eq 3">
+                <a style="color:grey">未通过</a>
+            </if>
+            </p>
+            <p>￥：{$prod.agcy_default_price}</p>
+            <div class="btns flex">
+                <if condition="$prod.agcy_goods_states eq 2">
+                    <if condition="$prod.agcy_goods_state eq 1">
+                        <button style="background-color:#f44336" onclick="shelfstatus(1,{$prod['agcy_goods_id']})">下架</button>
+                        <else/>
+                        <button onclick="shelfstatus(2,{$prod['agcy_goods_id']})">上架</button>
+                    </if>
+                </if>
+                <!--
+                1.如果是总平台的商品则不能编辑
+                2.自己的商品可以编辑，编辑之后需要总平台重新审核
+                -->
+                <if condition="$prod.agcy_goods_states neq 1">
+                    <if condition="$prod.agcy_goods_yes eq 2">
+                        <!--【代理商品】-->
+                        <button onclick="editAgcyPro({$prod['agcy_goods_id']})">编辑</button>
+                        <else/>
+                        <button onclick="editpro({$prod['agcy_goods_id']})">编辑</button>
+                    </if>
+                </if>
+                
+            </div>
+        </div>
+    </volist>
+</div>
+<div class="meiyouneirong" style="display:none;margin-top:10%;">
+    <i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+    <p>商品正在采购中，敬请期待！</p>
+</div>
+<div class="li_myxx_zt" id="li_myxx_zt" style="display:none" >
+    <p>亲，到底了~</p>
+</div>
+<div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+    <img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+</div>
+<button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button>
+<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script>
+    function searchGoods(){
+        var keywords=$('#keywords').val();
+        location.href="{:U('product/productlist')}&keywords="+keywords;
+    }
+    function editpro(goods_id){
+        location.href="{:U('product/editproduct')}&agcy_goods_id="+goods_id;
+    }
+    function editAgcyPro(agcygoods_id){
+        location.href="{:U('product/editagcypro')}&agcy_goods_id="+agcygoods_id;
+    }
+</script>
+<script>
+    var count={$count};
+    if(count<=0){
+        $(".meiyouneirong").css("display","block");
+    }
+
+    //滚动加载
+    $(window).scroll(function () {
+        getData();
+    });
+    var totalheight = 0;     //定义一个总的高度变量
+    function getData() {
+        totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());
+        //浏览器的高度加上滚动条的高度 （页面总高度）
+        if ($(document).height() <= totalheight) {
+            //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+            //加载
+            $("#loadings").fadeIn();
+            //根据条件获取对应的项目条数
+            getmore();//使用模板加载更多
+            //加载完毕
+            $("#loadings").fadeOut();
+        }
+    }
+    //加载更多
+    function getmore(){
+        var keywords=$('#keywords').val();
+        var page=parseInt($("#more").attr("data"))+1;
+        $('#more').attr("data",page);//重置当前页数
+        $.getJSON("{:U('product/productlist')}&keywords="+keywords+"&p="+page,function(data){
+            console.log(data);
+            var info=data.product1;
+            var appendcontent="";
+            if(info.length>0){
+                for(var i=0;i<info.length;i++){
+                    appendcontent+= '<div class="list">';
+                    appendcontent+=     '<div class="tu" style="background-image: url('+info[i].goods_image+');">';
+                    appendcontent+=     '</div>';
+                    appendcontent+=     '<p class="omit2">'+info[i].agcy_goods_name;
+                    if(info[i].agcy_goods_yes ==2){
+                        appendcontent+=         '【代理商品】';
+                    }
+                    appendcontent+= '</p>';
+                    appendcontent+= '<p>￥：'+info[i].agcy_default_price+'</p>';
+                    appendcontent+= '<div class="btns flex">';
+                    if(info[i].agcy_goods_states ==2){
+                        if(info[i].agcy_goods_state ==1){
+                            appendcontent+=         '<button  style="background-color:#f44336"  onclick="shelfstatus(1,'+info[i].agcy_goods_id+')">下架</button>';
+                        }else{
+                            appendcontent+=         '<button onclick="shelfstatus(2,'+info[i].agcy_goods_id+')">上架</button>';
+                        }
+                    }
+                    if(info[i].agcy_goods_states != 1){
+                        if(info[i].agcy_goods_yes == 2){
+                            appendcontent+=         '<button onclick="editAgcyPro('+info[i].agcy_goods_id+')">编辑</button>';
+                        }else{
+                            appendcontent+=         '<button onclick="editpro('+info[i].agcy_goods_id+')">编辑</button>';
+                        }
+
+                    }
+                    if(info[i].agcy_goods_states ==1){
+                        appendcontent+=         '<button>未审核</button>';
+                    }else if(info[i].agcy_goods_states ==2){
+                        appendcontent+=         '<button>已审核</button>';
+                    }else if(info[i].agcy_goods_states ==3){
+                        appendcontent+=         '<button>未通过</button>';
+                    }
+                    appendcontent+= '</div>';
+                    appendcontent+=  '</div>';
+                }
+                $('#content').append(appendcontent);
+            } else{
+                $("#loadings").fadeOut();
+                $('#li_myxx_zt').show();
+            }
+        })
+    }
+    //下架
+    function shelfstatus(status,goods_id){
+        $.getJSON("{:U('product/shelfstatus')}&status="+status+"&goods_id="+goods_id,function(state){
+            if(state.status>0){  
+                layer.msg('商品状态更改成功！',{icon:6,time:1000}, function () {
+                   location.href="{:U('product/productlist')}";
+                });
+            }else{  
+                layer.msg('商品状态更改失败！',{icon:5,time:1000}, function () {
+                   location.href="{:U('product/productlist')}";
+                });
+            }
+
+        })
+    }
+    
+</script>

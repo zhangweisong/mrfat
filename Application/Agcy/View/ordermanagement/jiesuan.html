@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>结算</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/jiesuan.css" />
+	</head>
+
+	<body>
+		<div class="header">
+            <if condition="$state neq 0">
+                <a href="{:U('user/agcyorder')}">
+                    <img src="__PUBLIC__/agcy/images/left.png" />
+                </a>
+            <else/>
+                <a href="{:U('ordermanagement/xiangqing',array('f_classify_id'=>$f_classify_id,'f_classify_fatherid'=>$f_classify_fatherid,'fgoods_id'=>$fgoods_id))}">
+                    <img src="__PUBLIC__/agcy/images/left.png" />
+                </a>
+            </if>
+			<p>结算</p>
+		</div>
+		<div class="address">
+			<p>厂家名称:{$forder.fname}</span></p>
+			<p>厂家地址:{$forder.faddress}</p>
+		</div>
+		<div class="shop">
+			<div class="sp">
+				<img src="{$forderlist.fgoods_images}" />
+				<p class="omit1"> {$forderlist.fgoods_name}</p>
+				<p>￥: {$forderlist.fgoods_tonprice}</p>
+				<p>规格：{$forderlist.forderlist_spec}<span>X {$forderlist.forderlist_tonnum}吨</span></p>
+			</div>
+			<textarea class="txt" placeholder="给卖家留言：" id="notes"  ></textarea>
+			<div class="hj">
+				<!--<p>物流：￥400.00元</p>-->
+				<p class="xx">共计 {$forderlist.forderlist_tonnum}吨商品，<span>合计￥ {$forderlist.forderlist_totprice}元</span></p>
+				<div class="wl">
+					<p>物流公司</p>
+					<volist name="logistics" id="logistics">
+					<div class="flexb">
+						<p>{$logistics.logistics_name}</p>
+						<p>{$logistics.logistics_phone}</p>
+						<a href="tel:{$logistics.logistics_phone}"><img src="__PUBLIC__/agcy/images/rediphone.png"/></a>
+					</div>
+					</volist>
+				</div>
+				<div class="flex">
+					<img src="__PUBLIC__/agcy/images/bank.png" />
+					<p>温馨提示：本订单享受中国人寿保险保障，请放心付款</p>
+				</div>
+			</div>
+		</div>
+		<ul class="contt">
+        	<li>
+				<img src="__PUBLIC__/agcy/images/icon-wechat.png" />
+				<p>微信支付</p>
+				<input type="radio" value="1" name="money" checked/>
+			</li>
+			<!--<li>
+				<img src="__PUBLIC__/agcy/images/icon-alipay.png" />
+				<p>支付宝支付</p>
+				<input type="radio" value="2" name="money"/>
+			</li>
+			<li>
+				<img src="__PUBLIC__/agcy/images/icon-unionpay.png" />
+				<p>银联卡支付</p>
+				<input type="radio" value="3" name="money"/>
+			</li>-->
+		</ul>
+        <div class="clear" style="height:3.2rem;"></div>
+		<div class="bottom flex">
+			<div>
+				<p>合计：¥{$forderlist.forderlist_totprice}</p>
+			</div>
+			<button onclick="buys()">去付款</button>
+		</div>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+        <script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-3.1.1.min.js" ></script>
+	</body>
+
+</html>
+<script>
+    function buys(){
+        var type=$('input:radio:checked').val();
+        var forder_id={$forder_id};
+        var notes=$('#notes').val();
+        if(type==1){   //微信支付
+            window.location.href="{:U('payinfo/buy')}&forder_id="+forder_id+"&notes="+notes;
+        }
+       
+    }    
+
+</script>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>详情</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/swiper-3.4.2.min.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/xiangqing.css" />
+	</head>
+    <style>
+        .jine_text{ padding:1rem 0;}
+        .jine_text p{font-size:1.12rem;ine-height:180%;color:#363636;}
+    </style>
+	<body>
+		<div class="header">
+			<a href="{:U('ordermanagement/ordershop',array('f_classify_id'=>$f_classify_id,'f_classify_fatherid'=>$f_classify_fatherid))}">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>详情</p>
+		</div>
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+                <volist name="fgoods['fgoods_images']" id="images">
+                    <div class="swiper-slide">
+                        <img src="{$images}" />
+                    </div>
+                </volist>
+			</div>
+		</div>
+		<div class="cont">
+			<p>{$fgoods.fgoods_name}</p>
+			<p>价格：{$fgoods.fgoods_tonprice}元/吨<span>销量：{$fgoods.fgoods_sale}</span></p>
+			<div class="flexb cont1">
+				<p>订货量：</p>
+				<div class="number">
+					<div class="min">-</div>
+					<input type="text" id="num" class="num" value="1" maxlength="2" readonly="readonly" />
+					<div class="max">+</div>
+					<input class="hide" value="0" type='hidden' />
+				</div>
+				<p>吨</p>
+				<p>（可售{$fgoods.fgoods_stock}吨）</p>
+			</div>
+			<div class="cont2 flexbb">
+				<p>规格：</p>
+                <volist name="fgoods['fgoods_spec']" id="spec" >
+                    <button  data="{$key}" spec="{$spec}" <if condition="$key eq 0"> class="red" </if>>{$spec}</button>
+				</volist>
+			</div>
+            <div id="price" class="jine_text" price="0" spec="0" style="display:none">
+                    <p>0元</p>
+            </div>
+			<!--<div class="cont3 flexb">
+				<p>物流：</p>
+				<button>平台联系物流</button>
+				<button>自己联系物流</button>
+			</div>-->
+		</div>
+		<div class="contt">
+			<p class="tit">商品详情</p>
+            <p>{$fgoods.fgoods_detail}</p>
+		</div>
+        <if condition="$fgoods['flag'] eq 1">
+            <button class="btnn" style="font-size: 1.12rem;position:fixed;bottom:0;margin:0 2%;" onclick="dinghuo()">立即订货</button>
+        </if>
+        <div class="clear" style="height:4.4rem;"></div>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-3.1.1.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/swiper-3.4.2.jquery.min.js" ></script>
+        <script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script> 
+		<script>
+		$(function(){
+			$('.cont2').find("button").eq(0).trigger('click');  //模拟点击时间
+		});
+        price='{$fgoods_zhidaojia}';
+        var prices=new Array();
+        prices=price.split(",");
+       /* 
+        price=fgoods_zhidaojia.split(",");
+        console.log(price);*/
+			//轮播图
+		    var mySwiper = new Swiper ('.swiper-container', {
+				autoplay:3000,
+		    });
+			//点击修改数字加减
+			$(".min").click(function(){
+				var numm =parseInt($(this).next().val());
+					numm -= 1;
+					if (numm < 1) {
+						numm = 1
+					};
+					$(this).next().val(numm);	
+			});
+			$(".max").click(function(){
+				var numm =parseInt($(this).prev().val());
+					numm += 1;
+					$(this).prev().val(numm);
+			});
+            //
+			$(".cont2 button").click(function(){
+				$(this).addClass("red").siblings().removeClass("red");
+                var data=$(this).attr('data');
+                var spec=$(this).attr('spec');
+                //规格
+                $('#price p').attr('spec',spec);
+                //价格
+                /*$('#price p').attr('price',prices[data]);
+                $('#price p').text("指导价：每单位"+prices[data]+"元");
+                $('#price ').show();*/
+			});
+            
+			/*$(".cont3 button").click(function(){
+				$(this).addClass("red");
+				$(this).siblings().removeClass("red")
+			});*/
+        var f_classify_id={$f_classify_id};
+        var f_classify_fatherid={$f_classify_fatherid};
+        function dinghuo(){
+            var fgoods_id='{$fgoods.fgoods_id}';
+            var spec=$('#price p').attr('spec');//规格
+            //var price=$('#price p').attr('price');//价格
+            var num=$('#num').val();//数量  单位吨
+            //alert(fgoods_id+"--"+spec+"--"+price+"--"+num);
+            if(fgoods_id==undefined||fgoods_id==0||spec==undefined||spec==0||num==undefined||num==0){ 
+                layer.msg('请选择商品规格或者数量！',{icon:5,time:1000}); 
+                return false;
+            }else{
+                $.getJSON("{:U('ordermanagement/dinghuo')}&fgoods_id="+fgoods_id+"&spec="+spec+"&num="+num,function(data){
+                    if(data.status>0){
+                        layer.msg(data.msg,{icon:6,time:1000},function(){
+                            location.href = "{:U('ordermanagement/jiesuan')}&f_classify_id="+f_classify_id+"&f_classify_fatherid="+f_classify_fatherid+"&forder_id="+data.forder_id+"&fgoods_id="+data.fgoods_id;
+                        }); 
+                    }
+                });
+            }
+           
+            
+        }
+		</script>
+	</body>
+
+</html>

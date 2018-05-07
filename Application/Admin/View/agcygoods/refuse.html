@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>商品审核</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a >商品审核</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <div class="form-item">
+                    <table class="table"  border="" cellspacing="" cellpadding="">
+                        <tr>
+                            <td colspan="4" style="font-weight:bold">审核信息</td>
+                        </tr>
+                        <tr>
+                            <th style="font-weight:bold">商品名称</th>
+                             <td>{$popinfo.agcy_goods_name}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="min">
+                <div class="form_box">
+                    <form  name="myform" id="myform" action="{:U('Agcygoods/reject')}" method="post">
+                        <input type="hidden" name="agcy_goods_id"  value="{$popinfo.agcy_goods_id}"  />
+                        <div class="form-item">
+                            <label class="form-label">驳回备注信息：</label>
+                            <div class="textarea form-textarea form-input-block" style="width:50%">
+                                <textarea type="text" id="agcy_pop_check_remark" name="agcy_default_remskss"  maxlength="255" style="width:100%;height:150px"  ></textarea>
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <div class="form-button form-input-block">
+                                <input class="chaxun but" type="submit"  id="submit" onclick="return validate()" value="提交"/>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    function validate() {
+        var look_remark = $('#agcy_pop_check_remark').val();
+        if (look_remark == '') {
+            alert('请输入备注信息');
+            return false;
+        }
+        if (confirm("确认驳回该商品审核?")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+</script>
+

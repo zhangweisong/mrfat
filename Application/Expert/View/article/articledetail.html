@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>文章详情</title>
+        <!--说明文字编码-->
+        <meta http-equiv="Content-type" content="text/html" charset="utf-8">
+        <!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+        <!--控制状态栏显示样式-->
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!--解决uc字体变大问题-->
+        <meta name="wap-font-scale" content="no">
+        <!--手机号码不被显示为拨号链接-->
+        <meta content="telephone=no" name="format-detection" />
+        <!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        <link rel="stylesheet" href="__PUBLIC__/expert/css/public.css" />
+        <link rel="stylesheet" href="__PUBLIC__/expert/css/common.css" />
+        <link rel="stylesheet" href="__PUBLIC__/expert/css/xiangq.css" />  
+        <script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-3.1.1.min.js" ></script>
+        <style type="text/css">
+            .con_img img{
+                width:100%;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div class="header">
+            <a href="{:U('article/articlelist')}">
+                <img src="__PUBLIC__/expert/images/left.png" />
+            </a>
+            <p>文章详情</p>
+        </div>
+        <div class="cont">
+            <div class="wen">
+                <img class="toux" src="<?=$articleinfo['expert_avator']?>" />
+                <p><?=$articleinfo['expert_nickname']?><span><?=$articleinfo['snclassify_name']?></span></p>
+                <p><?=$articleinfo['expert_article_addtime']?></p>
+               
+                <div style="width:80%;margin-left:18%;">
+                    <img style="width:100%;" src="<?=$articleinfo['expert_article_image']?>" />
+                    <div class="con_img" style="font-size:1.2rem;line-height:2rem;">
+                        <?=$articleinfo['expert_article_content']?>
+                    </div> 
+                    <div class="footerr flexb">
+                        <div class="flexb">
+                            <img src="__PUBLIC__/expert/images/good.png" />
+                            <p><?=$articleinfo['expert_article_like']?></p>
+                        </div>
+                        <div class="flexb">
+                            <img src="__PUBLIC__/expert/images/message.png" />
+                            <p><?=$articleinfo['expert_article_comment']?></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <img src="__PUBLIC__/expert/images/ding.png" />
+            <p>用户评论</p>
+            <div class="clear"></div>
+            <div id='content'>
+                <?php if(count($commentlist)>0):?>
+                <?php foreach($commentlist AS $k=>$v):?>
+                <div class="da">
+                    <img src="<?=$v['avatar']?>" />
+                    <p><?=$v['realname']?></p>
+                    <p><?=$v['comment_addtime']?></p>
+                    <p ><?=$v['comment_content']?></p>
+                    <div class="foot flexb" onclick='like_questions(<?=$v['comment_id']?>)'>
+                        <img src="__PUBLIC__/expert/images/good.png" />
+                        <p id='count<?=$v['comment_id']?>'><?=$v['comment_like']?></p>
+                    </div>
+                </div> 
+                <?php endforeach;?>
+                <?php else:?> 
+                <div class="meiyouneirong" style="display:block;margin-top:10%;">
+                    <i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+                    <p>暂无评论</p>
+                </div>
+                <?php endif;?>
+            </div>
+            <div class="li_myxx_zt" id="li_myxx_zt" style="display:none" >
+                <p>亲，到底了~</p> 
+            </div>
+            <div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+                <img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+            </div>
+            <button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button>
+            <style>
+                .li_myxx_zt{height: 30px; line-height: 30px; background:#f5f5f5;}
+                .li_myxx_zt p{ text-align:center; font-size:12px; color:#cacaca;}
+                .meiyouneirong {
+                    width: 100%;
+                    margin-top: 100px;
+                    display: none;
+                }
+                .meiyouneirong i {
+                    display: block;
+                    width: 100px;
+                    margin: 0 auto;
+                }
+                .meiyouneirong i img {
+                    display: block;
+                    width: 100%;
+                }
+                .meiyouneirong p {
+                    text-align: center;
+                    font-size: 13px;
+                    color: #cacaca;
+                    margin-top: 8px;
+                }
+            </style>
+        </div>
+        <!--<button class="btnn" onclick="window.location.href = 'wendahuifu.html'">回复他</button>-->
+        <script type="text/javascript" src="__PUBLIC__/expert/js/screenSize.js" ></script>
+        <script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+        <script>
+            $(function () {
+                //页面滚动的时候绑定事件
+                $(window).scroll(function () {
+                    getData();
+                });
+            })
+
+            function getData() {
+                totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()) + 1;
+                //浏览器的高度加上滚动条的高度 （页面总高度）
+                if ($(document).height() <= totalheight) {
+                    //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+                    //加载
+                    $("#loadings").fadeIn();
+                    //根据条件获取对应的项目条数
+                    getmore();//使用模板加载更多
+                    //加载完毕          
+                    $("#loadings").fadeOut();
+                }
+            }
+            function getmore() {
+                var page = parseInt($("#more").attr("data")) + 1;
+                var title = $("#article_title").val();
+                var start = $("#demo2").text();
+                var end = $("#demo3").text();
+                $('#more').attr("data", page);//重置当前页数  
+                $.get("{:U('article/articledetail')}", {"p": page, "article_id": <?=$article_id?>}, function (data) {
+                    if (data) {
+                       $("#content").append(data);
+                    } else {
+                       $(".li_myxx_zt").show();
+                    }
+                 })
+            }
+
+
+
+            //问题点赞
+            var questions_id_arr = localStorage.getItem("questions_id");
+            if (questions_id_arr == null) {
+                questions_id_arr = [];
+            } else {
+                if (questions_id_arr.length <= 0) {
+                    questions_id_arr = [];
+                } else {
+                    questions_id_arr = JSON.parse(questions_id_arr);
+                }
+            }
+            function like_questions(questions_id) { 
+                //如果已点数组中存在
+                var in_array = false;
+                for (var i = 0; i < questions_id_arr.length; i++) {
+                    if (questions_id_arr[i] == questions_id) {
+                        in_array = true;
+                        break;
+                    }
+                }
+                if (in_array) {
+                    layer.msg('已点过赞了！',{icon:6,time:1000});
+                    return;
+                } else { 
+                    questions_id_arr.push(questions_id);
+                    localStorage.setItem("questions_id", JSON.stringify(questions_id_arr));
+                    $.get("{:U('article/comment_dianzan')}", {"comment_id": questions_id});
+                    var id_name = "#count"+questions_id;
+                    $(id_name).text(parseInt($(id_name).text())+1)
+                }
+            }
+
+        </script>
+    </body>
+
+</html>

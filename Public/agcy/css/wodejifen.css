@@ -1,0 +1,92 @@
+.cont{
+	background: #3ab849;
+	height: 6.52rem;
+	padding: 0.8rem 0;
+	border-top: 1px solid #FFFFFF;
+}
+.cont>div{
+	width: 49%;
+}
+.cont>div:first-of-type{
+	border-right: 1px solid #FFFFFF;
+}
+.cont>div:first-of-type p:first-of-type{
+	text-align: center;
+	color: #FFFFFF;
+	font-size: 1.8rem;
+	font-weight: 900;
+	padding-top: 1rem;
+}
+.cont>div:first-of-type p:last-of-type{
+	text-align: center;
+	color: #FFFFFF;
+	font-size: 0.96rem;
+	padding-top: 1.72rem;
+}
+.cont>div:last-of-type button{
+	width: 11.32rem;
+	height: 2.6rem;
+	background: #FFFFFF;
+	color: #3ab849;
+	border: none;
+	border-radius: 0.4rem;
+	display: block;
+	margin: 0 auto;
+	font-size: 1.12rem;
+}
+.links{
+	width: 90%;
+	margin-top: 1.6rem;
+}
+.links a{
+	color: #FFFFFF;
+	font-size: 0.96rem;
+}
+.tit{
+	line-height: 3rem;
+	padding-top: 1rem;
+	text-align: center;
+	font-size: 1.04rem;
+	color: #686868;
+}
+.table{
+	padding: 0 0.64rem;
+}
+.title div{
+	background: #f0f0f0;
+	border: solid 1px #FFFFFF;
+	height: 2.4rem;
+	line-height: 2.4rem;
+	color: #FFFFFF;
+	text-align: center;
+	color: #363636;
+	font-size: 1.04rem;
+}
+.title div:nth-of-type(1){
+	width: 40%;
+}
+.title div:nth-of-type(2){
+	width: 30%;
+}
+.title div:nth-of-type(3){
+	width: 30%;
+}
+.list div{
+	background: #ffffff;
+	border: solid 1px #dcdcdc;
+	height: 2.4rem;
+	line-height: 2.4rem;
+	color: #FFFFFF;
+	text-align: center;
+	color: #363636;
+	font-size: 0.88rem;
+}
+.list div:nth-of-type(1){
+	width: 40%;
+}
+.list div:nth-of-type(2){
+	width: 30%;
+}
+.list div:nth-of-type(3){
+	width: 30%;
+}

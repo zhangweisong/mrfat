@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+    <link href="__PUBLIC__/validform/Validform.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="__PUBLIC__/validform/Validform_v5.3.2.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" />
+</head>
+<style>
+    .form-button .ke-inline-block.but{margin-top:0;}
+    .form-button .ke-button-common{display:block;width:100%; height:100%; line-height:38px; background:none;}
+    .form-button .ke-button-common.ke-button{color:#fff; font-size:16px;}
+    .form-button .ke-upload-area.ke-form .ke-upload-file{display:block;width:100% !important; height:100%;     cursor: pointer;}
+</style>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">系统设置</a></li>
+            <li> > </li>
+            <li><a href="{:U('department/city')}">市区列表</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">修改市区</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <div class="form_box">
+            <form name="myform" id="myform" action="{:U('department/editcity',array('c_id'=>$cityInfo['c_id']))}" method="post">
+                <div class="form-item">
+                    <label class="form-label">省份名称</label>
+                    <div class="form-select form-input-block">
+                        <select name="p_id" id="p_id" class="dfinput" datatype="*" errormsg="请选择省份!" >
+                            <option value="">--请选择省份--</option>
+                            <volist name="province" id="data" >
+                                <option value="{$key}" <if condition="$cityInfo['p_id'] eq $key">selected</if>>{$data}</option>
+                            </volist>
+                        </select>
+                        <i class="Validform_checktip"></i>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-label">城市名称</label>
+                    <div class="form-text form-input-block">
+                        <input name="c_name" id="c_name" value="{$cityInfo.c_name}"  type="text" class="dfinput" datatype="check_a_name" errormsg="城市名称字数在2~20位之间！" maxlength="20" />
+                        <i class="Validform_checktip"></i>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <div class="form-button form-input-block">
+                        <input class="chaxun but" type="submit" value="提交"/>
+                        <button class="but chongzhi" type="button" onclick="location.href='{:U('department/city')}'">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+
+        $('.skin-section input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        $('input').on('ifChecked', function(event){
+            //alert($(this).val());
+        });
+    });
+</script>
+<script>
+    $(function(){
+        $("#myform").Validform({
+            //tiptype:2
+            tiptype:function(msg,o,cssctl){
+                var objtip=o.obj.siblings(".Validform_checktip");
+                cssctl(objtip,o.type);
+                objtip.text(msg);
+            },
+			datatype:{	//传入自定义datatype类型，可以是正则，也可以是函数（函数内会传入一个参数）;
+				"check_a_name":function(gets,obj,curform,datatype){
+					/*
+					  参数gets是获取到的表单元素值，
+					  obj为当前表单元素，
+					  curform为当前验证的表单，
+					  datatype为内置的一些正则表达式的引用。
+					*/
+					$.ajaxSetup({ 
+						async: false 
+					}); 
+				
+					var p_id=$("#p_id").val();  //省份名称id
+					var c_id={$cityInfo['c_id']};
+					var str="{:U('department/existnewtype1')}&p_id="+p_id+"&c_id="+c_id+"&param="+gets;
+					var flag=false;
+					var ajaxdata="";
+					$.ajax({  
+						type:'get',
+						url:str,
+						cache:false,
+						dataType:'json',
+						success:function(result){
+							if(result.status==="y"){
+								ajaxdata=result.info;
+								flag=true;
+							}else if(result.status==="n"){
+								ajaxdata=result.info;
+								flag=false;
+							}							
+						},
+						error:function() { 
+							ajaxdata="数据异常，请重新验证";
+							flag=false;
+						},
+						async:false
+					});
+					if(!flag)return ajaxdata;
+					return true;
+				}
+			}
+        });
+    });
+</script>

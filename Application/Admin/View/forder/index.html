@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>经销商订单</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css"> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 
+        <script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script> 
+        <script type="text/javascript">
+            $(function () {
+                $('input, textarea').placeholder();
+            });
+        </script> 
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a href="###">厂家管理</a></li>
+                    <li> > </li>
+                    <li><a href="{:U('forder/index')}">经销商订单</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <!--查询-->
+                <div class="query">
+                    <form name="seachform" id="seachform" action="{:U('forder/index')}"  method="post" class="form">
+                        <div class="form_input mg_trb">
+                            <label class="text">快速检索</label>
+                            <input type="text" name="info[agcy_name]"  value="{$agcy_name}"  placeholder="订单编号/经销商名称"  maxlength="20"/>
+                        </div> 
+
+                        <div class="form_input mg_trb form-date">
+                            <label class="text">订单时间</label>
+                            <input type="text" class="laydate-icon layer-date" name="info[starttime]"  value="{$starttime}"  id="start" placeholder="开始时间" readonly/>
+                            <span>--</span>
+                            <input type="text" class="laydate-icon layer-date" name="info[endtime]"  value="{$endtime}"  id="end" placeholder="结束时间" readonly/>
+                        </div>
+                         
+                        <div class="select mg_trb">
+                            <span class="text">订单状态</span>
+                            <select name="info[forder_flag]">
+                                <option value="0">--请选状态--</option> 
+                                <option value="1" <?php if($forder_flag == 1){echo 'selected';}?>>待付款</option> 
+                                <option value="2" <?php if($forder_flag == 2){echo 'selected';}?>>待发货</option> 
+                                <option value="3" <?php if($forder_flag == 3){echo 'selected';}?>>已完成</option> 
+                            </select>
+                        </div>
+                         
+                        <div class="button mg_trb" onclick="location.href = '{:U(\'forder/index\')}'">
+                            <i class="fa fa-refresh ico"></i>
+                            <input type="button" value="刷新" class="but chongzhi" />
+                        </div>
+                        <div class="button mg_trb chaxun">
+                            <i class="fa fa-search ico"></i>
+                            <input type="submit" value="查询" class="but " style="position: absolute; background: none;z-index: 2;"/>
+                        </div>
+                    </form>
+                </div> 
+                <div class="table_box">
+                    <table class="table" border="" cellspacing="" cellpadding=""> 
+                        <colgroup>
+                            <col width="150">
+                            <col width="150">
+                            <!--<col width="100">-->
+                            <!--<col width="100">-->
+                            <col width="100"> 
+                            <col width="150">
+                            <col width="100">
+                            <col width="100"> 
+                            <col>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>订单编号</th>
+                                <th>经销商名称</th>
+                                <!--<th>运费</th>-->
+                                <!--<th>商品总价</th>-->
+                                <th>合计</th>
+                                <th>订单时间</th> 
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="forderlist" id="order">
+                            <tr>
+                                <td>{$order.forder_number}</td> 
+                                <td>{$order.agcy_name}</td>
+                                <!--<td>{$order.forder_tpcost}</td>-->
+                                <!--<td>{$order.forder_price}</td>-->
+                                <td>{$order.forder_total}</td>
+                                <td>{$order.forder_addtime}</td> 
+                                <td>{$order.forder_flagstr}</td>  
+                                <td> 
+                                    <a onclick="xiangQing({$order.forder_id})" href="###"  class="but chaxun">
+                                        <i class="fa fa-eye"></i>
+                                        商品详情
+                                    </a> 
+                                </td>
+                            </tr> 
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                {$pageshow}
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $("#p_id").change(function () {
+                    $("#c_id").html("<option value='0' >--请选择市--</option> ")
+                    $("#a_id").html("<option value='0' >--请选择区县--</option> ")
+                    var province_id = $("#p_id").val()
+                    if (province_id == 0)
+                        return;
+                    $.getJSON("{:U('department/getCityName')}&p_id=" + province_id, function (res) {
+                        data = res.data
+                        var html = "<option value='0' >--请选择市--</option>";
+                        for (var i = 0; i < data.length; i++) {
+                            html += "<option value=" + data[i].c_id + ">" + data[i].c_name + "</option>";
+                        }
+                        $("#c_id").html(html);
+                    });
+                })
+                $("#c_id").change(function () {
+                    $("#a_id").html("<option value='0' >--请选择区县--</option> ")
+                    var city_id = $("#c_id").val()
+                    if (city_id == 0)
+                        return;
+                    $.getJSON("{:U('department/getAreaName')}&c_id=" + city_id, function (res) {
+                        data = res.data
+                        var html = "<option value='0' >--请选择区县--</option>";
+                        for (var i = 0; i < data.length; i++) {
+                            html += "<option value=" + data[i].a_id + ">" + data[i].a_name + "</option>";
+                        }
+                        $("#a_id").html(html);
+                    });
+                })
+            })
+        </script> 
+        <script src="__PUBLIC__/admin/js/layer/layer.js"></script> 
+        <script src="__PUBLIC__/admin/js/laydate/laydate.js"></script>
+        <script>
+            //laydate({elem: "#hello", event: "focus"});
+            var start = {
+                elem: "#start",
+                format: "YYYY-MM-DD",
+                min: "2000-06-16",
+                max: "2099-06-16",
+                istime: false,
+                istoday: false,
+                choose: function (datas) {
+                    end.min = datas;
+                    end.start = datas
+                }
+            };
+            var end = {
+                elem: "#end",
+                format: "YYYY-MM-DD",
+                min: "2000-06-16",
+                max: "2099-06-16",
+                istime: false,
+                istoday: false,
+                choose: function (datas) {
+                    start.max = datas
+                }
+            };
+            laydate(start);
+            laydate(end);
+            $(function () {
+                $('input, textarea').placeholder();
+            });
+            //显示开关1显示；2隐藏
+            function checkedswitchs(obj, id) {
+                if ($(obj).is(':checked')) {
+                    //true 
+                    $.get("{:U('factory/ajax_on')}", {"factory_id": id})
+                } else {
+                    $.get("{:U('factory/ajax_off')}", {"factory_id": id})
+                }
+            }
+            $(".right_min").height($(window).height());
+            function xiangQing(forder_id) {
+                var body_w = $(".right_min").width() - 200;
+                var body_h = $(".right_min").height() - 100;
+                layer.open({
+                    type: 2,
+                    title: false,
+                    skin: "layui-layer-molv",
+                    shade: [0.8, '#000000'],
+                    scrollbar: false,
+                    maxmin: false,
+                    shadeClose: false, //点击遮罩关闭层
+                    area: [body_w + "px", body_h + "px"],
+                    content: "{:U('forder/orderdetails')}&forder_id=" + forder_id
+                });
+            }
+        </script> 
+    </body>
+</html>

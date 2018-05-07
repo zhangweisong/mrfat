@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>商品详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+	<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+	<link rel="stylesheet" href="__PUBLIC__/tupian/css/lightbox.css">
+</head>
+<body>
+
+<div class="right_min">
+	<div class="crumbs_nav">
+		<i class="iconfont icon-shouye"></i>
+		<ul>
+			<li><a href="javascript:void(0);">商品详情</a></li>
+		</ul>
+	</div>
+	<div class="min">
+		<div class="message">
+			<div class="message-block message-border-t">
+				<h4 class="message-left_block">商品详情</h4>
+			</div>
+			<table class="table" border="" cellspacing="" cellpadding="">
+				<tr>					
+					<th style="font-weight:bold;">商品编号</th>
+					<td>{$orderinfo.fgoods_id}</td>
+					<th style="font-weight:bold">商品名称</th>
+					<td>{$orderinfo.fgoods_name}</td>
+
+				</tr>
+				<tr>
+					<th style="font-weight:bold">所属厂家</th>
+					<td style="color:green">{$orderinfo.factory_name}</td>
+					<th style="font-weight:bold">审核状态</th>
+					<if condition="$orderinfo['fgoods_state'] eq 0">
+					<td style="color:red">未审核</td>
+					</if>
+					<if condition="$orderinfo['fgoods_state'] eq 1">
+					<td style="color:green">已通过</td>
+					</if>
+					<if condition="$orderinfo['fgoods_state'] eq 2">
+					<td style="color:green">驳回</td>
+					</if>
+				</tr> 
+				<tr>
+					<th style="font-weight:bold">商品规格</th>
+					<td>{$orderinfo.fgoods_spec}</td>
+					<th style="font-weight:bold">价格/吨</th>
+					<td>{$orderinfo.fgoods_tonprice}</td>
+				</tr>
+				<tr>
+					<th style="font-weight:bold">商品图片</th>
+					<?php
+						$images=explode('|',$orderinfo['fgoods_images']);
+						?>
+						<td colspan="3"> 
+						<volist name="images" id="res">
+							<a class="example-image-link" href="{$res}" data-lightbox="example-1" >
+								<img class="example-image" style="width:60px;heigtht:60px;" src="{$res}"/>
+							</a> 
+					    </volist> 
+						</td>
+				</tr>
+				<tr>
+					<th style="font-weight:bold" >商品简介</th>
+					<td colspan="3">{$orderinfo.fgoods_detail}</td>
+				</tr>
+			</table>         			
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src="/foodsking/Public/admin/js/layer/layer.js"></script>
+<script src="__PUBLIC__/tupian/js/lightbox-plus-jquery.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+        $('.table_box input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        var index = parent.layer.getFrameIndex(window.name);
+        $('#net').on('click', function(){
+            parent.layer.close(index);
+        });
+    });
+</script>

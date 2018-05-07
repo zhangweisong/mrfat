@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>书籍详情</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="css/mian.css"/>
+        <link rel="stylesheet" type="text/css" href="js/Swiper/swiper.min.css"/>
+        <script src="js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<div>
+			<!--banner-->
+	    	<div class="sjxq_banner">
+			    <div class="swiper-container">
+			        <div class="swiper-wrapper">
+			            <div class="swiper-slide">
+			            	<a href="#">
+			            		<img src="images/sjxq_t1.jpg"/>
+			            	</a>
+			            </div>
+			            <div class="swiper-slide">
+			            	<a href="#">
+			            		<img src="images/sjxq_t1.jpg"/>
+			            	</a>
+			            </div>
+			        </div>
+			        <div class="swiper-pagination"></div>
+			    </div>
+	    	</div>
+	    	<!---->
+	    	<div class="sjxq_box mg_t5">
+    			<div class="spxq_text">
+    				<h4 class="title">得力中性笔批发0.5黑色按动中性笔办公碳素笔水笔</h4>
+    				<p class="jiage c">
+    					<span>￥:360.00</span>
+    					<i>￥:400.00</i>
+    					<em>销量：25252252</em>
+    				</p>
+    				<div class="shuliang c">
+    					<dl class="shuliang_fl">
+    						<dt>数量：</dt>
+    						<dd>
+    							<span class="jian">-</span>
+    							<i class="shuzi">1</i>
+    							<span class="jia">+</span>
+    						</dd>
+    					</dl>
+    					<span class="shuliang_fr">库存：200</span>
+    				</div>
+    			</div>
+	    		<div class="sjxq_title_bt mg_t5">
+	    			<ul>
+	    				<li>作者：于泗勇、陈英霞、陈蓉、庞涛、王驰呈</li>
+	    				<li>出版社：清华大学出版社</li>
+	    				<li>开本：32开</li>
+	    				<li>ISBN编号: 78511564654987</li>
+	    			</ul>
+	    		</div>
+ 				<div class="spxq_zdy">
+    				<h4 class="title">商品信息</h4>
+    				<div class="spxq_zdy_xq">
+    					自定义区域
+    				</div>
+    			</div>
+	    	</div>
+    	</div>
+    	<div class="xpxq_footer">
+    		<ol>
+    			<li class="li1">加入购物车</li>
+    			<li class="li2">立即购买</li>
+    		</ol>
+    	</div>
+		<div class="gouwuchetubiao">
+			<a href="gouwuche.html">
+				<span></span>
+				<em>5</em>
+			</a>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="js/Swiper/swiper.min.js"></script>
+<script type="text/javascript">
+    var swiper = new Swiper('.sjxq_banner .swiper-container', {
+        pagination : '.sjxq_banner .swiper-pagination',
+        paginationType : 'fraction',
+    });
+</script>
+<script type="text/javascript">
+	$(function(){
+		var _xinshu;
+		var _shu=parseInt($('.shuzi').text());
+		var _jian=$('.jian');
+		var _jia=$('.jia');
+		_jia.click(function(){
+			_xinshu=++_shu;
+			$('.shuzi').text(_xinshu);
+		});
+		_jian.click(function(){
+			if(_shu===1){
+				return;
+			};
+			_xinshu=--_shu;
+			$('.shuzi').text(_xinshu);
+		})
+	})
+</script>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"> 
+    <script src="../jquery.min.js"></script> 
+    <script src="../webuploader.min.js"></script> 
+    <script src="../Eleditor.min.js"></script> 
+</head>
+<body>
+  
+
+<div id="contentEditor"> 
+</div>
+
+<script> 
+var contentEditor = new Eleditor({
+						el: '#contentEditor',
+						upload:{
+							server: '/upload.json',
+							compress: false, 
+						},
+						/*自定义按钮的例子*/
+						toolbars: [
+			              'insertText',
+			              'editText',
+			              'insertImage',
+			              'insertLink',
+			              'insertHr',
+			              'delete', 
+			              'undo',
+			              'cancel'
+						] 
+					});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>购物车</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="css/mian.css"/>
+        <script src="js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<div class="pd_t45 gouwuche_box">
+			<div class="gouwuche_ct">
+				<div class="gouwuche_list mg_b10">
+					<div class="gouwuche_list_top">
+						<i class="quanbufuxuan"><input onclick="quanxuan(this)" type="checkbox"/></i>
+						<h4>和盛农资连锁店</h4>
+					</div>
+					<div class="gouwuche_list_ct">
+						<i class="dangefuxuan"><input onclick="danxuan(this)" type="checkbox"/></i>
+						<dl class="c">
+							<a href="#">
+								<dt><img src="images/ceshi_img1.jpg"/></dt>
+								<dd>
+									<h4>马克华菲夹克男2018春秋新款简约纯色时尚棒球领修身上衣外套</h4>
+				    				<div class="danjia">
+				    					<span>价格：￥<em>100</em></span>
+				    				</div>
+									<div class="shuliang c">
+				    					<span class="shuliang_fr">删除</span>
+				    					<dl class="shuliang_fl">
+				    						<dt>数量：</dt>
+				    						<dd>
+				    							<span onclick="jian(this)" class="jian">-</span>
+				    							<i class="shuzi">1</i>
+				    							<span onclick="jia(this)" class="jia">+</span>
+				    						</dd>
+				    					</dl>
+				    				</div>
+								</dd>
+							</a>
+						</dl>
+					</div>
+					<div class="gouwuche_list_ct">
+						<i class="dangefuxuan"><input onclick="danxuan(this)" type="checkbox"/></i>
+						<dl class="c">
+							<a href="#">
+								<dt><img src="images/ceshi_img1.jpg"/></dt>
+								<dd>
+									<h4>马克华菲夹克男2018春秋新款简约纯色时尚棒球领修身上衣外套</h4>
+				    				<div class="danjia">
+				    					<span>价格：￥<em>100</em></span>
+				    				</div>
+									<div class="shuliang c">
+				    					<span class="shuliang_fr">删除</span>
+				    					<dl class="shuliang_fl">
+				    						<dt>数量：</dt>
+				    						<dd>
+				    							<span onclick="jian(this)" class="jian">-</span>
+				    							<i class="shuzi">1</i>
+				    							<span onclick="jia(this)" class="jia">+</span>
+				    						</dd>
+				    					</dl>
+				    				</div>
+								</dd>
+							</a>
+						</dl>
+					</div>
+				</div>
+				<div class="gouwuche_list mg_b10">
+					<div class="gouwuche_list_top">
+						<i class="quanbufuxuan"><input onclick="quanxuan(this)" type="checkbox"/></i>
+						<h4>三农直通车惠民平台</h4>
+					</div>
+					<div class="gouwuche_list_ct">
+						<i class="dangefuxuan"><input onclick="danxuan(this)" type="checkbox"/></i>
+						<dl class="c">
+							<a href="#">
+								<dt><img src="images/ceshi_img1.jpg"/></dt>
+								<dd>
+									<h4>马克华菲夹克男2018春秋新款简约纯色时尚棒球领修身上衣外套</h4>
+				    				<div class="danjia">
+				    					<span>价格：￥<em>100</em></span>
+				    				</div>
+									<div class="shuliang c">
+				    					<span class="shuliang_fr">删除</span>
+				    					<dl class="shuliang_fl">
+				    						<dt>数量：</dt>
+				    						<dd>
+				    							<span onclick="jian(this)" class="jian">-</span>
+				    							<i class="shuzi">1</i>
+				    							<span onclick="jia(this)" class="jia">+</span>
+				    						</dd>
+				    					</dl>
+				    				</div>
+								</dd>
+							</a>
+						</dl>
+					</div>
+					<div class="gouwuche_list_ct">
+						<i class="dangefuxuan"><input onclick="danxuan(this)" type="checkbox"/></i>
+						<dl class="c">
+							<a href="#">
+								<dt><img src="images/ceshi_img1.jpg"/></dt>
+								<dd>
+									<h4>马克华菲夹克男2018春秋新款简约纯色时尚棒球领修身上衣外套</h4>
+				    				<div class="danjia">
+				    					<span>价格：￥<em>100</em></span>
+				    				</div>
+									<div class="shuliang c">
+				    					<span class="shuliang_fr">删除</span>
+				    					<dl class="shuliang_fl">
+				    						<dt>数量：</dt>
+				    						<dd>
+				    							<span onclick="jian(this)" class="jian">-</span>
+				    							<i class="shuzi">1</i>
+				    							<span onclick="jia(this)" class="jia">+</span>
+				    						</dd>
+				    					</dl>
+				    				</div>
+								</dd>
+							</a>
+						</dl>
+					</div>
+				</div>
+				<div class="gouwuche_list mg_b10">
+					<div class="gouwuche_list_top">
+						<i class="quanbufuxuan"><input onclick="quanxuan(this)" type="checkbox"/></i>
+						<h4>三农直通车惠民平台</h4>
+					</div>
+					<div class="gouwuche_list_ct">
+						<i class="dangefuxuan"><input onclick="danxuan(this)" type="checkbox"/></i>
+						<dl class="c">
+							<a href="#">
+								<dt><img src="images/ceshi_img1.jpg"/></dt>
+								<dd>
+									<h4>马克华菲夹克男2018春秋新款简约纯色时尚棒球领修身上衣外套</h4>
+				    				<div class="danjia">
+				    					<span>价格：￥<em>100</em></span>
+				    				</div>
+									<div class="shuliang c">
+				    					<span class="shuliang_fr">删除</span>
+				    					<dl class="shuliang_fl">
+				    						<dt>数量：</dt>
+				    						<dd>
+				    							<span onclick="jian(this)" class="jian">-</span>
+				    							<i class="shuzi">1</i>
+				    							<span onclick="jia(this)" class="jia">+</span>
+				    						</dd>
+				    					</dl>
+				    				</div>
+								</dd>
+							</a>
+						</dl>
+					</div>
+					<div class="gouwuche_list_ct">
+						<i class="dangefuxuan"><input onclick="danxuan(this)" type="checkbox"/></i>
+						<dl class="c">
+							<a href="#">
+								<dt><img src="images/ceshi_img1.jpg"/></dt>
+								<dd>
+									<h4>马克华菲夹克男2018春秋新款简约纯色时尚棒球领修身上衣外套</h4>
+				    				<div class="danjia">
+				    					<span>价格：￥<em>100</em></span>
+				    				</div>
+									<div class="shuliang c">
+				    					<span class="shuliang_fr">删除</span>
+				    					<dl class="shuliang_fl">
+				    						<dt>数量：</dt>
+				    						<dd>
+				    							<span onclick="jian(this)" class="jian">-</span>
+				    							<i class="shuzi">1</i>
+				    							<span onclick="jia(this)" class="jia">+</span>
+				    						</dd>
+				    					</dl>
+				    				</div>
+								</dd>
+							</a>
+						</dl>
+					</div>
+				</div>
+			</div>
+			<div class="heji">
+				<i>合计：￥<em>100</em></i>
+				<span>结算</span>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	//全选、全不选
+	function quanxuan(obj){
+		if($(obj).is(':checked')){
+			$(obj).parents('.gouwuche_list_top').siblings().find('.dangefuxuan input').prop("checked",true);  
+			$(obj).parents('.gouwuche_list').siblings().find('input[type="checkbox"]').prop("checked",false);
+		}else{
+			$(obj).parents('.gouwuche_list_top').siblings().find('.dangefuxuan input').prop("checked",false);  
+		}	
+		allmoney();
+	}
+	//单选
+	function danxuan(obj){
+		//获取gouwuche_list_ct的个数
+		var length_=$(obj).parents('.gouwuche_list').find('.gouwuche_list_ct').length;
+		//获取gouwuche_list_ct选中的个数
+		var checked_True=$(obj).parents('.gouwuche_list').find('.gouwuche_list_ct input:checkbox:checked').length
+		if(length_==checked_True){
+			$(obj).parents('.gouwuche_list').find('.gouwuche_list_top input').prop("checked",true);
+		}else{
+			$(obj).parents('.gouwuche_list').find('.gouwuche_list_top input').prop("checked",false);
+		}
+		if($(obj).is(':checked')){
+			$(obj).parents('.gouwuche_list').siblings().find('input[type="checkbox"]').prop("checked",false);
+		}else{
+				
+		}	
+		allmoney();
+	}
+	var zongshu=1;
+	//数量加
+	function jia(obj){
+		var zongshu=parseInt($(obj).prev().text())
+		zongshu++;
+		$(obj).prev().text(zongshu);
+		allmoney();
+	}
+	//数量减
+	function jian(obj){
+		var zongshu=parseInt($(obj).next().text())
+		zongshu--;
+		if(zongshu<1){
+			return false;
+		}
+		$(obj).next().text(zongshu);
+		allmoney();
+	}	
+	//计算总价
+	function allmoney(){
+		var money=0;
+		//console.log($(".dangefuxuan").find("input"));
+		$(".dangefuxuan").find("input").each(function(i){
+			if($(this).is(':checked')){
+				var price=parseInt($(this).parents().next().find("em").html());
+				var num=parseFloat($(this).parents().next().find(".shuzi").html());
+				money+=price*num;
+			}
+		});
+		$(".heji").find("em").html(money.toFixed(2));
+	}
+	function toFixed(num, s) {
+	    var times = Math.pow(10, s)
+	    var des = num * times + 0.5
+	    des = parseInt(des, 10) / times
+	    return des + ''
+	}
+</script>
+
+

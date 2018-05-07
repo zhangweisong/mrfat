@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+	<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+	<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.idTabs.min.js"></script>
+	<link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" />
+	<script type="text/javascript" src="__PUBLIC__/kindeditor/kindeditor-min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/kindeditor/lang/zh-CN.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/admin/js/stringOperate.js"></script>
+</head>
+<script type="text/javascript">
+    var editor;
+    KindEditor.ready(function (K) {
+        editor = K.create('textarea[id="book_content"]', {
+            uploadJson: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}',
+            fileManagerJson: '{:U(\'kindeditor/file_manager_json\')}',
+            allowFileManager: true,
+            urlType: 'domain',
+            afterCreate: function () {
+                this.sync();
+            },
+            afterBlur: function () {
+                this.sync();
+            }
+        });
+
+        //多图
+        var uploadbutton = K.uploadbutton({
+            button: K('#uploadButton')[0],
+            fieldName: 'imgFile',
+            url: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}',
+            afterUpload: function (data) {
+                if (data.error === 0) {
+                    var url = K.formatUrl(data.url, 'domain');
+                    K('#imagemore').val(url);
+                    add_album_img(url);
+                } else {
+                    alert(data.message);
+                }
+            },
+            afterError: function (str) {
+                alert('自定义错误信息: ' + str);
+            }
+        });
+        uploadbutton.fileBox.change(function (e) {
+            uploadbutton.submit();
+        });
+    });
+
+
+
+    //图片插件
+    function add_album_img(imgurl) {
+        var val = StringOperate.add($("#expert_image").val(), imgurl);
+        $("#expert_image").val(val);
+        $("#toollist_pic").append("<li onclick=\"del_album_img(\'" + imgurl + "\',this);\"><a><img src='" + imgurl + "'><i class=\"fa fa-times-circle\"></i></a></li>");
+        $('#imagemore').val("");
+    }
+    function del_album_img(imgurl, obj) {
+        var val = StringOperate.remove($("#expert_image").val(), imgurl);
+        $("#expert_image").val(val);
+        $(obj).remove();//删除元素
+    }
+
+</script>
+
+<style>
+	/*多图上传样式*/
+	.toollist_pic{clear: both;width: 100%;text-align: center;margin-right: 10px; margin-top:10px;}
+	.toollist_pic li{float: left;list-style:none; clear: initial; width:100px;height:100px; overflow:hidden;position: relative;}
+	.toollist_pic li a{display:block; width:100%; height:100%;}
+	.toollist_pic li img{width:100px;height:100px;}
+	.toollist_pic li i{display:block; position:absolute; top:0; right:0; width:20px; height:20px; background:#2cb184; z-index:888; margin:0;}
+	.toollist_pic li .fa-times-circle{ font-size:20px; color:#fff;}
+	.span{display:inline-block; height:34px; line-height:34px;color: #ff0000;font-size:1.8rem;vertical-align: middle;}
+	.form-button .ke-inline-block.but{margin-top:0;}
+	.form-button .ke-button-common{display:block;width:100%; height:100%; line-height:38px; background:none;}
+	.form-button .ke-button-common.ke-button{color:#fff; font-size:16px;}
+	.form-button .ke-upload-area.ke-form .ke-upload-file{display:block;width:100% !important; height:100%;     cursor: pointer;}
+</style>
+
+<body>
+<div class="right_min">
+	<div class="crumbs_nav">
+		<i class="iconfont icon-shouye"></i>
+		<ul>
+			<li><a href="{:U('index/welcome')}">首页</a></li>
+			<li> > </li>
+			<li><a href="#">专家管理</a></li>
+			<li> > </li>
+			<li><a href="{:U('expert/index')}">专家列表</a></li>
+			<li> > </li>
+			<li><a href="#">编辑专家</a></li>
+		</ul>
+	</div>
+	<div class="min">
+		<div class="form_box">
+			<form name="myform" id="myform" action="{:U('expert/edit',array('expert_id'=>$expert['expert_id']))}" method="post" onsubmit="return check()">
+				<div class="form-item">
+					<label class="form-label">登录账户</label>
+					<div class="form-text form-input-block w50">
+						<input type="text" name="info[expert_username]" id="expert_username" value="{$expert.expert_username}"  readonly/>
+						<i class="expert_username" style="display:none;color:red;">登录账户不能为空</i>
+					</div>
+				</div>
+				<div class="form-item">
+					<label class="form-label">昵称</label>
+					<div class="form-text form-input-block w50">
+						<input type="text" name="info[expert_nickname]" id="expert_nickname" value="{$expert.expert_nickname}" placeholder="请输入昵称" maxlength="20" readonly/>
+						<i class="expert_nickname" style="display:none;color:red;">昵称不能为空</i>
+					</div>
+				</div>
+				<div class="form-item">
+					<label class="form-label">真实姓名</label>
+					<div class="form-text form-input-block w50">
+						<input type="text" name="info[expert_realname]" id="expert_realname" value="{$expert.expert_realname}" placeholder="请输入真实姓名" maxlength="20"/>
+						<i class="expert_realname" style="display:none;color:red;">真实姓名不能为空</i>
+					</div>
+				</div>
+				<div class="form-item">
+					<label class="form-label">手机号码</label>
+					<div class="form-text form-input-block w50">
+						<input type="text" name="info[expert_phone]" id="expert_phone" value="{$expert.expert_phone}" placeholder="手机号码" maxlength="11" onkeyup='this.value=this.value.replace(/\D/gi,"")'/>
+						<i class="expert_phone" style="display:none;color:red;">请输入正确的手机号码</i>
+					</div>
+				</div>
+				<div class="form-item">
+					<label class="form-label">专家职称</label>
+					<div class="form-select form-input-block">
+						<select name="info[expert_pessional]" id="expert_pessional">
+							<option value="">请选择专家职称</option>
+							<volist name="expert_pessionals" id="data">
+								<option value="{$key}" <if condition="$key eq $expert['expert_pessional']">selected </if>>{$data}</option>
+							</volist>
+						</select>
+						<i class="expert_pessional" style="display:none;color:red;">专家职称不能为空</i>
+					</div>
+				</div>
+				<div class="form-item">
+					<label class="form-label">工作单位</label>
+					<div class="form-text form-input-block w50">
+						<input type="text" name="info[expert_company]" id="expert_company" value="{$expert.expert_company}" placeholder="请输入工作单位" maxlength="20"/>
+						<i class="expert_company" style="display:none;color:red;">工作单位不能为空</i>
+					</div>
+				</div>
+				<div class="form-item">
+					<label class="form-label">个人简介</label>
+					<div class="form-textarea form-input-block">
+						<textarea name="info[expert_brief]" placeholder="请输入个人简介" id="expert_brief"  maxlength="300">{$expert.expert_brief}</textarea>
+						<i class="expert_brief" style="display:none;color:red;">个人简介不能为空</i>
+					</div>
+				</div>
+				<div class="form-item">
+					<label class="form-label">擅长</label>
+					<div class="form-textarea form-input-block">
+						<textarea name="info[expert_skil]" placeholder="请输入擅长" id="expert_skil"  maxlength="300">{$expert.expert_skil}</textarea>
+						<i class="expert_skil" style="display:none;color:red;">擅长不能为空</i>
+					</div>
+				</div>
+				<div class="form-item">
+					<label class="form-label"  >专家状态</label>
+					<div class="form-radio form-input-block" style="width:50%">
+						<div class="skin-section">
+							<ul>
+								<li>
+									<input type="radio" name="radio" value="1" <if condition="$expert['expert_state'] eq 1">checked </if>>
+									<span>正常</span>
+								</li>
+								<li>
+									<input type="radio" name="radio" value="2" <if condition="$expert['expert_state'] eq 2"> checked</if>  >
+									<span>禁用</span>
+								</li>
+							</ul>
+							<input type="hidden"  name="info[expert_state]"  id="expert_state" value="{$expert.expert_state}" >
+						</div>
+						<i class="expert_state" style="display:none;color:red;">状态不能为空</i>
+					</div>
+				</div>
+				<div class="form-item">
+					<label class="form-label">职称证书</label>
+					<div class="form-text form-input-inline w40">
+						<input type="text"  name="info[expert_image]" id="expert_image"   readonly value="{$expert.expert_image}"/>
+					</div>
+					<div class="form-button form-input-inline">
+						<input class="but shenhe mg_t0" type="button" id="uploadButton"  class="chaxun but" value="上传" />
+						<i class="expert_image" style="display:none;color:red;">请上传图片</i>
+						<input name="image" id="imagemore" type="hidden" class="dfinput" value="" readonly />
+					</div>
+					<!--<div class="form-text form-input-block w50"><i style="font-size:12px;color:red;">第一张是图书封面图（图片大小220x230） ， 第二张开始是图书详细图（图片大小720x460）</i></div>-->
+					<div class="form-text form-input-block w50">
+						<ul class="toollist_pic c" id="toollist_pic">
+							<volist name="expert_images" id="image">
+								<li onclick="del_album_img('{$image}', this)"><a><img src="{$image}"><i class="fa fa-times-circle"></i></a></li>
+							</volist>
+						</ul>
+					</div>
+				</div>
+				<div class="form-item">
+					<div class="form-button form-input-block">
+						<input class="chaxun but" type="submit" id="submit" value="提交"/>
+
+						<button class="but chongzhi" type="button" onclick="location.href='{:U('expert/index')}'">返回</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $('.form-checkbox input,.form-radio input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
+    $(function () {
+        $(".right_min").height($(window).height());
+        $('.form-checkbox input,.form-radio input').on('ifChecked', function (event) {
+            var a = $(this).val();
+            $("#expert_state").val(a);
+        });
+    });
+
+    function check() {
+        var all_arr = new Array('expert_realname','expert_phone','expert_pessional','expert_company','expert_brief','expert_skil',
+			'expert_state', 'expert_image');
+        for (var i = 0; i < all_arr.length; i++) {
+            var obj_name = all_arr[i];
+            var obj_id = '#'+obj_name;
+            var obj_class = '.'+obj_name;
+            var this_obj_val = document.getElementById(obj_name).value;
+            if(obj_id=='#expert_phone'){
+				if(!(/^1\d{10}$/.test(this_obj_val))){
+                    $(obj_class).show();
+                    $(obj_id).focus();
+                    return false;
+				}
+			}else{
+                if (this_obj_val == 0||this_obj_val=="") {
+                    $(obj_class).show();
+                    $(obj_id).focus();
+                    return false;
+                }
+			}
+            $(obj_class).hide();
+        }
+        document.getElementById("submit").disabled = true;
+    }
+
+</script>

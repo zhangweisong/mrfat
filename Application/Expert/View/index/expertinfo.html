@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>个人信息</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/expert/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/expert/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/expert/css/gerenxinxi.css" />
+        <script type="text/javascript" src="__PUBLIC__/expert/js/jquery-3.1.1.min.js"></script>
+        <link rel="stylesheet" href="__PUBLIC__/user/js/mui/mui.min.css">
+        <link rel="stylesheet" href="__PUBLIC__/user/js/mui/mui-custom.css">
+	</head>
+    <style>
+       body{background:#fff;}
+       .botton_bg{width: 100%; height: 42px; padding: 0 10px; display: block;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
+       .botton_bg .bot{display:block;width: 100%; height: 100%; text-align: center; font-size: 16px; color: #fff; border: none; background: none; background: #3ab849; border-radius: 5px; line-height: 42px;}
+    </style>  
+
+	<body>
+		<div class="header">
+			<a href="{:U('index/index')}">
+				<img src="__PUBLIC__/expert/images/left.png" />
+			</a>
+			<p>个人信息</p>
+		</div>
+		<ul class="cont">
+			<li>
+				<p style="color:#000;">昵称：</p>
+				<p style="color:#000;">{$expert.expert_nickname}</p>
+			</li>
+			<li>
+				<p style="color:#000;">电话：</p>
+				<p style="color:#000;">{$expert.expert_phone}</p>
+			</li>
+			<li>
+				<p style="color:#000;">职称：</p>
+				<p style="color:#000;">{$expert.sclassify_name}</p>
+			</li>
+			<li>    
+				<p style="color:#000;">简介：</p>
+                <p style="color:#000;"  readonly  maxlength="100">{$expert.expert_brief}</p>
+			</li>
+			<li>
+				<p style="color:#000;">擅长：</p>
+				<p style="color:#000;">{$expert.expert_skil}</p>
+			</li>
+			<li>
+				<p style="color:#000;">证书：</p> 
+					 
+						<?php if($expert['expert_image']):?>
+						<?php foreach(explode("|",$expert['expert_image']) AS $k=>$v):?>
+						<img src="{$v}" data-preview-src="" data-preview-group="1" /> 
+						<?php endforeach;?>
+						<?php endif;?>
+					 
+			</li>
+		</ul>
+        <div class="botton_bg" style="margin:30px auto" onclick="outlogin()"s>
+            <span class="bot" >退出登录</span>
+        </div> 
+		<script type="text/javascript" src="__PUBLIC__/expert/js/screenSize.js" ></script>
+        <script src="__PUBLIC__/user/js/mui/mui.min.js"></script>
+        <script src="__PUBLIC__/user/js/mui/mui.zoom.js"></script>
+        <script src="__PUBLIC__/user/js/mui/mui.previewimage.js"></script>
+	</body>
+    <script>
+		 function outlogin(){
+			  location.href="{:U('index/outlogin')}";
+		 }
+	 </script>
+</html>
+<script>
+        mui.previewImage();
+        mui('body').on('tap','a',function(){
+            window.top.location.href=this.href;
+        });
+        window.onload = function() {
+            $.each($(".img"), function(){
+                if($(this).find('span').length==1){
+                    $(this).find('span').css({
+                        'width':'60%'
+                    })
+                }			
+            });
+
+        }
+</script>

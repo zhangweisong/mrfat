@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>商品结算</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<div class="jiesuan_box">
+			<div class="peisong">
+				<span>配送方式</span>
+				<ul>
+					<li>
+						<em><input type="radio" checked="checked" name="peisong" value="" /></em>
+						<i>自提</i>
+					</li>
+				</ul>
+			</div>
+			<div class="dizhi">
+				<ul>
+					<li>
+						<!--商家地址-->
+						<h4>
+							<span>{$agcy.agcy_manager}（{$agcy.agcy_name}）</span>
+							<i>{$agcy.agcy_tel}</i>
+						</h4>
+						<p>{$agcy.agcy_address}</p>
+					</li>
+				</ul>
+			</div>
+			<div class="shangpin_list">
+                <if condition="$state eq 1"><!--1 立即购买 -->
+                    <dl class="c">
+                        <dt><img src="{$goods.agcy_goods_images}"/></dt>
+                        <dd>
+                            <h4>{$goods.agcy_goods_name}</h4>
+                            <p>
+                                <span>￥:{$price}</span>
+                                <em>X{$num}</em>
+                            </p>
+                            <strong>规格：{$spec}</strong>
+                        </dd>
+                    </dl>
+                <elseif condition="$state eq 2"/>   <!--2 购物车 -->
+                    <volist name="goods" id="goods">
+                        <dl class="c">
+                            <dt><img src="{$goods.gimages}"/></dt>
+                            <dd>
+                                <h4>{$goods.gname}</h4>
+                                <p>
+                                    <span>￥:{$goods.goods_price}</span>
+                                    <em>X{$goods.goods_num}</em>
+                                </p>
+                                <strong>规格：{$goods.goods_spec}</strong>
+                            </dd>
+                        </dl>
+                    </volist>
+                  
+                <else/>
+                    <volist name="goods" id="goods">
+                        <dl class="c">
+                            <dt><img src="{$goods.gimages}"/></dt>
+                            <dd>
+                                <h4>{$goods.gname}</h4>
+                                <p>
+                                    <span>￥:{$goods.goods_price}</span>
+                                    <em>X{$goods.goods_num}</em>
+                                </p>
+                                <strong>规格：{$goods.goods_spec}</strong>
+                            </dd>
+                        </dl>
+                    </volist>
+                </if>
+				<div class="liuyan">
+					<span>给卖家留言：</span>
+					<em>
+						<input type="text" name="" id="notes" value="" maxlength=50/>
+					</em>
+				</div>
+				<div class="text">
+					<span>快递：自提</span>
+					<p>共计{$count}件商品，<em>合计:￥{$sum}</em></p>
+				</div>
+				<div class="baoxian">
+					<span><img src="__PUBLIC__/user/images/renshou_img.jpg"/></span>
+					<p>温馨提示：本订单享受中国人寿保险保障，请放心付款</p>
+				</div>
+			</div>
+			<div class="zhifufangshi">
+				<ul>
+					<li>
+						<i><img src="__PUBLIC__/user/images/weixin.png"/></i>
+						<span>微信支付</span>
+						<em><input type="radio" name="zhifu" value="1" checked /></em>
+					</li>
+					<li>
+						<i><img src="__PUBLIC__/user/images/yinlian.png"/></i>
+						<span>银联卡支付</span>
+						<em><input type="radio" name="zhifu" value="2" /></em>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="qvfukuan">
+			<span>合计：¥{$sum}</span>
+			<strong onclick="zhifu()">去付款</strong>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script>
+    var state={$state};
+    function zhifu(){
+        var notes=$('#notes').val();
+        var type=$("input[name='zhifu']:checked").val();
+        if(type==undefined||type==""){
+            layer.msg('请选择支付方式',{icon:5,time:1000});
+            return false;
+        }else{
+            //立即购买
+            if(state==1){ 
+                var price=<?php echo $price?$price:0; ?>;
+                var spec='<?php echo $spec?$spec:0; ?>';
+                var num=<?php echo $num?$num:0; ?>;
+                var agcy_id=<?php echo $agcy['agcy_id']? $agcy['agcy_id']:0; ?>;
+                var agcy_goods_id=<?php echo $agcy_goods_id?$agcy_goods_id:0; ?>;
+                 window.location.href="{:U('shopcar/zhifu')}&type="+type+"&state=1&agcy_id="+agcy_id+"&spec="+spec+"&agcy_goods_id="+agcy_goods_id+"&num="+num+"&notes="+notes;
+                 
+            }else if(state==2){
+                //购物车
+                var car_ids='<?php echo $car_ids?$car_ids:0; ?>';
+                window.location.href="{:U('shopcar/zhifu')}&type="+type+"&state=2&car_ids="+car_ids+"&notes="+notes;
+                
+            }else if(state==3){ 
+               //我的订单
+               var order_id=<?php echo $order_id?$order_id:0; ?>;
+               window.location.href="{:U('shopcar/zhifu')}&type="+type+"&state=3&order_id="+order_id+"&notes="+notes;
+            }
+          
+        
+        }
+    }
+    
+     //浏览器返回键监听事件
+    /*$(function(){
+        pushHistory();
+        window.addEventListener("popstate", function(e) {
+            //alert("我监听到了浏览器的返回按钮事件啦");//根据自己的需求实现自己的功能
+            if(state==1){
+            //立即购买
+            var agcy_goods_id=<?php echo $agcy_goods_id?$agcy_goods_id:0; ?>;
+                window.location.href="{:U('shopcar/xiangqing')}&agcy_goods_id="+
+                agcy_goods_id;
+            }else if(state==2){
+            //购物车
+                window.location.href="{:U('shopcar/shoppingcart')}";
+            }else if(state==3){
+            //我的订单
+                window.location.href="{:U('expert/wodeshangpindingdan')}";
+            }
+            
+        }, false);
+        function pushHistory() {
+        var state = {
+        title: "title",
+        url: "#"
+        };
+        window.history.pushState(state, "title", "#");
+        }
+    });*/
+</script>

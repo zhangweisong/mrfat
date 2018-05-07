@@ -1,0 +1,53 @@
+.cont{
+	padding: 0 0.64rem;
+}
+.list{
+	height: 7.2rem;
+	position: relative;
+	padding-top: 0.8rem;
+	border-bottom:1px solid #f0f0f0 ;
+}
+.list:last-of-type{
+	border-bottom: none;
+}
+.tu{
+	height: 6.28rem;
+	width: 6.08rem;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	position: relative;
+}
+.tu img{
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 2.52rem;
+}
+.list>p:nth-of-type(1){
+	position: absolute;
+	font-size: 1.12rem;
+	color: #363636;
+	top: 1.5rem;
+	left: 7rem;
+	line-height: 140%;
+}
+.list>p:nth-of-type(2){
+	position: absolute;
+	font-size: 1.12rem;
+	color: #363636;
+	top: 5.5rem;
+	left: 7rem;
+}
+
+.list button{
+	width: 6.6rem;
+	position: absolute;
+	right: 0;
+	top: 5.2rem;
+	height: 1.8rem;
+	background: #3ab849;
+	border: none;
+	font-size: 1.04rem;
+	color: #FFFFFF;
+	border-radius: 0.4rem;
+}

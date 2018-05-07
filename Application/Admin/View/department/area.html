@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>县区列表</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $('input, textarea').placeholder();
+    });
+</script>
+</head>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">系统设置</a></li>
+            <li> > </li>
+            <li><a href="{:U('department/area')}">县区列表</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <div class="query">
+            <form  name="seachform" id="seachform"  action="{:U('department/area')}"  method="post" class="form">
+                <div class="select mg_trb">
+                    <span class="text">省份</span>
+                    <select name="info[p_id]" id="p_id">
+                        <option value="">--请选择省份--</option>
+                        <volist name="province" id="data">
+                            <option value="{$key}" <if condition="$key eq $p_id ">selected</if>>{$data}</option>
+                        </volist>
+                    </select>
+                </div>
+                <div class="select mg_trb">
+                    <span class="text">城市</span>
+                    <select name="info[c_id]" id="cityName">
+                        <option value="">--请选择城市--</option>
+                        <volist name="city1" id="data">
+                            <option value="{$data.c_id}" <if condition="$data.c_id eq $c_id ">selected</if>>{$data.c_name}</option>
+                        </volist>
+                    </select>
+                </div>
+                <div class="button mg_trb"  onclick="location.href='{:U('department/area')}'">
+                    <i class="fa fa-refresh ico"></i>
+                    <input type="button" value="刷新" class="but chongzhi"/>
+                </div>
+
+                <div class="button mg_trb chaxun">
+                    <i class="fa fa-search ico"></i>
+                    <input type="submit" value="查询" class="but"  style="    position: absolute; background: none;z-index: 2;"/>
+                </div>
+            </form>
+        </div>
+        <!--添加角色-->
+        <div class="tianjia">
+            <a class="tianjia_but" href="{:U('department/addarea')}">
+                <i class="fa fa-plus"></i>
+                添加县区
+            </a>
+        </div>
+        <div class="table_box">
+            <table class="table" border="" cellspacing="" cellpadding="">
+                <colgroup>
+                    <col width="80">
+                    <col width="100">
+                    <col width="100">
+                    <col width="100">
+                    <col width="100">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>省份名称</th>
+                    <th>城市名称</th>
+                    <th>县区名称</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="areaList" id="area">
+                    <tr>
+                        <td>{$area.a_id}</td>
+                        <td>{$area.p_name}</td>
+                        <td>{$area.c_name}</td>
+                        <td>{$area.a_name}</td>
+                        <td>
+                            <a href="{:U('department/editarea',array('a_id'=>$area['a_id']))}" class="but chaxun">
+                                <i class="fa fa-edit"></i>
+                                编辑</a>
+                            <a href="{:U('department/delarea',array('a_id'=>$area['a_id']))}" onclick="{if(confirm('确认删除？？？若删除该县区则下属的相关信息将全部删除，请谨慎操作！！！')){return true;}return false;}" class="but chongzhi">
+                                <i class="fa fa-trash-o"></i>
+                                删除</a>
+
+                        </td>
+                    </tr>
+                </volist>
+
+                </tbody>
+            </table>
+        </div>
+        {$pageshow}
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+    });
+</script>
+<script>
+    //省份下拉框改变，城市给定其联动的值
+    $("#p_id").change(function(){
+		$("#cityName").empty();
+        $("#cityName").append("<option value=''>--请选择城市--</option>");
+        var p_id=$("#p_id").val();
+        $.getJSON("{:U('department/getCityName')}&p_id="+p_id,function(result){
+            var data=result.data;
+            $("#cityName").empty();
+            $("#cityName").append("<option value=''>--请选择城市--</option>");
+            $.each(data, function(i, v){
+                $("#cityName").append("<option value='"+v['c_id']+"'>"+v['c_name']+"</option>");
+            });
+        });
+    });
+</script>

@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>经销商产品详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+	<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+	<link rel="stylesheet" href="__PUBLIC__/tupian/css/lightbox.css">
+</head>
+<body>
+<div class="right_min">
+	<div class="crumbs_nav">
+		<i class="iconfont icon-shouye"></i>
+		<ul>
+			<li><a href="javascript:void(0);">经销商产品详情</a></li>
+		</ul>
+	</div>
+	<div class="min">
+		<div class="message">
+			<div class="message-block message-border-t">
+				<h4 class="message-left_block">经销商产品详情</h4>
+			</div>
+			<table class="table" border="" cellspacing="" cellpadding="">
+				<tr>					
+					<th style="font-weight:bold;">经销商店铺名称</th>
+					<td>{$agcygoodsinfo.agcy_name}</td>
+					<th style="font-weight:bold;">经销商店铺负责人</th>
+					<td>{$agcygoodsinfo.agcy_manager}</td>
+					<th style="font-weight:bold;">经销商店铺负责人电话</th>
+					<td>{$agcygoodsinfo.agcy_tel}</td>
+					<th style="font-weight:bold;">经销商店铺地址</th>
+					<td>{$agcygoodsinfo.agcy_address}</td> 
+				</tr>
+				<tr>
+					
+					<th style="font-weight:bold;">一级分类</th>
+					<td>{$agcygoodsinfo.yiji_name}</td>
+					<th style="font-weight:bold;">二级分类</th>
+					<td>{$agcygoodsinfo.erji_name}</td>
+					<th style="font-weight:bold;">名称</th>
+					<td>{$agcygoodsinfo.agcy_goods_name}</td>
+					<th style="font-weight:bold;">价格</th>
+					<td>{$agcygoodsinfo.agcy_goods_price}</td>
+							
+				</tr> 
+				<tr> 
+					<th style="font-weight:bold;">规格</th>
+					<td>{$agcygoodsinfo.agcy_goods_spec}</td>
+					<th style="font-weight:bold;">产品状态</th>
+					<?php if($agcygoodsinfo['agcy_goods_state']==1):?>
+					<td>上架</td>
+					<?php else:?>
+					<td>下架</td>
+					<?php endif;?>
+					<th style="font-weight:bold;">产品销售量</th>
+					<td>{$agcygoodsinfo.agcy_goods_salenum}</td>
+					<th style="font-weight:bold;">产品库存</th>
+					<td>{$agcygoodsinfo.agcy_goods_repertory}</td>
+					
+				</tr>
+				<tr>
+					<th style="font-weight:bold;">审核状态</th>
+					<?php if($agcygoodsinfo['agcy_goods_states']==1):?>
+					<td>未审核</td>
+					<?php elseif($agcygoodsinfo['agcy_goods_states']==2):?>
+					<td>通过</td>
+					<?php else:?>
+					<td>驳回</td>
+					<?php endif;?>
+					<th style="font-weight:bold;">产品图片</th>
+					<td colspan="3">
+					<volist name="res" id="res">
+							<a class="example-image-link" href="{$res}" data-lightbox="example-1" >
+								<img class="example-image" style="width:60px;heigtht:60px;" src="{$res}"/>
+							</a> 
+					</volist> 
+					</td> 
+					<th style="font-weight:bold;">添加商品时间</th>
+					<td colspan="2"><?php echo date('Y-m-d H:i:s',$agcygoodsinfo['agcy_goods_addtime']);?></td>
+				</tr>
+                <tr>
+					<th colspan="2" style="font-weight:bold;">审核备注</th>
+					<td colspan="6">{$agcygoodsinfo.agcy_default_remskss}</td>
+				</tr>
+			</table>   
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src="__PUBLIC__/tupian/js/lightbox-plus-jquery.min.js"></script>
+<script src="/foodsking/Public/admin/js/layer/layer.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+        $('.table_box input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        var index = parent.layer.getFrameIndex(window.name);
+        $('#net').on('click', function(){
+            parent.layer.close(index);
+        });
+    });
+</script>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>商品结算</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="css/mian.css"/>
+        <script src="js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<div class="jiesuan_box">
+			<div class="peisong">
+				<span>配送方式</span>
+				<ul>
+					<li>
+						<em><input type="radio" checked="checked" name="peisong" value="" /></em>
+						<i>自提</i>
+					</li>
+				</ul>
+			</div>
+			<div class="dizhi">
+				<ul>
+					<li>
+						<!--商家地址-->
+						<h4>
+							<span>大大横</span>
+							<i>13609250397</i>
+						</h4>
+						<p>陕西省西安市长安区子午镇中心街到50号和盛农资商店</p>
+					</li>
+				</ul>
+			</div>
+			<div class="shangpin_list">
+				<dl class="c">
+					<dt><img src="images/ceshi_img1.jpg"/></dt>
+					<dd>
+						<h4>复合肥尿素缓释肥化肥奥绿肥蔬菜花肥</h4>
+						<p>
+							<span>￥:40.00</span>
+							<i>￥5000</i>
+							<em>X100</em>
+						</p>
+						<strong>规格：25公斤/袋</strong>
+					</dd>
+				</dl>
+				<dl class="c">
+					<dt><img src="images/ceshi_img1.jpg"/></dt>
+					<dd>
+						<h4>复合肥尿素缓释肥化肥奥绿肥蔬菜花肥</h4>
+						<p>
+							<span>￥:40.00</span>
+							<i>￥5000</i>
+							<em>X100</em>
+						</p>
+						<strong>规格：25公斤/袋</strong>
+					</dd>
+				</dl>
+				<div class="liuyan">
+					<span>给卖家留言：</span>
+					<em>
+						<input type="text" name="" value="" />
+					</em>
+				</div>
+				<div class="text">
+					<span>快递：自提</span>
+					<p>共计2件商品，<em>合计￥90.00元</em></p>
+				</div>
+				<div class="baoxian">
+					<span><img src="images/renshou_img.jpg"/></span>
+					<p>温馨提示：本订单享受中国人寿保险保障，请放心付款</p>
+				</div>
+			</div>
+			<div class="zhifufangshi">
+				<ul>
+					<li>
+						<i><img src="images/weixin.png"/></i>
+						<span>微信支付</span>
+						<em><input type="radio" name="zhifu" value="" /></em>
+					</li>
+					<li>
+						<i><img src="images/yinlian.png"/></i>
+						<span>银联卡支付</span>
+						<em><input type="radio" name="zhifu" value="" /></em>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="qvfukuan">
+			<span>合计：¥1200.00</span>
+			<strong>去付款</strong>
+		</div>
+	</body>
+</html>

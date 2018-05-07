@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+		<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+		<link href="__PUBLIC__/validform/Validform.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="__PUBLIC__/validform/Validform_v5.3.2.js"></script>
+	</head>
+	<body>
+		<div class="right_min">
+			<div class="crumbs_nav">
+				<i class="iconfont icon-shouye"></i>
+				<ul>
+					<li><a href="{:U('index/welcome')}">首页</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">管理员设置</a></li>
+					<li> > </li>
+					<li><a href="{:U('admininfo/index')}">管理员列表</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">修改密码</a></li>
+				</ul>
+			</div>
+			<div class="min">
+				<div class="form_box">
+					<form name="myform" id="myform" action="{:U('admininfo/pswadmin',array('admin_id'=>$admininfo['admin_id']))}" method="post">
+						<div class="form-item">
+							<label class="form-label">用户名</label>
+							<div class="form-text form-input-block">
+								<input name="username" id="username" type="text" class="dfinput" readonly value="{$admininfo.username}" />
+								<i class="Validform_checktip"></i>
+							</div>
+						</div>
+						
+						
+						<div class="form-item">
+							<label class="form-label">原密码</label>
+							<div class="form-text form-input-block">
+								<input name="info[oldpassword]" id="oldpassword" type="password" class="dfinput" datatype="*5-15" nullmsg="请输入原密码！" errormsg="密码范围在5~15位之间！" maxlength="20" /><i class="Validform_checktip"></i>
+							</div>
+						</div>
+						<div class="form-item">
+							<label class="form-label">新密码</label>
+							<div class="form-text form-input-block">
+								<input name="info[newpassword]" id="newpassword" type="password" class="dfinput" datatype="*5-15" nullmsg="请输入新密码！" errormsg="密码范围在5~15位之间！" maxlength="20" /><i class="Validform_checktip"></i>
+							</div>
+						</div>
+						
+						<div class="form-item">
+							<div class="form-button form-input-block">
+								<input class="chaxun but" type="submit" value="提交"/>
+								<button class="but chongzhi" type="button" onclick="location.href='{:U('admininfo/index')}'">返回</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="__PUBLIC__/admin/js/laydate/laydate.js"></script>
+<script>
+    //laydate({elem: "#hello", event: "focus"});
+    var start = {
+        elem: "#start",
+        format: "YYYY/MM/DD",
+        min: laydate.now(),
+        max: "2099-06-16",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            end.min = datas;
+            end.start = datas
+        }
+    };
+    var end = {
+        elem: "#end",
+        format: "YYYY/MM/DD",
+        min: laydate.now(),
+        max: "2099-06-16",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            start.max = datas
+        }
+    };
+    laydate(start);
+    laydate(end);
+</script>
+<script type="text/javascript">
+	$(function(){
+		$(".right_min").height($(window).height());
+		
+		$('.skin-section input').iCheck({
+			checkboxClass: 'icheckbox_square-green',
+			radioClass: 'iradio_square-green',
+		});
+		$('input').on('ifChecked', function(event){
+		  //alert($(this).val());
+		});
+	});
+</script>
+	<script>
+	$(function(){
+		$("#myform").Validform({
+			//tiptype:2
+			tiptype:function(msg,o,cssctl){
+				var objtip=o.obj.siblings(".Validform_checktip");
+				cssctl(objtip,o.type);
+				objtip.text(msg);
+			}
+		});
+	}); 
+	</script>

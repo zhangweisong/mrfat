@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>短信群发</title>
+        <!--说明文字编码-->
+        <meta http-equiv="Content-type" content="text/html" charset="utf-8">
+        <!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+        <!--控制状态栏显示样式-->
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!--解决uc字体变大问题-->
+        <meta name="wap-font-scale" content="no">
+        <!--手机号码不被显示为拨号链接-->
+        <meta content="telephone=no" name="format-detection" />
+        <!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        <link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+        <link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+        <style>
+            .cont{
+                width: 90%;
+                padding: 0.6rem 0.6rem 1.2rem;
+                border: 1px solid #dcdcdc;
+                display: block;
+                margin: 0.8rem auto 2rem;
+                font-size: 1.04rem;
+                line-height: 180%;
+                border-radius: 0.4rem;
+                resize: none;
+                height: 10rem;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="header">
+            <a href="{:U('user/userlist')}">
+                <img src="__PUBLIC__/agcy/images/left.png" />
+            </a>
+            <p>短信群发</p>
+        </div> 
+        <textarea name='content' id='content' class="cont" placeholder="请输入短信内容"></textarea>
+        <input type="submit" id="yzmbut" class="btnn" value="发送"  onclick="return seed()">
+        
+        <script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script> 
+        <script>    
+            //发送短信验证码  
+            function seed(){ 
+                var content = $.trim($("#content").val()); 
+                if(content==""){ 
+                    layer.msg('请输入内容！',{icon:5,time:1000}); 
+                    $('#yzmbut').attr('onclick',' return seed()');
+                    return false;
+                }  
+                $.getJSON("{:U('user/smsCode')}&content="+content, function (res) { 
+                    $('#yzmbut').attr('disable','true'); 
+                    var date = res.data;
+                    var mas = $.parseJSON(date); 
+                    if(mas.errorMsg==""){ 
+                        layer.msg('发送成功！',{icon:6,time:1000}, function () {
+                            window.location = "{:U('index/index')}";
+                        });
+                    }else{ 
+                        $('#yzmbut').attr('disable','false');
+                        layer.msg('发送失败！',{icon:5,time:1000}); 
+                    }
+                    
+                });
+             } 
+            
+        </script>
+    </body>
+
+</html>

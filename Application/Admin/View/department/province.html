@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>省份列表</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">系统设置</a></li>
+            <li> > </li>
+            <li><a href="{:U('department/province')}">省份列表</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <!--添加角色-->
+        <div class="tianjia">
+            <a class="tianjia_but" href="{:U('department/addprovince')}">
+                <i class="fa fa-plus"></i>
+                添加省份
+            </a>
+        </div>
+        <div class="table_box">
+            <table class="table" border="" cellspacing="" cellpadding="">
+                <colgroup>
+                    <col width="80">
+                    <col width="100">
+                    <col width="100">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>省份名称</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="proList" id="pro">
+                    <tr>
+                        <td>{$pro.p_id}</td>
+                        <td>{$pro.p_name}</td>
+                        <td>
+                            <a href="{:U('department/editprovince',array('p_id'=>$pro['p_id']))}" class="but chaxun">
+                                <i class="fa fa-edit"></i>
+                                编辑</a>
+                            <a href="{:U('department/delprovince',array('p_id'=>$pro['p_id']))}" onclick="{if(confirm('确认删除？？？若删除该省份则下属的城市、县区以及相关信息将全部删除，请谨慎操作！')){return true;}return false;}" class="but chongzhi">
+                            <i class="fa fa-trash-o"></i>
+                            删除</a>
+
+                        </td>
+                    </tr>
+                </volist>
+
+                </tbody>
+            </table>
+        </div>
+        {$pageshow}
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+    });
+</script>

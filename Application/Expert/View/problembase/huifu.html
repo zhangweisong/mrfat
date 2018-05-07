@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>问答回复</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/expert/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/expert/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/expert/css/wendahuifu.css" />
+        <script type="text/javascript" src="__PUBLIC__/expert/js/jquery-3.1.1.min.js" ></script>
+        <link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" /> 
+		<script type="text/javascript" src="__PUBLIC__/kindeditor/kindeditor-min.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/kindeditor/lang/zh-CN.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/admin/js/stringOperate.js"></script>
+	</head>
+    <script type="text/javascript">
+            var editor;
+            KindEditor.ready(function (K) {
+                editor = K.create('textarea[id="agcy_content"]', {
+                    uploadJson: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}',
+                    fileManagerJson: '{:U(\'kindeditor/file_manager_json\')}',
+                    allowFileManager: true,
+                    urlType: 'domain',
+                    afterCreate: function () {
+                        this.sync();
+                    },
+                    afterBlur: function () {
+                        this.sync();
+                    }
+                });
+
+                //多图
+                var uploadbutton = K.uploadbutton({
+                    button: K('#uploadButton')[0],
+                    fieldName: 'imgFile',
+                    url: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}',
+                    afterUpload: function (data) { 
+                        if (data.error === 0) {
+                            var url = K.formatUrl(data.url, 'domain');
+							layer.msg('上传成功',{icon:6,time:1000});
+                            K('#imagemore').val(url);
+                            add_album_img(url);
+                        } else {
+                            layer.msg(data.message,{icon:6,time:1000}); 
+                        }
+                    },
+                    afterError: function (str) {
+                         layer.msg('自定义错误信息: ' + str,{icon:5,time:1000});
+                    }
+                });
+                uploadbutton.fileBox.change(function (e) {
+                    uploadbutton.submit();
+                    layer.msg('上传中，请稍后...',{icon:6,time:3000});
+                });
+                 
+             
+             
+            });
+            //图片插件
+            function add_album_img(imgurl) {
+                var val = StringOperate.add($("#answers_image").val(), imgurl);
+                $("#answers_image").val(val);
+				if($(".toollist_pic li").length<2){
+					$("#toollist_pic").append("<li onclick=\"del_album_img(\'" + imgurl + "\',this);\"><a><img src='" + imgurl + "'><i class=\"fa fa-times-circle\"></i></a></li>");
+					$('#imagemore').val("");
+				}else{
+                    layer.msg('只能上传两张图片',{icon:5,time:1000});
+					return false;
+				}
+            }
+            function del_album_img(imgurl, obj) {
+                var val = StringOperate.remove($("#answers_image").val(), imgurl);
+                $("#answers_image").val(val);
+                $(obj).remove();//删除元素
+            } 
+            
+           
+        </script>
+		<style>
+            /*多图上传样式*/
+            .toollist_pic{clear: both;text-align: center;margin:0.5rem;}
+            .toollist_pic li{float: left;list-style:none; clear: initial; width:100px;height:100px; overflow:hidden;position: relative;}
+            .toollist_pic li a{display:block; width:100%; height:100%;}
+            .toollist_pic li img{width:100px;height:100px;}
+            .toollist_pic li i{display:block; position:absolute; top:0; right:0; width:16px; height:16px; background:green; z-index:888; margin:0;background-image:url("__PUBLIC__/agcy/images/274C.png")}
+            .toollist_pic li .fa-times-circle{ font-size:20px; color:#fff;}
+            .span{display:inline-block; height:34px; line-height:34px;color: #ff0000;font-size:1.8rem;vertical-align: middle;}      
+            .form-button .ke-inline-block.but{margin-top:0;}
+            .form-button .ke-button-common{display:block;width:100%; height:100%; line-height:38px; background:none;}
+            .form-button .ke-button-common.ke-button{color:#fff; font-size:16px;}
+            .form-button .ke-upload-area.ke-form .ke-upload-file{display:block;width:100% !important; height:100%;}
+        </style> 
+		<style>
+		.c:before,.c:after {content:"";display:table}
+		.c:after {clear:both}
+		.c {zoom:1}			
+		.ke-button-common{opacity: 0;}
+		.form-item {margin-bottom: 15px;clear: both;min-height: 35px;}
+		.form-label {    font-size: 1.12rem;
+                        line-height: 1.6rem;
+                        color: #363636;
+                        float: left;margin-left:0.64rem;}
+		.ke-upload-area .ke-upload-file{height:30px;}
+		.form-input-inline{overflow:hidden; height:30px; position:relative;}
+		.form-input-inline span{ display:block; width:100px; height:30px; background:#3ab849; font-size:0.96rem; text-align:center; line-height:30px; color:#fff; border-radius:5px;margin-left:1.5rem;}
+		.form-input-inline .shenhe{position:absolute; top:0; left:0;}
+		.toollist_pic li{margin-right:10px; margin-bottom:10px;}
+
+        .txt{
+				width: 73%;
+				height: 10rem;
+				resize: none;
+				display: block;
+				border: 1px solid #dfdfdf;
+				border-radius: 0.4rem;
+				line-height: 180%;
+				font-size: 1.2rem;
+				padding: 0.5rem;
+		}
+   
+		</style>
+	<body>
+		<div class="header">
+			<a href="{:U('answer/xiangq')}">
+				<img src="__PUBLIC__/expert/images/left.png" />
+			</a>
+			<p>问答回复</p>
+		</div>
+		<div class="content">
+			<p>内容：</p>
+			<textarea id="answers_content" maxlength="500"></textarea>
+		</div>
+		<!--<div class="picture">
+			<p>图片：</p>
+			<img src="__PUBLIC__/expert/images/upload.png" />
+			<p>备注：点击上传图片,有就上传，没有可以不传，最多上传两张。</p>
+		</div>-->
+        <div class="form-item">
+				<label class="form-label">图片:</label>
+				<div class="form-text form-input-inline w40">
+					<input type="hidden"  name="answers_image"  id="answers_image"  maxlength="255"  readonly/>
+					<span>点击上传</span>
+					<input class="but shenhe mg_t0" type="button" id="uploadButton"  class="chaxun but" value="上传"/>	
+				</div>  
+				<input name="answers_image"  id="imagemore" type="hidden" class="dfinput" value="" readonly />				 
+				<div class="form-text form-input-block w50 c">
+					<ul class="toollist_pic c" id="toollist_pic">
+					</ul>
+				</div>
+		</div>
+		<button class="btnn" onclick="tijiao()" id="btnn">保存</button>
+		<script type="text/javascript" src="__PUBLIC__/expert/js/screenSize.js" ></script>
+        <script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+	</body>
+
+</html>
+<script> 
+    var questions_id={$questions_id};
+	function tijiao(){
+		var answers_content = $("#answers_content").val();
+		if(answers_content==""){
+            layer.msg('请输入回复内容',{icon:5,time:1000});
+            $("#answers_content").focus();
+			return false;
+		} 
+        var answers_image=$("#answers_image").val(); 
+        document.getElementById("btnn").disabled=true;
+		/*
+		if(answers_image==""){
+			alert("请上传图片");
+			return false;
+		} 
+		window.location.href="{:U('problembase/huifu')}&questions_id="+questions_id+"&answers_content="+answers_content+"&answers_image=" + answers_image;*/
+        
+        
+        var a_url = "{:U('problembase/huifu')}";
+       	$.ajax({ 
+		     type : "POST", 
+		     url : a_url,
+		     data : { 
+		      'questions_id':questions_id,
+		      'answers_content':answers_content, 
+              'answers_image':answers_image, 
+		     },
+		     success : function(ret) {
+                data = ret.data  
+                if(data==1){
+                    layer.msg('回复成功',{icon:6,time:1000},function(){
+                        window.location.href='{:U("answer/xiangq")}&questions_id='+questions_id;
+                    });
+                }else{
+                    layer.msg('回复失败',{icon:5,time:1000},function(){
+                        window.location.href='{:U("problembase/huifu")}&questions_id='+questions_id;
+                    });
+                    return false;
+                }     
+		    } 
+             
+	    });
+        
+	}
+
+</script>

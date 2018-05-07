@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>经销商订单</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css"> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 
+        <script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script> 
+        <script type="text/javascript">
+            $(function () {
+                $('input, textarea').placeholder();
+            });
+        </script> 
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="javascript:void(0);">经销商订单详情</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <div class="message">
+                    <div class="message-block message-border-t">
+                        <h4 class="message-left_block">订单详情</h4>
+                    </div>
+                    <table class="table" border="" cellspacing="" cellpadding="" >
+                        <tr>					
+                            <th style="font-weight:bold;">经销商店铺名称</th>
+                            <td>{$forder.agcyname}</td>
+                            <th style="font-weight:bold;">经销商负责人</th>
+                            <td>{$forder.agcymanager}</td>
+                            <th style="font-weight:bold;">订单编号</th>
+                            <td>{$forder.forder_number}</td>
+                        </tr>
+                        <tr>					
+                            <!--<th style="font-weight:bold;">总价（不含运费）</th>
+                            <td>{$forder.forder_price}</td>
+                            <th style="font-weight:bold;">运费</th>
+                            <td>{$forder.forder_tpcost}</td>-->
+                            
+                        </tr>
+                        <tr>  
+                            <th style="font-weight:bold">状态 </th>
+                            <td>{$forder.forder_flagstr}</td>  
+                            <th style="font-weight:bold">订单时间</th>
+                            <td>{$forder.forder_addtime|date='Y-m-d H:i:s',###}</td>
+							<th style="font-weight:bold">发货时间</th>
+                            <td>
+							  <?php if($forder['forder_tptime']!=0):?>      {$forder.forder_tptime|date='Y-m-d H:i:s',###}
+							  <?php else:?>
+							  --
+							  <?php endif;?>
+							</td>
+                        </tr>
+                        <tr>  
+                            <th style="font-weight:bold;">合计</th>
+                            <td>{$forder.forder_total}</td>
+                            <th style="font-weight:bold">订单备注</th>
+                            <td>{$forder.forder_memo}</td>
+							<th style="font-weight:bold">发货备注</th>
+                            <td>{$forder.forder_tpremark}</td> 
+                        </tr> 
+                    </table> 
+                </div>    
+                <div class="message">
+                    <div class="message-block message-border-t">
+                        <h4 class="message-left_block">产品详情</h4>
+                    </div>
+                    <div class="table_box">
+                        <table class="table" border="" cellspacing="" cellpadding=""> 
+                            <colgroup>
+                                <col width="150">
+                                <col width="150">
+                                <col width="200">
+                                <col width="100">
+                                <col width="100"> 
+                                <col>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>商品名</th>
+                                    <th>图片</th> 
+                                    <th>规格</th>
+                                    <th>数量(吨)</th>
+                                    <th>商品总价</th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <volist name="forderlist" id="list">
+                                <tr>
+                                    <td>{$list.fgoods_name}</td>  
+                                    <td><img src="{$list.fgoods_images}" style="width: 50px;height: 50px"></td>
+                                    <td>{$list.forderlist_spec}</td>
+                                    <td>{$list.forderlist_tonnum}</td>
+                                    <td>{$list.forderlist_totprice}</td>  
+                                </tr> 
+                            </volist>
+                            </tbody>
+                        </table>
+                    </div>
+                    {$pageshow}
+                </div> 
+            </div>    
+        </div>   
+    </body>
+</html>

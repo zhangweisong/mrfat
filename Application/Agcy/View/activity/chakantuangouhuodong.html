@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<if condition="$act_classify eq 2"> 
+		<title>团购活动</title>
+		<else/>
+		<title>秒杀活动</title>
+		</if>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/chakantuangouhuodong.css" />
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-1.10.2.min.js" ></script>
+	</head>
+	<style>
+		.li_myxx_zt{height: 30px; line-height: 30px; background: #f5f5f5;}
+		.li_myxx_zt p{ text-align:center; font-size:12px; color:#cacaca;}
+		.sousuokuang_box{padding: 0 10px; height: 45px; background: #ef404c}
+	</style>
+        <style> 
+     .wrap-dialog {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         font-size: 16px;
+         text-align: center;
+         background-color: rgba(0, 0, 0, .4);
+         z-index: 999;
+         
+     }
+     .dialog {
+         position: relative;
+         margin: 40% auto;
+         width: 250px;
+         background-color: #FFFFFF;
+         border-radius:10px;
+     } 
+     .dialog .dialog-body {
+         height: 25px;
+         padding: 20px;
+     }
+     .dialog .dialog-footer {
+         padding: 15px;
+         background-color: whitesmoke;
+         border-radius:0 0 10px 10px;
+     }
+     .btn {
+         border-radius:10px;
+         width: 70px;
+         padding: 4px;
+         border:0px;
+     }
+     .hide {
+         display: none;
+     }
+     .ml50 {
+         margin-left: 50px;
+     }
+ </style>
+
+	<body>
+		<div class="header">
+			<a href="{:U('activity/cuxiaohuodong')}">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<if condition="$act_classify eq 2"> 
+			<p>团购活动</p>
+			<else/>
+			<p>秒杀活动</p>
+			</if>
+		</div>
+		<div class="cont">
+			<div class="xiaoxi">					
+			</div>
+		</div>
+		<div class="meiyouneirong" style="display:none;margin-top:10%;">
+			<i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+			<if condition="$act_classify eq 2"> 
+			<p>暂无团购活动</p>
+			<else/>
+			<p>暂无秒杀活动</p>
+			</if>
+		</div>
+		<div class="li_myxx_zt" id="li_myxx_zt" style="display:none" >
+		<p>亲，到底了~</p> 
+		</div>
+		<div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+			<img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+		</div> 
+        <div class="wrap-dialog hide">
+            <div class="dialog">
+                <div class="dialog-body">
+                    <span class="dialog-message">你确认删除？</span>
+                </div>
+                <div class="dialog-footer">
+                    <input type="button" class="btn" id="cancel" value="取消" />
+                    <input type="button" class="btn ml50" id="confirm" value="确认" /> 
+                </div>
+            </div>
+        </div>
+		<button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button> 
+	</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script> 
+<script>
+    function jieshu(a){ 
+        var message = "确认删除？";
+        dialogBox(message,
+            function () {  
+                $.getJSON("{:U('activity/jieshuhuodong')}&act_id="+a+"&callback=?",function(data){
+                    if(data.status == 1){ 
+                        layer.msg('活动结束成功！',{icon:6,time:1000});
+                        $("#zht_"+a).html('活动结束');
+                        $("#zht_"+a).css('right','1rem');
+                        $("#btnn_"+a).remove();
+                        return false;
+                    } else{
+                        layer.msg('活动结束失败！',{icon:5,time:1000}); 
+                        return false;
+                    }
+                });   
+            },
+            function(){
+                return false;   
+            }
+        ); 
+    }
+    function dialogBox(message, yesCallback, noCallback){
+         if(message){
+             $('.dialog-message').html(message);
+        }
+         // 显示遮罩和对话框
+         $('.wrap-dialog').removeClass("hide");
+         // 确定按钮
+         $('#confirm').click(function(){
+             $('.wrap-dialog').addClass("hide");
+             yesCallback();
+         });
+         // 取消按钮
+        $('#cancel').click(function(){
+             $('.wrap-dialog').addClass("hide");
+             noCallback();
+         });
+     }
+</script>
+<script>
+var act_classify={$act_classify};
+init();
+//初始化页面
+ function init(){  
+		var data = {$activity}; 
+	    var info = data.activity;    
+       if(info.length>0){
+           var html = htmlinfo(info);
+            $(".xiaoxi").html(html);
+       }else{
+           $(".meiyouneirong").css("display","block");
+       } 
+ }
+ //数据列表
+     function htmlinfo(info){  
+          var html="";
+         for(var i=0;i<info.length;i++){ 
+            html+='<div class="list">';
+            html+='<div class="tu" style=\'background-image: url('+info[i]['image'][0]+');\'>';
+			if(info[i].act_classify==1){
+            html+='<img src=""__PUBLIC__/agcy/images/ms.png" />';
+			}else{
+			html+='<img src=""__PUBLIC__/agcy/images/tg.png" />';
+			}
+            html+='</div>';
+            html+='<p class="omit2">'+info[i].act_name+'</p>';
+            html+='<p>￥：'+info[i].act_price+'</p>';
+			if(info[i].act_state==1){
+			html+='<p style="position: absolute;font-size: 0.96rem;color: #999999;top:5.5rem;right: 8rem;" id=\'zht_'+info[i]['act_id']+'\'>预热中</p>'
+			}else if(info[i].act_state==2){
+			html+='<p style="position: absolute;font-size: 0.96rem;color: #999999;top:5.5rem;right: 8rem;" id=\'zht_'+info[i]['act_id']+'\'>进行中</p>'
+			}else{
+			html+='<p style="position: absolute;font-size: 0.96rem;color: #999999;top:5.5rem;right: 1rem;" id=\'zht_'+info[i]['act_id']+'\'>活动结束</p>'
+			}
+			if(info[i].act_state!=3){
+			 html+='<button onclick=\'jieshu('+info[i]['act_id']+')\' id=\'btnn_'+info[i]['act_id']+'\'>结束活动</button>';
+			}
+            html+='</div>';
+         }
+         return html;     
+     }
+    //滚动加载  
+    $(window).scroll(function () { 
+        getData();
+    });
+    var totalheight = 0;     //定义一个总的高度变量
+    function getData() {
+         totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()); 
+         //浏览器的高度加上滚动条的高度 （页面总高度）  
+        if ($(document).height() <= totalheight) {          
+            //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+            //加载
+            $("#loadings").fadeIn(); 
+            //根据条件获取对应的项目条数
+            getmore();//使用模板加载更多
+            //加载完毕          
+            $("#loadings").fadeOut(); 
+        }
+    }  
+    //加载更多
+    function getmore(){      
+      var page=parseInt($("#more").attr("data"))+1; 
+      $('#more').attr("data",page);//重置当前页数      
+      $.getJSON("{:U('activity/chakantuangouhuodong')}&act_classify="+act_classify+"&p="+page,function(data){  
+           var info = data.activity;     
+           if(info.length>0){
+                var html = htmlinfo(info);
+                $(".xiaoxi").append(html);
+           }else{
+                $("#loadings").fadeOut(); 
+				$(".li_myxx_zt").show();   
+               // alert('亲，没有数据了');                
+           }
+        }) 
+     }
+	 
+</script>

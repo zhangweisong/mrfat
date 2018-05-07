@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>{$agcy_name}</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/shangjiaerweima.css" />
+		<script src="__PUBLIC__/agcy/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+		<script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+		<style>
+			.tanchu{position: fixed; top: 0; left: 0; background: url(__PUBLIC__/agcy/images/tanchuang.png); background-size: cover; width: 100%; height: 100%; display: none;}
+		</style>
+	</head>
+	<body>
+		<div style="display:none;"><img src="{$image}"></div>  <!--分享默认调取第一张图片-->
+		<div class="header">
+			<a href="javascript:history.go(-1)">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>商家二维码</p>
+		</div>
+		<div class="cont">
+			<?php
+			$URL=C('WEB_URL')."index.php/user/index/index/agcy_id/$agcy_id";
+			//dd($URL);
+			?>				
+			<img src="http://qr.liantu.com/api.php?text=<?php echo $URL;?>"  width="60%"/>
+			<p>商家二维码</p>
+			<p style="color:red;">长按二维码保存图片，贴于商家店铺内，便于农户扫码。</p>
+			<div class="btns flex">
+				<p onclick="hide();"  class="tanchu"></p>
+				<button onclick="show();" class="btnl">分享</button>
+			</div>
+		</div>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+	</body>
+</html>
+<script type="text/javascript">
+	function show(){
+		$('.tanchu').fadeTo(200,1);
+	}
+	function hide(){
+		$('.tanchu').fadeOut(300);
+	}
+</script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script> 
+<script>
+/*
+* 注意：
+* 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+* 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+* 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+*
+* 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+* 邮箱地址：weixin-open@qq.com
+* 邮件主题：【微信JS-SDK反馈】具体问题
+* 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+*/	
+
+
+  wx.config({
+    debug: false,
+    appId: '<?php echo $signPackage["appId"];?>',
+    timestamp: <?php echo $signPackage["timestamp"];?>,
+    nonceStr: '<?php echo $signPackage["nonceStr"];?>',
+    signature: '<?php echo $signPackage["signature"];?>',
+    jsApiList: [
+      // 所有要调用的 API 都要加到这个列表中
+	  'onMenuShareTimeline',
+	  'onMenuShareAppMessage',
+	  'onMenuShareQQ',
+	  'onMenuShareWeibo',
+	  'onMenuShareQZone'
+    ]
+  });
+  
+
+  wx.ready(function () {
+	   // 在这里调用 API
+		wx.onMenuShareTimeline({
+			title: '<?php  echo $agcy_name;?>的推广二维码', // 分享标题
+			link: '{$Think.WEB_HOST}index.php/user/index/index/agcy_id/<?php  echo $agcy_id;?>', // 分享链接
+			imgUrl: '{$Think.WEB_HOST}Public/agcy/images/share_logo.jpg', // 分享图标
+			success: function () { 
+				layer.msg('分享成功！',{icon:6,time:2000});
+			},
+			cancel: function () { 
+				// 用户取消分享后执行的回调函数
+			}
+		});
+  
+
+	wx.onMenuShareAppMessage({
+		title: '<?php  echo $agcy_name;?>的推广二维码', // 分享标题
+		desc: '<?php  echo $agcy_name;?>的推广二维码', // 分享描述
+		link: '{$Think.WEB_HOST}index.php/user/index/index/agcy_id/<?php  echo $agcy_id;?>',  // 分享链接
+		imgUrl: '{$Think.WEB_HOST}Public/agcy/images/share_logo.jpg', // 分享图标
+		type: 'link', // 分享类型,music、video或link，不填默认为link
+		dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+		success: function () { 
+			layer.msg('分享成功！',{icon:6,time:2000});
+		},
+		cancel: function () { 
+			// 用户取消分享后执行的回调函数
+		}
+	});
+	wx.onMenuShareQQ({
+		title: '<?php  echo $agcy_name;?>的推广二维码', // 分享标题
+		desc: '<?php  echo $agcy_name;?>的推广二维码', // 分享描述
+		link: '{$Think.WEB_HOST}index.php/user/index/index/agcy_id/<?php  echo $agcy_id;?>',  // 分享链接
+		imgUrl: '{$Think.WEB_HOST}Public/agcy/images/share_logo.jpg', // 分享图标
+		success: function () { 
+		   layer.msg('分享成功！',{icon:6,time:2000});
+		},
+		cancel: function () { 
+		   // 用户取消分享后执行的回调函数
+		}
+	});
+	wx.onMenuShareWeibo({
+		title: '<?php  echo $agcy_name;?>的推广二维码', // 分享标题
+		desc: '<?php  echo $agcy_name;?>的推广二维码', // 分享描述
+		link: '{$Think.WEB_HOST}index.php/user/index/index/agcy_id/<?php  echo $agcy_id;?>',  // 分享链接
+		imgUrl: '{$Think.WEB_HOST}Public/agcy/images/share_logo.jpg', // 分享图标
+		success: function () { 
+           layer.msg('分享成功！',{icon:6,time:2000});
+		},
+		cancel: function () { 
+			// 用户取消分享后执行的回调函数
+		}
+	});
+	wx.onMenuShareQZone({
+		title: '<?php  echo $agcy_name;?>的推广二维码', // 分享标题
+		desc: '<?php  echo $agcy_name;?>的推广二维码', // 分享描述
+		link: '{$Think.WEB_HOST}index.php/user/index/index/agcy_id/<?php  echo $agcy_id;?>',  // 分享链接
+		imgUrl: '{$Think.WEB_HOST}Public/agcy/images/share_logo.jpg', // 分享图标
+		success: function () { 
+		   layer.msg('分享成功！',{icon:6,time:2000});
+		},
+		cancel: function () { 
+			// 用户取消分享后执行的回调函数
+		}
+	});
+  });
+
+</script>
+

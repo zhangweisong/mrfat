@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>文章详情</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="css/mian.css"/>
+        <script src="js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<style type="text/css">
+			body{background: #fff;}
+		</style>
+		<div class="xiangqingye zjwz_xq">
+			<div class="title">
+				<h4>大麦育苗的重要方法</h4>
+				<span>
+					<i>作者：西门吹雪</i>
+					<em>时间：2018-05-06 12:02:03</em>
+				</span>
+			</div>
+			<div class="content">
+				<img src="images/ceshi_img1.jpg"/>
+				1　育苗时间安排。理想的育苗时期为7月下旬至8月上旬，此期温度较
+				高，昼夜温差小、雨量充沛、空气湿度大，利于插穗生根，苗木10月
+				下旬至11月上旬即可出圃移栽。 
+				2　育苗地选择。育苗地是否符合要求，是育苗成败的关键，为了便于
+				管理和满足插穗生根、苗木快速生长的需要，应选择地势平坦、土壤肥
+				沃、排灌方便的沙质壤土或壤土地作苗圃，近几年更新过的金银花园、
+				果园及其他林地均不宜作苗圃。 
+				3　精细整地。苗圃地耕翻前3-5天浇一次透水，然后每亩施入腐熟有机
+				肥3-4立方米、磷肥50千克、硫酸亚铁5千克，耕地深度25厘米，随耕
+				随耙，耙后做成2-3米宽的畦，畦长20-30米，或视地势平整情况增减
+			</div>
+			<div class="wenda_ct">
+				<div class="wenda_list">
+	    			<div class="nonghu">
+		    			<dl class="c">
+		    				<dt>
+		    					<a href="zhuanjiawenda_xq.html"><img src="images/touxiang.jpg"></a>
+		    				</dt>
+		    				<dd>
+								<div class="top">
+									<a href="zhuanjiawenda_xq.html">
+										<h4>大大横</h4>
+										<span>20分钟前</span>
+									</a>
+								</div>
+								<div class="ct">
+									<a href="zhuanjiawenda_xq.html">
+										<p>
+											嘉宾讲的好，提问的好，兑换质量高，嘉宾讲的好，提
+											问的好，兑换质量高，嘉宾讲的好，提问的好，兑换质
+											量高，嘉宾讲的好，提问的好，兑换质量高，嘉宾讲的
+											好，提问的好，兑换质量高，嘉宾讲的好，提问的好，
+											兑换质量高，
+										</p>
+									</a>
+								</div>
+								<div class="bottom">
+									<span>
+										<i class="icon-zan"></i>
+										<em>2563</em>
+									</span>
+								</div>
+		    				</dd>
+		    			</dl>
+	    			</div>
+	    		</div>
+				<div class="meiyouneirong">
+					<i><img src="images/li_wdxx_img.png"/></i>
+					<p>暂无评论，赶紧抢沙发吧！</p>
+				</div>
+		    	<div class="dibufengexian">
+		    		<p>到底了，没有更多了</p>
+		    	</div>
+			</div>
+		</div>
+		<div class="zjwz_foot">
+			<ul>
+				<li class="link">
+					<i></i>
+					<em>3560</em>
+				</li>
+				<li onclick="pinglunShow()">
+					<strong></strong>
+					<em>评论</em>
+				</li>
+			</ul>
+		</div>
+		<div class="zhezhao" onclick="pinglunHide()"></div>
+		<div class="zjwz_pinglun">
+			<textarea name="" placeholder="请输入内容"></textarea>
+			<span class="fabiao" onclick="pinglunHide()">发表评论</span>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	function pinglunShow(){
+		$(".zhezhao").fadeTo(500,1)
+		$('.zjwz_pinglun').animate({
+			bottom:0
+		})
+		$('.zjwz_pinglun textarea').focus()
+	}
+	function pinglunHide(){
+		$('.zjwz_pinglun').animate({
+			bottom:'-100%'
+		})
+		$(".zjwz_pinglun textarea").val("");
+		$(".zhezhao").fadeOut(300)
+	}
+</script>

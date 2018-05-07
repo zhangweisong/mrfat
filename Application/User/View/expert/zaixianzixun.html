@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>在线咨询</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+		<script type="text/javascript" src="__PUBLIC__/imageUpload.js"></script> 
+		<script src="__PUBLIC__/user/js/stringOperate.js"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<style type="text/css">
+			body{background: #fff;}
+			.form_file strong{display: block;width: 90px; height:90px;float: left;position: relative;overflow: hidden; margin-right:1rem; margin-bottom:0.5rem}
+			.form_file strong img{display:block; width:100%; height:100%}
+			.form_file strong em{
+			 display: block;position: absolute;top: 0;width:2rem;height:2rem;background: url('__PUBLIC__/user/images/cuowu.png') no-repeat;background-size: cover; right:0; top:0; z-index:2;}
+		</style>		
+		<div class="zaixinzx">
+			<form action="{:U('expert/zaixianzixun')}" method="post" onsubmit="return check();">
+				<!--<div class="form_box">
+					<span>标　　题</span>
+					<div class="form_text">
+						<input type="text" name="" value="" placeholder="请输入标题"/>
+					</div>
+				</div>-->
+				<div class="form_box">
+					<span>选择类别</span>
+					<div class="form_select">
+						<select name="info[questions_type_id]" id="questions_type_id">
+							<option value="0">选择类别</option>
+							<?php foreach($type as $k=>$v):?>
+							<option value="{$k}">{$v}</option>
+							<?php endforeach;?>
+						</select>
+					</div>
+				</div>
+				<input type="hidden" value="{$expert_id}" name="info[questions_expert_id]">
+				<input type="hidden" value="{$questions_aim}" name="info[questions_aim]">
+				<div class="form_box">
+					<span>问题描述</span>
+					<div class="form_textarea">
+						<textarea name="info[questions_content]" placeholder="请输入详细描述" id="questions_content" maxlength="400"></textarea>
+					</div>
+				</div>
+				<div class="form_file">
+					<span id="img_file2">问题图片</span>
+					
+					<div class="file">
+						<!--最多上传两张图片-->
+						<ul>
+							<li>
+								<img src="__PUBLIC__/user/images/shangchantupain.jpg"/>
+								<input id="imgpath_path2" name="imgpath_path"  type="text"/>
+								<input id="imgpath2" name="info[questions_image]" value="" type="text" id="questions_image">	
+								<input type="file" id="imageUpload2" class="shangchuan"  >	
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!--<div class="form_box">
+					<span>电　　话</span>
+					<div class="form_text">
+						<input type="text" name="" value=""  placeholder="请输入联系电话"/>
+					</div>
+				</div>-->
+				<div class="botton_bg">
+					<button  class="bot" type="submit" id="submit">提交</span>
+				</div>
+				 
+			</form>
+		</div>
+		<div class="zhezhao"></div>
+		<div class="jizhejvbao_tankuang">
+			<div class="ct">
+				<p>提交成功</p>
+				<div class="botton_bg">
+					<span onclick="xksxHide()" class="bot">确定</span>
+				</div>
+			</div>
+		</div>
+        <div id="loading" style="width:85px;height:85px;position:fixed;left:50%;top:50%;margin-top:-43px;display:none;z-index:99999;">
+			<img src="__PUBLIC__/agcy/images/loading_page.gif">
+        </div>
+	</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script type="text/javascript">
+		function xksxShow(){
+			$('.zhezhao').fadeTo(200,1);
+			$('.jizhejvbao_tankuang').show();
+		}
+		function xksxHide(){
+			$('.zhezhao').fadeOut(300);
+			$('.jizhejvbao_tankuang').hide();
+		}
+		var j=0;
+		//图片插件 
+		function add_album_img(imgurl,i) {
+		    j++;
+			var imgpath = "#imgpath"+i; 
+			var val = StringOperate.add($(imgpath).val(), imgurl); 
+			$(imgpath).val(val);
+		}
+		function del_album_img(imgurl,i,obj) {
+		    j--;
+			var imgpath = "#imgpath"+i; 
+			var val = StringOperate.remove($(imgpath).val(), imgurl);
+			$(imgpath).val(val);
+			$(obj).parent('strong').remove();//删除元素
+		}
+		$("#imageUpload2").imageUpload2({ 
+				imgTar: '#imageUpload2',
+				uploadField: 'imgpath_path2',
+				limitSize: 20, //兆
+				uploadUrl: "{:U('upload/headimg')}",
+				uploadSuccess: function (res) { 
+				//alert(res);//res图片路径
+                    if(j<2){
+                        $("#loading").fadeOut();
+						$("#img_file2").after("<strong><img src='" + res + "'><em onclick=\"del_album_img(\'" + res+'\','+'2' +",this);\"></em></strong>");
+						add_album_img(res,'2');//将本次上传的文件拼接在后面   
+						return res;
+					}else{
+						 layer.msg('只能传两张图片',{icon:5,time:1000});
+						return false;
+					}
+				},
+				uploadError: function (res) { //something error
+					console.log(res);
+					// alert(res);
+					return false;
+				}
+		}); 
+		function check(){
+			var questions_type_id=$("#questions_type_id").val();
+			if(questions_type_id==0){
+				layer.msg('请选择类别',{icon:5,time:1000});
+				return false;
+			}
+			var questions_content=$("#questions_content").val();
+			if(questions_content==''){
+				layer.msg('请填写问题内容',{icon:5,time:1000});
+				return false;
+			}
+            $("#submit").attr("disabled","disabled");
+		}
+</script>

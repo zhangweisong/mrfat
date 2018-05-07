@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>秒杀详情</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/js/Swiper/swiper.min.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+        <script>
+            (function (doc, win) {
+                var docEl = doc.documentElement,
+                        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                        recalc = function () {
+                            var clientWidth = docEl.clientWidth;
+                            if (!clientWidth)
+                                return;
+                            docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+                        };
+                if (!doc.addEventListener)
+                    return;
+                win.addEventListener(resizeEvt, recalc, false);
+                doc.addEventListener('DOMContentLoaded', recalc, false);
+            })(document, window);
+
+            //倒计时初始化 
+            $(function () {
+                init();
+                var timer;
+            })
+            function init() {
+                //能点进来肯定是已经开始 尚未结束 
+                var timestamp = {$miaosha.act_endtime};
+                var nowTime = new Date();
+                var endTime = new Date(timestamp * 1000);
+                var t = endTime.getTime() - nowTime.getTime();
+                var day = Math.floor(t / 1000 / 60 / 60 / 24);
+                var hour = Math.floor(t / 1000 / 60 / 60 % 24);
+                var min = Math.floor(t / 1000 / 60 % 60);
+                var sec = Math.floor(t / 1000 % 60);
+                if (0 <= day && day < 10) {
+                    day = "0" + day;
+                }
+                if (0 <= hour && hour < 10) {
+                    hour = "0" + hour;
+                }
+                if (0 <= min && min < 10) {
+                    min = "0" + min;
+                }
+                if (0 <= sec && sec < 10) {
+                    sec = "0" + sec;
+                }
+                //写入dom中
+                $(".second").html(sec);
+                $(".minute").html(min);
+                $(".hour").html(hour);
+                $(".day").html(day);
+                //定时执行
+                timer = setInterval("countdown()", 1000);
+            }
+            //倒计时方法
+            function countdown() {
+                var s = parseInt($(".second").html());
+                var m = parseInt($(".minute").html());
+                var h = parseInt($(".hour").html());
+                var d = parseInt($(".day").html());
+                //console.log(act_state + "---" + d + "---" + h + "---" + m + "---" + s);
+                //console.log(s+'=========='+m+'=========='+h);
+                //如果活动状态1：预热中 
+                //如果活动状态2：活动进行中
+                if (d == 0 && s == 0 && m == 0 && h == 0) {	//结束 
+
+                    clearInterval(timer);
+                    //$.get("{:U('agcy/act_state_toend',array('act_id'=>$miaosha['act_id']))}");
+                    //移除立即抢购上的事件
+                    $("#button").removeAttr("onclick");
+                    $("#button").attr("onclick", "layer.msg('活动已结束！',{icon:5,time:1000});");
+                    $("#button").html("已结束");
+                    return;//停止跳秒 
+                }
+                if (0 < s && s < 11) {
+                    s--;
+                    s = "0" + s;
+                } else if (s >= 11) {
+                    s--;
+                } else if (s == 0) {
+                    if (0 < m && m < 11) {
+                        m--;
+                        m = "0" + m;
+                        s = 59;
+                    } else if (m >= 11) {
+                        m--;
+                        s = 59;
+                    } else if (m == 0) {
+                        if (0 < h && h < 11) {
+                            h--;
+                            h = "0" + h;
+                            m = 59;
+                            s = 59;
+                        } else if (h >= 11) {
+                            h--;
+                            m = 59;
+                            s = 59;
+                        } else if (h == 0) {
+                            if (0 < d && d < 11) {
+                                d--;
+                                d = "0" + d;
+                                h = 23;
+                                m = 59;
+                                s = 59;
+                            } else if (d >= 11) {
+                                d--;
+                                h = 23;
+                                m = 59;
+                                s = 59;
+                            } else if (d == 0) {
+                                clearInterval(timer);
+                            }
+                            //console.log(d+"-----");
+                            $(".day").html(d);
+                        }
+                        //console.log(h+"-----");
+                        $(".hour").html(h);
+                    }
+                    //console.log(m+"-----");
+                    $(".minute").html(m);
+                }
+                //console.log(s+"-----");
+                $(".second").html(s);
+            }
+        </script>
+    </head>
+    <body> 
+        <div>
+            <!--banner-->
+            <div class="sjxq_banner">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <?php foreach(explode('|',$miaosha['agcy_goods_images']) AS $k=>$v):?>
+                        <div class="swiper-slide">
+                            <a href="###">
+                                <img src="{$v}"/>
+                            </a>
+                        </div>
+                        <?php endforeach;?> 
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+            <!---->
+            <div class="sjxq_box mg_t5">
+                <div class="spxq_text">
+                    <h4 class="title">{$miaosha.agcy_goods_name}</h4>
+                    <p class="jiage c">
+                        <span>￥:{$miaosha.act_price}</span>
+                        <i>￥:{$miaosha.act_guige_price}</i>
+                        <em>销量：{$miaosha.act_ordercount}</em>
+                    </p>
+                    <div class="shuliang c">
+                        <dl class="shuliang_fl">
+                            <dt style="color: #ef404c;">距结束：
+                                <em class="day">00</em>天
+                                <em class="hour">00</em>:
+                                <em class="minute">00</em>:
+                                <em class="second">00</em>
+                            </dt>
+
+                        </dl>
+                        <span class="shuliang_fr">库存：{$miaosha.act_seccount}</span>
+                    </div>
+                    <div class="guige c">
+                        <span>规格：</span>
+                        <ul class="c">
+                            <li class="link">{$miaosha.act_guige}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="spxq_zdy">
+                    <h4 class="title">商品信息</h4>
+                    <div class="spxq_zdy_xq">
+                        {$miaosha.agcy_default_remskss}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="xpxq_footer">
+            <ol>
+                <?php if($miaosha['act_state'] == 3):?>
+                <li class="li2" id="button" onclick="layer.msg('活动已结束！',{icon:5,time:1000});">已结束</li>
+                <?php else:?>
+                <?php if($miaosha['act_ordercount']>=$miaosha['act_seccount']):?> 
+                <li class="li2" id="button">已抢完</li>
+                <?php else:?> 
+                <li class="li2" id="button" onclick="miaosha()">立即秒杀</li>
+                <?php endif;?>
+                <?php endif;?>
+            </ol>
+        </div>
+        <script type="text/javascript" src="__PUBLIC__/user/js/Swiper/swiper.min.js"></script>
+        <script type="text/javascript">
+                    var swiper = new Swiper('.sjxq_banner .swiper-container', {
+                        pagination: '.sjxq_banner .swiper-pagination',
+                        paginationType: 'fraction',
+                    });
+
+                    $(function () {
+                        var _xinshu;
+                        var _shu = parseInt($('.shuzi').text());
+                        var _jian = $('.jian');
+                        var _jia = $('.jia');
+                        _jia.click(function () {
+                            _xinshu = ++_shu;
+                            $('.shuzi').text(_xinshu);
+                        });
+                        _jian.click(function () {
+                            if (_shu === 1) {
+                                return;
+                            }
+                            ;
+                            _xinshu = --_shu;
+                            $('.shuzi').text(_xinshu);
+                        })
+
+                        $(".guige ul li").click(function () {
+                            $(this).addClass("link").siblings().removeClass("link");
+                        })
+                    })
+                    function miaosha() {
+                        /*post 提交 根据返回结果 
+                         * 1 成功 
+                         *  跳转到订单支付页面
+                         * 2 失败
+                         *   1 活动已结束 
+                         *   2 已经被抢完
+                         *   团购相同
+                         */ 
+                             
+                        $.post("{:U('agcy/miaosha')}",{"act_id":<?=$miaosha['act_id']?>},function(response){ 
+                                if(response.code){
+                                    layer.msg(response.msg,{icon:6,time:1000},function(){
+                                        location.href = "{:U('shopcar/jiesuan')}&order_id="+response.code+"&state=3";
+                                    });
+                                }else{
+                                    layer.msg(response.msg,{icon:5,time:1000});
+                                }
+                            });  
+                        $("#button").removeAttr("onclick");
+                    }
+        </script>
+    </body>
+</html>

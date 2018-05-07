@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>记者举报</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<style type="text/css">
+			body{background: #fff;}
+		</style>
+		<div class="jizhejvbao_form">
+			<form action="" method="post">
+				<div class="form_textarea">
+					<textarea name="title" id="title" rows="" cols=""  maxlength="200"  placeholder="请输入要举报的内容,最多不得超过200字"></textarea>
+				</div>
+				<div class="botton_bg">
+					<span onclick="xksxShow(this)" class="bot">提交</span>
+				</div>
+			</form>
+		</div>
+		<div class="zhezhao"></div>
+		<div class="jizhejvbao_tankuang">
+			<div class="ct">
+				<p>提交成功，谢谢你的举报。</p>
+				<div class="botton_bg">
+					<span onclick="xksxHide()" class="bot">确定</span>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script type="text/javascript">
+		function xksxShow(a){
+		 var title = $.trim($("#title").val());
+		   if(title==""){
+		      layer.msg('请输入要举报的内容',{icon:5,time:1000});
+			  return false;
+		    }
+		    $(a).removeAttr("onclick");
+			$.get("{:U('zhen/yijian')}&title="+title,function(data){
+			       
+			});
+			$('.zhezhao').fadeTo(200,1);
+			$('.jizhejvbao_tankuang').show();	
+		}
+		function xksxHide(){
+		 var title = $("#title").val();
+			$('.zhezhao').fadeOut(300);
+			$('.jizhejvbao_tankuang').hide();
+			location.href="{:U('index/index')}";
+			/*$.get("{:U('zhen/yijian')}&title="+title,function(data){
+			     var info = data.stat;
+				 if(info>0){
+				      
+				 }  
+			});*/
+		}
+</script>

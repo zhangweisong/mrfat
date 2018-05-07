@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>文章详情</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<style type="text/css">
+			body{background: #fff;}
+			.ct a p{word-wrap:break-word}
+		</style>
+		<div class="xiangqingye zjwz_xq">
+			<div class="title">
+				<h4>{$expert_article.expert_article_title}</h4>
+				<span>
+					<i>作者：{$expert_article.expert_realname}</i>
+					<em>时间：{$expert_article.expert_article_addtime}</em>
+				</span>
+			</div>
+			<div class="content" style="font-size:1.2rem;line-height:2rem;">
+				<img src="{$expert_article.expert_article_image}"/>
+				{$expert_article.expert_article_content}
+			</div>
+			<div class="wenda_ct">
+				<div class="wenda_list">
+	    			<div class="nonghu">
+		    			<div class="wz_xq"></div>
+	    			</div>
+	    		</div>
+				<div class="meiyouneirong">
+					<i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+					<p>暂无评论，赶紧抢沙发吧！</p>
+				</div>
+		    	<div class="dibufengexian">
+		    		<p>亲，到底了</p>
+		    	</div>
+					<div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+				<img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+				</div> 
+				<button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button> 
+			</div>
+		</div>
+		<div class="zjwz_foot">
+			<ul>
+				<li id="article" onclick="like_article({$expert_article.expert_article_id})">
+					<i></i>
+					<em id="expert_article_id">{$expert_article.expert_article_like}</em>
+				</li>
+				<li onclick="pinglunShow()">
+					<strong></strong>
+					<em>评论</em>
+				</li>
+			</ul>
+		</div>
+		<div class="zhezhao" onclick="hide()"></div>
+		<div class="zjwz_pinglun">
+			<textarea name="" placeholder="请输入内容"></textarea>
+			<span class="fabiao" onclick="pinglunHide()">发表评论</span>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script type="text/javascript">
+	function pinglunShow(){
+		$(".zhezhao").fadeTo(500,1)
+		$('.zjwz_pinglun').animate({
+			bottom:0
+		})
+		$('.zjwz_pinglun textarea').focus()
+	}
+	function hide(){
+		$('.zjwz_pinglun').animate({
+			bottom:'-100%'
+		})
+		$(".zhezhao").fadeOut(300)
+	}
+	function pinglunHide(){
+		$('.zjwz_pinglun').animate({
+			bottom:'-100%'
+		})
+		//$(".zjwz_pinglun textarea").val("");
+		$(".zhezhao").fadeOut(300)
+		var comment_content=$(".zjwz_pinglun textarea").val();
+        //alert(comment_content);
+		if(comment_content==''){
+			layer.msg('评论不能为空',{icon:5,time:1000});
+			$(".zhezhao").fadeOut(300)
+		}else{
+			var comment_article={$expert_article.expert_article_id};
+            var url="{:U('expert/fabiaopinglun')}";
+            var data={'comment_content':comment_content,'comment_article':comment_article};
+            var success=function(data){
+            if(data.data==1){
+                layer.msg('评论成功！',{icon:6,time:1000},function(){
+                window.location = "{:U('expert/zhuanjiawenzhang_xq')}&expert_article_id="+comment_article;
+                });
+             }else{
+                layer.msg('评论失败！',{icon:5,time:1000},function(){
+                window.location = "{:U('expert/zhuanjiawenzhang_xq')}&expert_article_id="+comment_article;
+                });
+             }
+             
+            }
+            $.post(url, data, success, 'json');
+			//window.location.href = "{:U('expert/fabiaopinglun')}&comment_content=" + comment_content+"&comment_article="+comment_article;
+			$(".zhezhao").fadeOut(300)
+		}
+	}
+	init();
+	function init(){
+		var data={$comment};
+		var info=data.comment;
+		console.log(info);
+		if(info.length>0){
+			var html=htmlinfo(info);
+			$(".wz_xq").html(html);
+		}else{
+			$(".meiyouneirong").css('display','block');
+		}
+	}
+	function htmlinfo(info){
+		var html='';
+		for(var i=0;i<info.length;i++){
+				html+='<dl class="c" >';
+				html+='<dt>';
+				html+='<a ><img src='+info[i].avatar+'></a>';
+				html+='</dt>';
+				html+='<dd>';
+				html+='<div class="top">';
+				html+='<a >';
+				html+='<h4>'+info[i].nickname+'</h4>';
+				html+='<span>'+info[i].comment_addtime+'</span>';
+				html+='</a>';
+				html+='</div>';
+				html+='<div class="ct">';
+				html+='<a >';
+				html+='<p>'+info[i].comment_content+'</p>';
+				html+='</a>';
+				html+='</div>';
+				html+='<div class="bottom">';
+				html+='<span onclick="comment_like('+info[i].comment_id+')">';
+				html+='<i class="icon-zan"></i>';
+				html+='<em id="comment_like'+info[i].comment_id+'">'+info[i].comment_like+'</em>';
+				html+='</span>';
+				html+='</div>';
+				html+='</dd>';
+				html+='</dl>';
+		}
+		return html;
+	}
+	
+	//滚动加载  
+	$(window).scroll(function () { 
+		getData();
+	});
+	
+	var totalheight = 0;     //定义一个总的高度变量
+	function getData() {
+		 totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()); 
+		 //浏览器的高度加上滚动条的高度 （页面总高度）  
+		if ($(document).height() <= totalheight) {          
+			//当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+			//加载
+			$("#loadings").fadeIn(); 
+			//根据条件获取对应的项目条数
+			getmore();//使用模板加载更多
+			//加载完毕          
+			$("#loadings").fadeOut(); 
+		}
+	}  
+	
+	function getmore(){
+		var expert_article_id={$expert_article_id}	;
+		var page=parseInt($("#more").attr("data"))+1; 
+		$('#more').attr("data",page);//重置当前页数  	
+		$.getJSON("{:U('expert/zhuanjiawenzhang_xq')}&expert_article_id="+expert_article_id+"&p="+page,function(data){
+			var info=data.comment;
+			if(info.length>0){
+				var html=htmlinfo(info);
+				$(".wz_xq").append(html);
+			}else{
+				$("#loadings").fadeOut(); 
+				$(".dibufengexian").show();
+			}
+		})
+	}
+	
+	
+	//文章评论点赞
+	//localStorage.getItem(key):获取指定key本地存储的值
+	//localStorage.setItem(key,value)：将value存储到key字段
+	//localStorage.removeItem(key):删除指定key本地存储的值
+	var comment_id_arr=localStorage.getItem("comment_id");
+	if(comment_id_arr==null){
+		comment_id_arr=[];
+	}else{
+		if(comment_id_arr.length<=0){
+			comment_id_arr=[];
+		}else{
+			comment_id_arr=JSON.parse(comment_id_arr);//用于将一个 JSON 字符串转换为对象
+		}
+	}
+	//文章评论点赞
+	function comment_like(comment_id){
+		//如果已点数组中存在
+		var in_array=false;
+		for(var i=0;i<comment_id_arr.length;i++){
+			if(comment_id_arr[i]==comment_id){
+				in_array=true;
+				break;
+			}
+		}
+		if(in_array){
+			layer.msg('已点过赞了！',{icon:5,time:1000});
+			return;
+		}else{
+			comment_id_arr.push(comment_id);
+			localStorage.setItem("comment_id",JSON.stringify(comment_id_arr));//给comment_id赋值
+			var url = "{:U('expert/dianzan_comment')}";
+			var data = {"comment_id": comment_id}; 
+			$.post(url, data);
+			var id_name = "#comment_like"+comment_id
+			$(id_name).text(parseInt($(id_name).text())+1)
+		}
+	}
+	
+	
+	//给发表的文章点赞
+	var expert_article_id_arr=localStorage.getItem("expert_article_id");
+	if(expert_article_id_arr==null){
+		expert_article_id_arr=[];
+	}else{
+		if(expert_article_id_arr.length<=0){
+			expert_article_id_arr=[];
+		}else{
+			expert_article_id_arr=JSON.parse(expert_article_id_arr);//用于将一个 JSON 字符串转换为对象
+		}
+	}
+	function like_article(expert_article_id){
+		//如果已点数组中存在
+		var in_array=false;
+		for(var i=0;i<expert_article_id_arr.length;i++){
+			if(expert_article_id_arr[i]==expert_article_id){
+				in_array=true;
+				break;
+			}
+		}
+		if(in_array){
+			layer.msg('已点过赞了！',{icon:5,time:1000});
+			return;
+		}else{
+			expert_article_id_arr.push(expert_article_id);
+			localStorage.setItem("expert_article_id",JSON.stringify(expert_article_id_arr));//给expert_article_id赋值
+			var url = "{:U('expert/dianzan_article')}";
+			var data = {"expert_article_id": expert_article_id}; 
+			$.post(url, data);
+			var id_name = "#expert_article_id"
+			$(id_name).text(parseInt($(id_name).text())+1)
+			$("#expert_article_id").parents().find("#article").addClass("link");
+		}
+	
+	}
+</script>

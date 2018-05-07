@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>问答详情</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <link rel="stylesheet" href="__PUBLIC__/user/js/mui/mui.min.css">
+        <link rel="stylesheet" href="__PUBLIC__/user/js/mui/mui-custom.css">
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<style type="text/css">
+			body{background: #fff;}
+			.wenda_ct .wenda_list .zhuanjia{border-bottom: none;}
+			.wenda_ct .wenda_list dl{border-bottom: 1px solid #f5f5f5;}
+			.wenda_ct .wenda_list .title{ height: 20px; line-height: 20px; padding-left: 10px;}
+.wenda_ct .wenda_list .title span{display: inline-block; vertical-align: top; width: 15px; height: 20px; background: url(__PUBLIC__/user/images/gjhf_ico.png) center no-repeat; background-size: cover;}
+.wenda_ct .wenda_list .title i{display: inline-block; vertical-align: top; font-size: 12px; color: #f49b1b; margin-left: 5px;}
+			.ct a p{word-wrap : break-word}
+		</style>
+		<div class="njzs_xiangxifenlei">
+	    	<div class="wenda_ct">
+	    		<div class="wenda_list">
+	    			<div class="nonghu">
+		    			<dl class="c">
+		    				<dt>
+		    					<a><img src="{$info.avatar}"/></a>
+		    				</dt>
+		    				<dd>
+								<div class="top">
+									<a>
+										<h4>{$info.nickname} <em>{$info.type_name}</em></h4>
+										<span>{$info.questions_addtime}</span>
+									</a>
+								</div>
+								<div class="ct">
+									<a>
+										<p>{$info.questions_content}</p>
+									</a>
+								</div>
+								<notempty name="info.questions_image">
+								<div class="img c">
+									<a>
+										<volist name="info.questions_image" id="vo">
+										<span><img src="{$vo}" data-preview-src="" data-preview-group="1"/></span>
+										</volist>
+									</a>
+								</div>
+								</notempty>
+								<div class="bottom">
+									<span>
+										<i class="icon-zan"></i>
+										<em>{$info.questions_like}</em>
+									</span>
+									<span>
+										<i class="icon-xiaoxi1"></i>
+										<em>{$info.questions_answers}</em>
+									</span>
+								</div>
+		    				</dd>
+		    			</dl>
+	    			</div>
+	    			<notempty name="expert">
+	    				<div class="title">
+	    					<span></span>
+	    					<i>专家回复</i>
+	    				</div>
+	    				<volist name="expert" id="vo">
+		    			<div class="zhuanjia">
+			    			<dl class="c">
+			    				<dt>
+			    					<a><img src="{$vo.expert_avator}"/></a>
+			    				</dt>
+			    				<dd>
+									<div class="top">
+										<a>
+											<h4>{$vo.expert_nickname} <em>专家</em></h4>
+											<span>{$vo.answers_addtime}</span>
+										</a>
+									</div>
+									<div class="ct">
+										<a>
+											<p>{$vo.answers_content}</p>
+										</a>
+									</div>
+									<notempty name="vo.answers_image">
+									<div class="img c">
+										<a>
+											<volist name="vo.answers_image" id="img">
+											<span><img src="{$img}" data-preview-src="" data-preview-group="1"/></span>
+											</volist>
+										</a>
+									</div>
+									</notempty>
+									<div class="bottom">
+										<span id="num{$vo.answers_id}" onclick="expert_like({$vo.answers_id})">
+											<i class="icon-zan"></i>
+											<em>{$vo.answers_like}</em>
+										</span>
+									</div>
+			    				</dd>
+			    			</dl>
+		    			</div>
+		    			</volist>
+	    			</notempty>
+	    		</div>
+	    	</div>
+		</div>
+	</body>
+</html>
+<script src="__PUBLIC__/user/js/mui/mui.min.js"></script>
+<script src="__PUBLIC__/user/js/mui/mui.zoom.js"></script>
+<script src="__PUBLIC__/user/js/mui/mui.previewimage.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script type="text/javascript">
+	mui.previewImage();
+	mui('body').on('tap','a',function(){
+	    window.top.location.href=this.href;
+	});
+	window.onload = function() {
+		$.each($(".img"), function(){
+			if($(this).find('span').length==1){
+				$(this).find('span').css({
+					'width':'60%'
+				})
+			}			
+		});
+
+	}
+	 //专家回复点赞
+	 var expert_id_arr=localStorage.getItem("expert_id");
+	 if(expert_id_arr== null){
+	 	expert_id_arr=[];
+	 }else{
+	 	if(expert_id_arr.length<=0){
+	 		expert_id_arr=[];
+	 	}else{
+	 		expert_id_arr=JSON.parse(expert_id_arr);
+	 	}
+	 }
+	 function expert_like(id){
+	 	var in_arr=false;
+	 	for (var i = 0; i < expert_id_arr.length; i++) {
+	 		if(expert_id_arr[i]==id){
+	 			in_arr=true;
+	 			break;
+	 		}
+	 	}
+	 	if(!in_arr){
+	 		//请求后台点赞
+			var url="{:U('user/consult_thumb')}";
+			$.ajax({
+				url:url,
+				method:'post',
+				data:{
+					expert_id:id
+				},
+				success:function(res){
+					if(res.data==2){
+						//成功
+						var _em="#num"+id+" > em";
+						$(_em).text(parseInt($(_em).text())+1);
+						expert_id_arr.push(id);
+	        			localStorage.setItem("expert_id", JSON.stringify(expert_id_arr));
+					}else{
+						layer.msg(res.msg,{icon:5,time:1000});
+					}
+				}
+			});
+	 	}else{
+	 		layer.msg('已经点过赞了',{icon:5,time:1000});
+	 	}
+	 	
+	 }
+      
+</script>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>农户列表</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">农户管理</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">农户列表</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <!--查询-->
+
+        <div class="query">
+            <form  name="seachform" id="seachform"  action="{:U('user/index')}"  method="post" class="form">
+                <div class="form_input mg_trb">
+                    <label class="text">快速检索</label>
+                    <input type="text" name="info[keyword]" id="keyword" value="{$keyword}"  placeholder="请输入农户姓名或电话"  maxlength="11"/>
+                </div>
+                <div class="form_input mg_trb">
+                    <label class="text">余额范围</label>
+                    <input type="text" name="info[minMoney]" id="money" value="{$minMoney}"  placeholder="请输入余额最小值" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')"   maxlength="11"/>
+                    <input type="text" name="info[maxMoney]" id="money1" value="{$maxMoney}"  placeholder="请输入余额最大值" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')"  maxlength="11"/>
+                </div>
+                <div class="form_input mg_trb">
+                    <label class="text">推荐人</label>
+                    <input type="text" name="info[refree_phone]" id="refree_phone" value="{$refree_phone}"  placeholder="请输入推荐人"  maxlength="11"/>
+                </div>
+                <!--<div class="form_input mg_trb form-date">
+                    <label class="text">注册时间</label>
+                    <input type="text" class="laydate-icon layer-date" name="info[starttime]"  value="{$starttime}"  id="start" placeholder="开始时间" readonly/>
+                    <input type="text" class="laydate-icon layer-date" name="info[endtime]"  value="{$endtime}"  id="end" placeholder="结束时间" readonly/>
+                </div>-->
+                <div class="select mg_trb">
+                    <span class="text">农户状态</span>
+                    <select name="info[user_status]">
+                        <option value="">--请选择农户状态--</option>
+                        <volist name="userStatus" id="data">
+                            <option value="{$key}" <if condition="$key eq $user_status">selected</if>>{$data}</option>
+                        </volist>
+                    </select>
+                </div>
+                <div class="button mg_trb" onclick="location.href='{:U('user/index')}'">
+                    <i class="fa fa-refresh ico"></i>
+                    <input type="button" value="刷新" class="but chongzhi" />
+                </div>
+
+                <div class="button mg_trb chaxun">
+                    <i class="fa fa-search ico"></i>
+                    <input type="submit" value="查询" class="but"  style="    position: absolute; background: none;z-index: 2;"/>
+                </div>
+            </form>
+        </div>
+
+        <div class="table_box">
+            <table class="table" border="" cellspacing="" cellpadding="">
+                <!--<colgroup>-->
+                    <!--<col width="10">-->
+                    <!--<col width="50">-->
+                    <!--<col width="50">-->
+                    <!--<col width="50">-->
+                    <!--<col width="50">-->
+                    <!--<col width="100">-->
+                    <!--<col width="50">-->
+                    <!--<col width="170">-->
+                    <!--<col>-->
+                <!--</colgroup>-->
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>姓名</th>
+                    <th>电话</th>
+					<th>余额(元)</th>
+				    <th>推荐人</th>
+                    <th>农户状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="listinfo" id="user">
+                    <tr>
+                        <td>{$user.user_id}</td>
+                        <td>{$user.realname}</td>
+                        <td>{$user.phone}</td>
+                        <td>{$user.money}</td>
+						<if condition="$user.refree_id eq 0">
+						<td>--</td>
+						<else />
+						<td>{$user.refree_realname}</td>
+						</if>
+                        <td <if condition="$user['user_status'] eq 1"> style='color:green' <else/> style='color:red' </if>>{$userStatus[$user['user_status']]}</td>
+                        <td>
+                            <!--<p onclick="edit({$user['user_id']})" class="but chaxun">-->
+                             <!--<i class="fa fa-edit"></i>-->
+                                <!--修改</p>-->
+                            <p onclick="xiangQing({$user['user_id']})" class="but chaxun">
+                            <i class="fa fa-eye"></i>
+                            查看详情</p>
+                           <if condition="$user['user_status'] eq 1">
+                                <a href="{:U('user/addBlack',array('user_id'=>$user['user_id']))}" onclick="{if(confirm('确定将该农户锁定?')){return true;}return false;}" class="but chaxun">
+                                    <i class="fa fa-lock"></i>
+                                    锁定农户</a>
+                                <else/>
+                                <a href="{:U('user/recover',array('user_id'=>$user['user_id']))}" onclick="{if(confirm('确定将该农户恢复正常?')){return true;}return false;}" class="but chaxun">
+                                    <i class="fa fa-check"></i>
+                                    恢复正常</a>
+                            </if>
+                            <!--<p onclick="myteam({$user['user_id']})" class="but chaxun">
+                                <i class="fa fa-child"></i>
+                                我的团队({$user['team_count']})</p>-->
+							<p onclick="getUserPhone({$user['user_id']})" class="but chaxun">
+                                <i class="fa fa-plus"></i>
+                                关注详情</p>
+                        </td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </div>
+        {$pageshow}
+    </div>
+</div>
+</body>
+</html>
+<script src="__PUBLIC__/admin/js/layer/layer.js"></script>
+<script type="text/javascript">
+    $(".right_min").height($(window).height());
+    var body_w=$(".right_min").width()-200;
+    var body_h=$(".right_min").height()-100;
+    function xiangQing(user_id) {
+        //alert(user_id);
+        layer.open({
+            type: 2,
+            title: false,
+            skin: "layui-layer-molv",
+            shade: [0.8, '#000000'],
+            scrollbar: false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area: [body_w + "px", body_h + "px"],
+            content: "{:U('user/xiangqing')}&user_id=" + user_id
+        });
+    }
+    //我的团队
+    function myteam(user_id){
+        layer.open({
+            type: 2,
+            title: false,
+            skin: "layui-layer-molv",
+            shade: [0.8, '#000000'],
+            scrollbar: false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area: [body_w + "px", body_h + "px"],
+            content: "{:U('user/myteam')}&user_id=" + user_id
+        });
+    }
+    //查看消费记录
+    function transaction(user_id) {
+        layer.open({
+            type: 2,
+            title: false,
+            skin: "layui-layer-molv",
+            shade: [0.8, '#000000'],
+            scrollbar: false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area: [body_w + "px", body_h + "px"],
+            content: "{:U('user/transaction')}&user_id=" + user_id
+        });
+    }
+	//关注详情
+    function getUserPhone(user_id){
+        layer.open({
+            type: 2,
+            title: false,
+            skin: "layui-layer-molv",
+            shade: [0.8, '#000000'],
+            scrollbar: false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area: [body_w + "px", body_h + "px"],
+            content: "{:U('user/attention')}&user_id=" + user_id
+        });
+    }
+</script>
+ 
+ 
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $('input, textarea').placeholder();
+    });
+</script>

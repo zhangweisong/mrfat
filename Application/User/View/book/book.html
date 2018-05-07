@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>图书商城</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/js/Swiper/swiper.min.css"/>
+        <script type="text/javascript" src="__PUBLIC__/user/js/jquery-1.10.2.min.js"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+        
+	</head>
+	<body>
+		<div class="tushushangcheng">
+			<!--banner-->
+	    	<div class="banner">
+			    <div class="swiper-container">
+			        <div class="swiper-wrapper"> 
+                        <?php foreach($banner as $k=>$v):?>
+			            <div class="swiper-slide">
+			            	<a href="#">
+			            		<img src="{$v.focus_image}"/>
+			            	</a>
+			            </div>
+                        <?php endforeach;?>
+			        </div>
+			        <div class="swiper-pagination"></div>
+			    </div>
+	    	</div>
+	    	<div class="shousuo_fenlei c">
+	    		<a class="xuanzefenlei" href="{:U('book/type')}">选择分类</a>
+	    		<div class="form_input">
+	    			<span class="bot"  onclick="search()" >搜索</span>
+	    			<i><input type="text" id="keyword" value="{$key}" maxlength="10" placeholder="请输入图书名称" /></i>
+	    		</div>
+	    	</div>
+	    	<div class="tushu_list_box">
+	    		<div class="title" >
+	    			<ul>
+	    				<li <?php if($n==1):?> class="link" <?php endif;?> datatype="all"  onclick="dianj(1);">
+	    					<span>综合排序</span> 
+	    				</li>
+	    				<li <?php if($n==2):?> class="link" <?php endif;?> datatype="sale" onclick="dianj(2);">
+	    					<span>销量</span>
+	    					<i id="xiaoliang_" data="1"></i>
+	    				</li>
+	    				<li <?php if($n==3):?> class="link" <?php endif;?> datatype="price"  onclick="dianj(3);">
+	    					<span>价格</span>
+	    					<i id="jiage_" data="0"></i>
+	    				</li>
+	    			</ul>
+	    		</div>
+	    		<div class="tushu_list">
+	    			<ul class="c" id="content">
+                        
+	    			</ul>
+	    		</div>
+				<input type="hidden" value="{$n}" id="fenlei_">
+				<input type="hidden" value="{$type}" id="paixu_">
+				<div class="meiyouneirong" style="display:none;margin-top:10%;">
+					<i><img src="__PUBLIC__/user/images/li_wdxx_img.png"/></i>
+					<p>没有产品</p>
+				</div>
+		    	<div class="dibufengexian" style="display:none;">
+		    		<p>亲，到底了</p>
+		    	</div>
+                <div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+                    <img src="__PUBLIC__/user/images/5-130H2191536.gif">
+                </div>
+                <button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button>  
+	    	</div>
+		</div>
+		<div class="gouwuchetubiao">
+			<a href="{:U('book/car')}">
+				<span></span>
+				<em class="carnum"></em>
+			</a>
+		</div>
+	</body>
+</html>
+
+<script type="text/javascript" src="__PUBLIC__/user/js/Swiper/swiper.min.js"></script>
+<script type="text/javascript">
+	window.onload = function() {
+		show_car_num();
+	    var swiper = new Swiper('.banner .swiper-container', {
+	        pagination: '.banner .swiper-pagination',
+	        slidesPerView: 1,
+	        paginationClickable: true,
+	        loop: true,
+	        centeredSlides: true,
+	        autoplay: 3500,
+	        autoplayDisableOnInteraction: false
+	    });	
+	    var liClick="";
+	    $(".title li").click(function(){ 
+	    	$(this).addClass("link").siblings().removeClass("link link1")
+	    	if($(this).attr('datatype')=="sale"&&liClick!="sale"){
+	    		$(this).find('i').attr('data',1)
+	    		liClick="sale"
+	    	}else if($(this).attr('datatype')=="price"&&liClick!="price"){
+	    		$(this).find('i').attr('data',0)
+	    		liClick="price"
+	    	}else if($(this).attr('datatype')=="all"){
+	    		liClick=""
+	    	}
+	    	if($(this).find('i').attr('data')=="0"){
+	    		$(this).addClass("link").removeClass("link1")
+	    		$(this).find('i').attr('data',1)
+	    	}else if($(this).find('i').attr('data')=="1"){
+	    		$(this).addClass("link1").removeClass("link")
+	    		$(this).find('i').attr('data','0')
+	    	} 
+	    })
+	}
+    var yiji = {$yiji};
+    var erji = {$erji}; 
+     //排序
+	function dianj(n){
+	    if(n==1){	//综合
+		   //清除数据
+		   $('#more').attr("data",1);
+		   $('#fenlei_').val(1);
+		   $('#paixu_').val(1);
+           var key = $("#keyword").val();  
+		   $.getJSON("{:U('book/book')}&yiji="+yiji+"&erji="+erji+"&key="+key+"&n="+n+"&type=1",function(data){  
+			   var info = data.book; 
+			   if(info.length>0){
+					var html = htmlinfo(info);
+					$("#content").html(html);
+			   }
+			});
+		}else if(n==2){	//销量
+		   //清除数据
+		   $('#more').attr("data",1);
+		   var a = $('#xiaoliang_').attr('data');
+		   $('#fenlei_').val(n);
+		   $('#paixu_').val(a);
+           var key = $("#keyword").val();  
+		   $.getJSON("{:U('book/book')}&yiji="+yiji+"&erji="+erji+"&key="+key+"&n="+n+"&type="+a,function(data){  
+			   var info = data.book; 
+			   if(info.length>0){
+					var html = htmlinfo(info);
+					$("#content").html(html);
+			   }
+			});
+		}else if(n==3){	//价格
+		   //清除数据
+		   $('#more').attr("data",1);
+		   var a = $('#jiage_').attr('data');
+		   $('#fenlei_').val(n);
+		   $('#paixu_').val(a);
+           var key = $("#keyword").val();   
+		   $.getJSON("{:U('book/book')}&yiji="+yiji+"&erji="+erji+"&key="+key+"&n="+n+"&type="+a,function(data){  
+			   var info = data.book; 
+			   if(info.length>0){
+					var html = htmlinfo(info);
+					$("#content").html(html);
+			   }
+			});
+		}
+	}
+</script>
+<script type="text/javascript">
+    
+	init();
+    function init(){             
+	    var data = {$book}; 
+	    var info = data.book;  
+	    if(info.length>0){
+			var html = htmlinfo(info);
+			$("#content").html(html);
+	    }else{
+			$(".meiyouneirong").css("display","block");
+	    } 
+    } 
+	//数据列表
+    function htmlinfo(info){   
+        var html=""; 
+        for(var i=0;i<info.length;i++){
+			html+='<li>';
+            html+='<a onclick="tiao('+info[i].book_id+')">'; 
+            html+='<i class="img"><img src='+info[i].img+' /></i>';
+			html+='<div class="text">';
+            html+='<h5>'+info[i]['book_name']+'</h5>';
+            html+='<div class="jiage">';
+            html+='<span>'+info[i]['book_price']+'</span>';
+            html+='<em>'+info[i]['book_oldprice']+'</em>';
+            html+='</div>';
+            html+='<div class="xiaoliang">';
+            html+='<span>销量：'+info[i]['book_buynum']+'</span>';
+            html+='<em></em>';
+            html+='</div>';
+            html+='</div>';
+			html+='</a>';
+			html+='</li>';   
+        }
+        return html;     
+    }
+      
+    
+	//滚动加载  
+    $(window).scroll(function () { 
+        getData();
+    });
+    var totalheight = 0;     //定义一个总的高度变量
+    function getData() {
+         totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop())+1; 
+         //浏览器的高度加上滚动条的高度 （页面总高度）  
+        if ($(document).height() <= totalheight) { 
+            //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+            //加载
+            $("#loadings").fadeIn(); 
+            //根据条件获取对应的项目条数
+            getmore();//使用模板加载更多
+            //加载完毕          
+            $("#loadings").fadeOut(); 
+        }
+    }
+
+	//加载更多 
+    function getmore(){ 
+        var page=parseInt($("#more").attr("data"))+1; 
+        $('#more').attr("data",page);//重置当前页数 
+        var key = $("#keyword").val();  
+		var n_a = $('#fenlei_').val();
+		var type_a =$('#paixu_').val();
+		var yiji = {$yiji};
+		var erji = {$erji};
+        $.getJSON("{:U('book/book')}&yiji="+yiji+"&erji="+erji+"&n="+n_a+"&type="+type_a+"&key="+key+"&p="+page,function(data){  
+           var info = data.book; 
+           if(info.length>0){ 
+                var html = htmlinfo(info);
+                $("#content").append(html);
+           }else{ 
+                $("#loadings").fadeOut(); 
+                $(".dibufengexian").show();          
+           }
+        }) 
+    }  
+    
+    function search(){ 
+        $(".meiyouneirong").css("display","none");
+        $(".dibufengexian").css("display","none");
+		var key = $("#keyword").val(); 
+		var n = $('#fenlei_').val();
+		var type =$('#paixu_').val();
+		var yiji = {$yiji};
+		var erji = {$erji}; 
+        $.getJSON("{:U('book/book')}&yiji="+yiji+"&erji="+erji+"&n="+n+"&type="+type+"&key="+key,function(data){  
+           var info = data.book; 
+           if(info.length>0){
+                var html = htmlinfo(info); 
+                $("#content").html(html);
+           }else{ 
+                $("#content").html(""); 
+                $(".meiyouneirong").css("display","block");
+           }
+        }) 
+    }
+     
+    //跳转到详情        
+    function tiao(a){
+        var book_id=a;
+        location.href="{:U('book/bookinfo')}&book_id="+book_id; 
+    }
+    //显示购物车的数量
+    // var sh=setInterval(function(){ 
+         
+    // },1000);
+    function show_car_num(){
+    	var str=$.ajax({ async:false,cache:false,url:"{:U('book/carnum')}",data: "" }).responseText; 
+        if(str>0){
+                $(".carnum").css("display","block"); 
+                $(".carnum").html(str);
+        }else{
+            $(".carnum").css("display","none"); 
+        }
+        return false;  
+    }
+     
+    
+    
+</script>

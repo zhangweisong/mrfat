@@ -1,0 +1,32 @@
+.cont{}
+.cont img{
+	width: 14.6rem;
+	padding: 0.4rem;
+	border: 1px solid #f1f1f1;
+	margin: 5.2rem auto 0;
+	display: block;
+}
+.cont p:nth-of-type(1){
+	font-size: 1.36rem;
+	margin-top: 2.68rem;
+	text-align: center;
+	color: #363636;
+}
+.cont p:nth-of-type(2){
+	font-size: 0.96rem;
+	color: #7a7a7a;
+	margin-top: 2.88rem;
+	text-align: center;
+}
+.btns{
+	margin-top: 3rem;
+}
+.btns button{
+	width: 10.4rem;
+	height: 2.8rem;
+	background: #3ab849;
+	color: #FFFFFF;
+	font-size: 1.2rem;
+	border: none;
+	border-radius: 0.4rem;
+}

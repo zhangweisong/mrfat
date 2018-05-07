@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>提现申请详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+	<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+</head>
+<body>
+<div class="right_min">
+	<div class="crumbs_nav">
+		<i class="iconfont icon-shouye"></i>
+		<ul>
+			<li><a href="javascript:void(0);">提现申请详情</a></li>
+		</ul>
+	</div>
+	<div class="min">
+		<div class="message">
+			<div class="message-block message-border-t">
+				<h4 class="message-left_block">提现申请详情</h4>
+			</div>
+			<table class="table" border="" cellspacing="" cellpadding="">
+				<tr>					
+					<th style="font-weight:bold;">店铺名称</th>
+					<td>{$agcypopinfo.agcy_name}</td>
+					<th style="font-weight:bold">申请提现金额</th>
+					<td>{$agcypopinfo.agcy_pop_money}</td>
+					<th style="font-weight:bold">手续费</th>
+					<?php if($agcypopinfo['agcy_pop_routine']=="0"):?>
+					<td>---</td>
+					<?php else:?>
+					<td>{$agcypopinfo.agcy_pop_routine}</td>
+					<?php endif;?>
+					
+					<th style="font-weight:bold">实际到账金额</th>
+					<?php if($agcypopinfo['agcy_pop_fact']=="0"):?>
+					<td>---</td>
+					<?php else:?>
+					<td>{$agcypopinfo.agcy_pop_fact}</td>
+					<?php endif;?>
+					 
+				</tr>
+				<tr>
+					 
+					<th style="font-weight:bold">申请提现时间</th>
+					<td><?php echo date('Y-m-d H:i:s',$agcypopinfo['agcy_pop_addtime']);?></td> 
+					<th style="font-weight:bold">申请状态</th> 
+					<if condition="$agcypopinfo['agcy_pop_flag'] eq 1"><td style="color:green">{$state[$agcypopinfo['agcy_pop_flag']]}</td></if>
+					<if condition="$agcypopinfo['agcy_pop_flag'] eq 2"><td>{$state[$agcypopinfo['agcy_pop_flag']]}</td></if>
+					<if condition="$agcypopinfo['agcy_pop_flag'] eq 3"><td  style="color:green">{$state[$agcypopinfo['agcy_pop_flag']]}</td></if>
+					<th style="font-weight:bold">银行开户主姓名</th>
+					<td>{$agcypopinfo.agcy_pop_name}</td>
+					<th style="font-weight:bold">银行卡卡号</th>
+					<td>{$agcypopinfo.agcy_pop_code}</td>
+								
+				</tr> 
+				<tr>
+					<th style="font-weight:bold">银行卡名称</th>
+					<td>{$agcypopinfo.agcy_pop_account}</td>
+					<th style="font-weight:bold">银行卡预留手机号</th>
+					<td>{$agcypopinfo.agcy_pop_phone}</td>
+					<th style="font-weight:bold">银行卡预留户主身份证号</th>
+					<td>{$agcypopinfo.agcy_pop_idcard}</td>
+					
+					<th style="font-weight:bold">审核人</th>
+					<?php if($agcypopinfo['realname']==""):?>
+					<td>---</td>
+					<?php else:?>
+					<td>{$agcypopinfo.realname}</td> 
+					<?php endif;?>
+				</tr>  
+                <tr> 
+                    <th style="font-weight:bold">审核时间</th>
+					<?php if($agcypopinfo['agcy_pop_check_time']=="0"):?>
+					<td>---</td>
+					<?php else:?>
+					<td><?php echo date('Y-m-d H:i:s',$agcypopinfo['agcy_pop_check_time']);?></td>
+					<?php endif;?>
+					<th style="font-weight:bold">提现备注说明</th>
+					<td colspan="2">{$agcypopinfo.agcy_pop_remarks}</td>
+					<th style="font-weight:bold">审核备注</th>
+					<?php if($agcypopinfo['agcy_pop_check_remark']==""):?>
+					<td colspan="2">---</td>
+					<?php else:?>
+					<td colspan="2">{$agcypopinfo.agcy_pop_check_remark}</td>
+					<?php endif;?>
+				</tr> 
+			</table>   
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src="/foodsking/Public/admin/js/layer/layer.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+        $('.table_box input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        var index = parent.layer.getFrameIndex(window.name);
+        $('#net').on('click', function(){
+            parent.layer.close(index);
+        });
+    });
+</script>

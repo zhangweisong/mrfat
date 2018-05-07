@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>商品详情</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/js/Swiper/swiper.min.css"/>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<div>
+			<!--banner-->
+	    	<div class="sjxq_banner">
+			    <div class="swiper-container">
+			        <div class="swiper-wrapper">
+                        <volist name="agcygoods['agcy_goods_images']" id="image">
+                            <div class="swiper-slide">
+                                <a href="#">
+                                    <img src="{$image}"/>
+                                </a>
+                            </div>
+			            </volist>
+			        </div>
+			        <div class="swiper-pagination"></div>
+			    </div>
+	    	</div>
+	    	<!---->
+	    	<div class="sjxq_box mg_t5">
+    			<div class="spxq_text">
+    				<h4 class="title">{$agcygoods.agcy_goods_name}</h4>
+    				<p class="jiage c">
+    					<span price="0" spec="0" repertorys="0" >￥: 0.00</span>
+    					<!--<i>￥:400.00</i>-->
+    					<em>销量：{$agcygoods.agcy_goods_salenum}</em>
+    				</p>
+    				<div class="shuliang c">
+    					<dl class="shuliang_fl">
+    						<dt>数量：</dt>
+    						<dd>
+    							<span class="jian">-</span>
+    							<i class="shuzi">1</i>
+    							<span class="jia">+</span>
+    						</dd>
+    					</dl>
+    					<span class="shuliang_fr">库存：0</span>
+    				</div>
+    				<div class="guige c">
+    					<span>规格：</span>
+    					<ul id="gui" class="c">
+                            <volist name="agcygoods['agcy_goods_spec']" id="spec" >
+                                <li data="{$key}" spec="{$spec}"  >{$spec}</li>
+                            </volist>
+    					</ul>
+    				</div>
+    			</div>
+ 				<div class="spxq_zdy">
+    				<h4 class="title">商品信息</h4>
+    				<div class="spxq_zdy_xq">
+    					{$agcygoods.agcy_goods_remark}
+    				</div>
+    			</div>
+	    	</div>
+    	</div>
+    	<div class="xpxq_footer">
+    		<ol>
+    			<li class="li1" onclick="shoppingcar()">加入购物车</li>
+    			<li class="li2" onclick="buys()">立即购买</li>
+    		</ol>
+    	</div>
+		<div class="gouwuchetubiao">
+			<a href="{:U('shopcar/shoppingcart')}">
+				<span></span>
+				<em >{$count}</em>
+			</a>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/user/js/Swiper/swiper.min.js"></script>
+<script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script type="text/javascript">
+    $(function(){
+        $('.guige ul').find("li").eq(0).trigger('click');  //模拟点击时间
+        if({$count}>0){
+            $(".gouwuchetubiao").find("em").show();
+        }else{
+            $(".gouwuchetubiao").find("em").hide();
+        }
+    });
+    price='{$agcygoods.agcy_goods_price}';
+    var prices=new Array();
+    prices=price.split(",");
+    //库存：
+    repertory='{$agcygoods.agcy_goods_repertory}';
+    var repertorys=new Array();
+    repertorys=repertory.split(',');
+    var swiper = new Swiper('.sjxq_banner .swiper-container', {
+        pagination : '.sjxq_banner .swiper-pagination',
+        paginationType : 'fraction',
+    });
+
+	$(function(){
+		var _xinshu=0;
+		var _shu=parseInt($('.shuzi').text());
+		var _jian=$('.jian');
+		var _jia=$('.jia');
+		_jia.click(function(){
+            var repertorys=$('.jiage span').attr('repertorys');
+            if(_xinshu>=repertorys){
+                layer.msg('库存不足！',{icon:5,time:1000});
+                $('.shuzi').text(repertorys);
+                return false;
+            }else{
+                _xinshu=++_shu;
+                $('.shuzi').text(_xinshu);
+            }
+             
+		});
+		_jian.click(function(){
+			if(_shu===1){
+				return;
+			};
+			_xinshu=--_shu;
+			$('.shuzi').text(_xinshu);
+		})
+		
+		
+	});
+    $(".guige ul li").click(function(){
+			$(this).addClass("link").siblings().removeClass("link");
+            var data=$(this).attr('data');
+            var spec=$(this).attr('spec');
+            //规格
+            $('.jiage span').attr('spec',spec);
+            //价格
+            if(price==""||price==0){
+                $('.jiage span').attr('price',0);
+                $('.jiage span').text("￥: 0");
+            }else{
+                $('.jiage span').attr('price',prices[data]);
+                $('.jiage span').text("￥: "+prices[data]);
+            }
+           
+            //库存
+            if(repertory==""||repertory==0){
+                $('.shuliang_fr').text("库存 : 0");
+                $('.jiage span').attr('repertorys',0);
+            }else{
+                $('.shuliang_fr').text("库存 : "+repertorys[data]);
+                $('.jiage span').attr('repertorys',repertorys[data]);
+            }
+                
+           
+          
+		})
+    //立即购买
+    function buys(){
+        var agcy_goods_id={$agcygoods.agcy_goods_id};
+        var agcy_id={$agcygoods.agcy_id};
+        var num=$('.shuzi').text();
+        var spec=$('.jiage span').attr('spec');//规格
+        var price=$('.jiage span').attr('price');//价格
+        var repertorys=$('.jiage span').attr('repertorys');//库存
+        //alert(num+"=="+spec+"=="+price+"=="+agcy_goods_id+"=="+agcy_id);
+        if(spec==""||spec==undefined){
+            layer.msg('请选择规格！',{icon:5,time:1000});
+            return false;
+        }
+        if(parseFloat(price)==0||parseFloat(price)==undefined){
+            layer.msg('请选择规格！，价格不能为空！',{icon:5,time:1000});
+            return false;
+        }
+        if(parseInt(num)>parseInt(repertorys)){
+            layer.msg('库存不足！',{icon:5,time:1000});
+            return false;
+        }
+       window.location.href="{:U('shopcar/jiesuan')}&agcy_goods_id="+agcy_goods_id+"&agcy_id="+agcy_id+"&spec="+spec+"&price="+price+"&num="+num+"&state=1";
+        
+    }
+    //加入购物车
+    function shoppingcar(){
+        var agcy_goods_id={$agcygoods.agcy_goods_id};
+        var agcy_id={$agcygoods.agcy_id};
+        var num=$('.shuzi').text();
+        var spec=$('.jiage span').attr('spec');//规格
+        var price=$('.jiage span').attr('price');//价格
+        //alert(num+"=="+spec+"=="+price+"=="+agcy_goods_id+"=="+agcy_id);
+        if(spec==""||spec==undefined){
+            layer.msg('请选择规格！',{icon:5,time:1000});
+            return false;
+        }
+        if(parseFloat(price)==0||parseFloat(price)==undefined){
+           layer.msg('请选择规格！，价格不能为空！',{icon:5,time:1000});
+            return false;
+        }
+        var info = {"agcy_id": agcy_id,
+                    "goods_id": agcy_goods_id,    
+                    "goods_num": num,    
+                    "goods_spec": spec,    
+                    "goods_price": price, 
+                    };
+        $.post("{:U('shopcar/addcar')}",info,function(data){
+            console.log(data);
+            if(data.status==1){
+                $(".gouwuchetubiao").find("em").html(data.count);
+                $(".gouwuchetubiao").find("em").show();
+            }
+            layer.msg(data.msg,{icon:6,time:1000});
+        
+        });
+  
+    }
+    //显示购物车的数量
+        var str=$.ajax({ async:false,cache:false,url:"{:U('shopcar/carnum')}",data: "" }).responseText;
+        if(str>0){
+                $(".gouwuchetubiao").find("em").css("display","block"); 
+                $(".gouwuchetubiao").find("em").html(str);
+        }else{
+            $(".gouwuchetubiao").find("em").css("display","none"); 
+        }
+        
+    //浏览器返回键监听事件
+    /*$(function(){
+        pushHistory();
+        window.addEventListener("popstate", function(e) {
+            //alert("我监听到了浏览器的返回按钮事件啦");//根据自己的需求实现自己的功能
+            window.location.href="{:U('agcy/index')}&agcy_id="+{$agcygoods.agcy_id};
+        }, false);
+        function pushHistory() {
+        var state = {
+        title: "title",
+        url: "#"
+        };
+        window.history.pushState(state, "title", "#");
+        }
+    });    */
+</script>

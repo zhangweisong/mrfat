@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>详情</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<style type="text/css">
+			body{background: #fff;}
+		</style>
+		<div class="zhuanjiajieshao_xq">
+			<div class="top">
+				<i><img src="{$expertxq.expert_avator}"/></i>
+				<h5>
+					<span>{$expertxq.expert_realname}</span>
+					<em>{$expertxq.sclassify_name}</em>
+				</h5>
+			</div>
+			<div class="jianjie">
+				<dl class="c">
+					<dt>简介：</dt>
+					<dd>
+						{$expertxq.expert_brief}
+					</dd>
+				</dl>
+				<dl class="c">
+					<dt>擅长：</dt>
+					<dd>
+						{$expertxq.expert_skil}
+					</dd>
+				</dl>
+			</div>
+			<!--<div class="zdy">
+				自定义编辑区域
+				<img src="images/ceshi_img1.jpg"/>
+			</div>-->
+		</div>
+		<div class="zhuanjiajieshao_foot">
+			<ul>
+				<li><a onclick="huida({$expert_id})">他的回答</a></li>
+				<li><a onclick="zixun({$expert_id})">向他咨询</a></li>
+			</ul>
+		</div>
+	</body>
+</html>
+<script>
+function huida(expert_id){
+	location.href="{:U('expert/lishihuida')}&expert_id=" + expert_id;
+}
+function zixun(expert_id){
+	location.href="{:U('expert/zaixianzixun')}&expert_id=" + expert_id;
+}
+</script>

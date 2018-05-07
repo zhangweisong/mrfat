@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+</head>
+<body >
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="javascript:void(0);">{$getReferName[$user_id]}的团队</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <div class="query">
+            <if condition="$parent eq 1">
+                <form  name="seachform" id="mseachform"  action="{:U('user/myteam',array('user_id'=>$user_id,'parent'=>1))}"  method="post" class="form">
+                <else/>
+                    <form  name="seachform" id="seachform"  action="{:U('user/myteam',array('user_id'=>$user_id))}"  method="post" class="form"  onsubmit="return checkkwd()">
+            </if>
+                <div class="form_input mg_trb">
+                    <label class="text">快速检索</label>
+                    <input type="text" name="info[keyword]" id="keyword" value="{$keyword}"  placeholder="请输入用户姓名或电话"  maxlength="11"/>
+                </div>
+                <div class="form_input mg_trb form-date">
+                    <label class="text">注册时间</label>
+                    <input type="text" class="laydate-icon layer-date" name="info[starttime]"  value="{$starttime}"  id="start" placeholder="开始时间" readonly/>
+                    <input type="text" class="laydate-icon layer-date" name="info[endtime]"  value="{$endtime}"  id="end" placeholder="结束时间" readonly/>
+                </div>
+                    <if condition="$parent eq 1">
+                        <div class="button mg_trb"  onclick="location.href='{:U('user/myteam',array('user_id'=>$user_id,'parent'=>1))}'">
+                            <i class="fa fa-refresh ico"></i>
+                            <input type="button" value="刷新" class="but chongzhi" />
+                        </div>
+                        <else/>
+                        <div class="button mg_trb"  onclick="location.href='{:U('user/myteam',array('user_id'=>$user_id))}'">
+                            <i class="fa fa-refresh ico"></i>
+                            <input type="button" value="刷新" class="but chongzhi" />
+                        </div>
+                    </if>
+
+                <div class="button mg_trb chaxun">
+                    <i class="fa fa-search ico"></i>
+                    <input type="submit" value="查询" class="but" style="    position: absolute; background: none;z-index: 2;"/>
+                </div>
+            </form>
+        </div>
+    </div>
+        <div class="table_box">
+            <table class="table" border="" cellspacing="" cellpadding="">
+                <colgroup>
+                    <col width="10">
+                    <col width="20">
+                    <col width="30">
+                    <col width="50">
+                    <col width="120">
+                    <col width="100">
+                    <col width="100">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>姓名</th>
+                    <th>电话</th>
+                    <th>余额(元)</th>
+                    <th>注册时间</th>
+                    <th>用户状态</th>
+                    <if condition="$parent eq 1">
+                        <else/>
+                    <th>操作</th>
+                    </if>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="myTeam" id="team">
+                    <tr>
+                        <td>{$team.user_id}</td>
+                        <td>{$team.realname}</td>
+                        <td>{$team.phone}</td>
+                        <td>{$team.money}</td>
+                        <td>{$team.addtime|date='Y-m-d H:i:s',###}</td>
+                        <td <if condition="$team['user_status'] eq 1"> style='color:green' <else/> style='color:red' </if>>{$userStatus[$team['user_status']]}</td>
+                        <if condition="$parent eq 1">
+                            <else/>
+                            <td>
+                                <p onclick="myteam({$team['user_id']})" class="but chaxun">
+                                    <i class="fa fa-child"></i>
+                                    {$getReferName[$team['user_id']]}的团队({$team['subteam_count']})</p>
+                            </td>
+                        </if>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </div>
+        {$pageshow}
+    </div>
+</div>
+</body>
+</html>
+<script src="__PUBLIC__/admin/js/layer/layer.js"></script>
+<script type="text/javascript">
+    $(".right_min").height($(window).height());
+    var body_w=$(".right_min").width()-200;
+    var body_h=$(".right_min").height()-100;
+    //修改
+    function myteam(user_id) {
+//        alert(user_id);
+        layer.open({
+            type: 2,
+            title: false,
+            skin: "layui-layer-molv",
+            shade: [0.8, '#000000'],
+            scrollbar: false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area: [body_w + "px", body_h + "px"],
+            content: "{:U('user/myteam')}&user_id=" + user_id +"&parent=1"
+        });
+    }
+</script>
+<script src="__PUBLIC__/admin/js/laydate/laydate.js"></script>
+<script>
+    //laydate({elem: "#hello", event: "focus"});
+    var start = {
+        elem: "#start",
+        format: "YYYY-MM-DD",
+        min: "2000-01-01",
+        max: "2100-01-01",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            end.min = datas;
+            end.start = datas
+        }
+    };
+    var end = {
+        elem: "#end",
+        format: "YYYY-MM-DD",
+        min: "2000-01-01",
+        max: "2100-01-01",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            start.max = datas
+        }
+    };
+    laydate(start);
+    laydate(end);
+</script>
+
+
+
+
+

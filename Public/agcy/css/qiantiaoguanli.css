@@ -1,0 +1,64 @@
+body {
+	background: #f0f0f0;
+}
+
+.search {
+	padding: 0 0.64rem;
+	border-bottom: 0.6rem solid #f0f0f0;
+}
+
+.sear {
+	border: 1px solid #dcdcdc;
+	border-radius: 0.4rem;
+	width: 18rem;
+	height: 2.88rem;
+	margin: 1rem 0;
+	margin-right: 0.5rem;
+	background: #FFFFFF;
+}
+
+.sear input {
+	line-height: 2.88rem;
+	border: none;
+	font-size: 1.2rem;
+	padding-left: 0.5rem;
+	background: none;
+	width: 90%;
+}
+
+.sear img {
+	height: 1.68rem;
+	margin-top: 0.6rem;
+}
+
+.search button {
+	background: #3ab849;
+	color: #FFFFFF;
+	font-size: 1.2rem;
+	border: none;
+	width: 4rem;
+	border-radius: 0.4rem;
+	margin: 1rem 0;
+}
+
+.ll {
+	padding: 0 0.64rem;
+	background: #FFFFFF;
+	margin-bottom: 0.6rem;
+}
+
+.ll li {
+	border-bottom: 1px solid #F5F5F5;
+	padding: 1rem 0;
+}
+
+.ll li:first-of-type p {
+	color: #9d9d9d;
+	font-size: 1rem;
+}
+
+.ll li p {
+	line-height: 2rem;
+	font-size: 1.2rem;
+	color: #363636;
+}

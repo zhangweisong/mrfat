@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>用户详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+	<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+</head>
+<body >
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="javascript:void(0);">查看详情</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <div class="message">
+			<div class="message-block message-border-t">
+				<h4 class="message-left_block">意见反馈详情</h4>
+			</div>
+			<div class="table_box">
+				<table class="table" border="" cellspacing="" cellpadding="">
+					<tr>
+                        <th style="font-weight:bold;width:15%">姓名</th>
+                        <td>{$listinfo.realname}</td>
+                        <th style="font-weight:bold">电话</th>
+                        <td>{$listinfo.phone}</td>                        						
+					</tr>
+					<tr>
+                      <th style="font-weight:bold">反馈时间</th>
+                      <td>{$listinfo.addtime|date='Y-m-d H:i:s',###}</td>    
+                      <th style="font-weight:bold">状态</th>
+                       <td <if condition="$listinfo['state'] eq 2"> style='color:green' <else/> style='color:red' </if>>{$state[$listinfo['state']]}</td>
+                         
+					</tr>
+					<tr>
+                        <th style="font-weight:bold" >意见</th>
+                        <td colspan ="3">{$listinfo.title}</td>                        
+					</tr>
+					<if condition="$listinfo['state'] eq 2"> 
+                      <tr>
+                        <th style="font-weight:bold">审核人</th>
+                        <td>{$listinfo.realname1}</td>
+                        <th style="font-weight:bold">审核时间</th>
+                        <td>{$listinfo.feedbackaddtime|date='Y-m-d H:i:s',###}</td> 
+					  </tr>
+					   <tr>
+                        <th style="font-weight:bold" >备注</th>
+                        <td colspan ="3">{$listinfo.feedback}</td>                        
+					  </tr>
+					</if>                   
+				</table>
+			</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+
+        $('.form-checkbox input,.form-radio input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        $('input').on('ifChecked', function(event){
+            //alert($(this).val());
+        });
+        $(".checkbox-title dd i").click(function(){
+            $(this).toggleClass("fa-flip-vertical");
+            $(this).parents().siblings(".skin-section").slideToggle(500);
+        });
+
+
+
+    });
+</script>
+
+
+
+
+

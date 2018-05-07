@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>申请代理</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/shenqingdaili.css" />
+	</head>
+    <style>
+        .txt{
+				width: 73%;
+				height: 10rem;
+				resize: none;
+				display: block;
+				border: 1px solid #dfdfdf;
+				border-radius: 0.4rem;
+				line-height: 180%;
+				font-size: 1.2rem;
+				padding: 0.5rem;
+		}
+    
+    </style>
+	<body>
+		<div class="header">
+			<a href="{:U('ordermanagement/ordershop',array('f_classify_id'=>$f_classify_id,'f_classify_fatherid'=>$f_classify_fatherid))}">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>申请代理</p>
+		</div>
+		<div class="tit">
+			<p class="title">申请代理</p>
+			<img src="{$fgoods.fgoods_images}" />
+			<p class="omit2">{$fgoods.fgoods_name}</p>
+			<p>￥：{$fgoods.fgoods_tonprice} 元/吨</p>
+			<div class="clear"></div>
+		</div>
+		<ul class="cont">
+			<li>
+				<p>店铺名称：</p>
+				<p>{$agcy.agcy_name}</p>
+			</li>
+			<li>
+				<p>店铺地址：</p>
+				<p style="margin-left:6.5rem;">{$agcy.agcy_address}</p>
+			</li>
+			<li>
+				<p>负责人：</p>
+				<p>{$agcy.agcy_manager}</p>
+			</li>
+			<li>
+				<p>电话：</p>
+				<p>{$agcy.agcy_tel}</p>
+			</li>
+            <li>
+				<p>备注：</p>
+				<textarea class="txt" type="text" id="remarks" maxlength="500" value=""></textarea>
+			</li>
+		</ul>
+		<button class="btnn" onclick="tijiao()">提交</button>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+        <script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-3.1.1.min.js" ></script>
+	</body>
+</html>
+<script>
+    var fgoods_id={$fgoods_id};
+    var factory_id={$factory_id};
+    var f_classify_id={$f_classify_id};
+    var f_classify_fatherid={$f_classify_fatherid};
+    
+    function tijiao(){
+    var remarks=$('#remarks').val();
+       window.location.href="{:U('ordermanagement/applysucc')}&fgoods_id="+fgoods_id+"&factory_id="+factory_id+"&f_classify_id="+f_classify_id+"&f_classify_fatherid="+f_classify_fatherid+"&remarks="+remarks;
+    }
+</script>

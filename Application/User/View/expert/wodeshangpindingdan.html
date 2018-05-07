@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>我的商品订单</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+            <style> 
+     .wrap-dialog {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         font-size: 16px;
+         text-align: center;
+         background-color: rgba(0, 0, 0, .4);
+         z-index: 999;
+         
+     }
+     .dialog {
+         position: relative;
+         margin: 40% auto;
+         width: 250px;
+         background-color: #FFFFFF;
+         border-radius:10px;
+     } 
+     .dialog .dialog-body {
+         height: 60px;
+         padding: 20px;
+     }
+     .dialog .dialog-footer {
+         padding: 15px;
+         background-color: whitesmoke;
+         border-radius:0 0 10px 10px;
+     }
+     .btn {
+         border-radius:10px;
+         width: 70px;
+         padding: 4px;
+         border:0px;
+     }
+     .hide {
+         display: none;
+     }
+     .ml50 {
+         margin-left: 50px;
+     }
+     
+     .dingdangl_ctbox .dingdangl_ct .shangpin dl dd h4,.dingdangl_ctbox .dingdangl_ct .shangpin dl dd p{
+        font-size:14px;
+     }
+ </style>
+	</head>
+	<body>
+		<div>
+			<div class="dingdangl">
+				<div class="dingdangl_top">
+					<div class="nav">
+						<span class="link" onclick="gettype(this)" data-value="0">全部</span>
+						<span onclick="gettype(this)" data-value="1">待付款</span>
+						<span onclick="gettype(this)" data-value="2">待收货</span>
+						<span onclick="gettype(this)" data-value="3">已完成</span>
+					</div>
+				</div>
+                <div class="wrap-dialog hide">
+                    <div class="dialog">
+                        <div class="dialog-body">
+                            <span class="dialog-message">你确认删除？</span>
+                        </div>
+                        <div class="dialog-footer">
+                            <input type="button" class="btn " id="cancel"  value="取消"/>
+                            <input type="button" class="btn ml50" id="confirm" value="确认"/>
+                        </div>
+                    </div>
+                </div>
+				<div class="dingdangl_ctbox">
+					<div class="dingdangl_ct">
+						<div class="dingdan"></div>
+					</div>		
+					<div class="meiyouneirong">
+						<i><img src="__PUBLIC__/user/images/li_wdxx_img.png"/></i>
+						<p>还没有购买任何商品哦！</p>
+					</div>
+			    	<div class="dibufengexian">
+			    		<p>亲，到底了</p>
+			    	</div>
+					<div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+					<img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+					</div> 
+					<button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button> 
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="__PUBLIC__/user/js/jquery.pin.js" type="text/javascript"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script>
+	$(".dingdangl_top").pin({
+    	containerSelector: ".dingdangl"
+	})
+	function gettype(o){
+		$(o).addClass("link");
+		$(o).siblings("span").removeClass("link");
+		var type=$(o).attr("data-value");  
+		$.getJSON("{:U('expert/wodeshangpindingdan')}&order_state=" + type , function(order){
+			var info = order.order;     
+			var html = htmlinfo(info);
+			$(".dingdan").html(html);
+			if(info.length<=0){
+				$(".meiyouneirong").css("display","block");
+			} else{
+				$(".meiyouneirong").css("display","none");
+			}
+	
+		});
+	}
+	init();
+	//初始化页面
+	function init(){
+		var data={$order};
+		console.log(data);
+		var info = data.order;
+		console.log(info);
+		if(info.length > 0){
+			var html = htmlinfo(info);
+			$(".dingdan").html(html);
+		}else{
+			$(".meiyouneirong").css("display","block");
+		} 
+	}
+	//数据列表 
+	function htmlinfo(info){
+			var html='';
+			for(var i=0;i<info.length;i++){
+				var inits = info[i]['shangpins'];
+				html+='<div class="dingdangl_ct"  id="order_id'+info[i].order_id+'">';
+				html+='<div class="danhao">';
+                if(info[i]['order_act_id']>0){
+                    html+='<span>单号：'+info[i].order_number+'<em style="color:red">['+info[i].act_type+']</em></span>';
+                }else{
+                    html+='<span>单号：'+info[i].order_number+'</span>';
+                }
+				html+='<i>'+info[i].order_addtime+'<em>'+info[i].order_addtimes+'</em></i>';
+				html+='</div>';
+				html+='<div class="shangpin">';
+				<!--同一店铺不同商品-->
+				for(var j=0;j<inits.length;j++){
+				html+='<dl onclick="xiangqing('+inits[j]['agcy_goods_id']+')">';
+				html+='<dt>';
+				html+='<img src='+inits[j].images+' >';
+				html+='</dt>';
+				html+='<dd>';
+				html+='<h4>'+inits[j].agcy_goods_name+'</h4>';
+				html+='<p>';
+				html+='<span>￥'+inits[j].goods_price+'</span>';
+				html+='<i>x'+inits[j].goods_num+'</i>';
+				html+='</p>';
+				html+='</dd>';
+				html+='</dl>';
+				}
+				html+='</div>';
+				html+='<div class="beizhu">';
+				html+='<table border="0" cellspacing="" cellpadding="">';
+				html+='<tr>';
+				html+='<td style="width:55px; text-align: center;">备注：</td>';
+				html+='<td style="color: #737272;">'+info[i].order_remarks+'</td>';
+				html+='</tr>';
+				html+='</table>';
+				html+='</div>';
+				html+='<div class="zongjia c">';
+				html+='<p>';
+				html+='<span>配送方式：</span>';
+				html+='<span>自提</span>';
+				html+='</p>';
+				html+='<p>';
+				html+='<span>共'+info[i].counts+'件商品</span>';
+				html+='<em>合计：'+info[i].order_money+'</em>';
+				html+='</p>';
+				if(info[i].order_state==1){
+				html+='<strong class="strong_1" onclick="buyer('+info[i].order_id+')">去支付</strong>';
+				html+='<strong class="strong_2" onclick="quxiao('+info[i].order_id+')">取消订单</strong>';
+				}else if(info[i].order_state==2){
+				html+='<strong class="strong_1" >待发货</strong>';
+				}else if(info[i].order_state==3){
+				html+='<strong class="strong_1" >已完成</strong>';
+				}
+				html+='</div>';
+				html+='</div>';
+			}
+			return html;
+	}
+	
+	//去支付
+	function buyer(order_id){
+		window.location.href = "{:U('shopcar/jiesuan')}&state=3&order_id=" + order_id;
+	}
+	
+	//详情
+	function xiangqing(agcy_goods_id){
+		window.location.href = "{:U('shopcar/xiangqing')}&agcy_goods_id=" + agcy_goods_id;
+	}
+	
+	//滚动加载  
+    $(window).scroll(function () { 
+        getData();
+    });
+    var totalheight = 0;     //定义一个总的高度变量
+    function getData() {
+         totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()); 
+         //浏览器的高度加上滚动条的高度 （页面总高度）  
+        if ($(document).height() <= totalheight) {          
+            //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+            //加载
+            $("#loadings").fadeIn(); 
+            //根据条件获取对应的项目条数
+            getmore();//使用模板加载更多
+            //加载完毕          
+            $("#loadings").fadeOut(); 
+        }
+    }  
+    //加载更多
+    function getmore(){     
+      var page=parseInt($("#more").attr("data"))+1; 
+      $('#more').attr("data",page);//重置当前页数      
+      $.getJSON("{:U('expert/wodeshangpindingdan')}&p="+page,function(data){  
+           var info = data.order;    
+           if(info.length>0){
+                var html = htmlinfo(info);
+                $(".dingdan").append(html);
+           }else{
+                $("#loadings").fadeOut(); 
+				//$(".dibufengexian").show();
+                //alert('亲，没有数据了');                
+           }
+        }) 
+     }
+     
+	
+    function quxiao(order_id){ 
+        var message = "确认删除？";
+        var id_name = "#order_id"+order_id ;
+        dialogBox(message,
+            function () {  
+                $.getJSON("{:U('expert/quxiao')}&order_id="+order_id,function(data){
+                    if(data.status==1){
+                    layer.msg('已取消订单',{icon:6,time:1000},function(){
+                        location.href="{:U('expert/wodeshangpindingdan')}"; 
+                    });
+                    $(id_name).remove();
+                    }
+                })    
+            },
+            function(){
+                return false;   
+            }
+        ); 
+    }
+    function dialogBox(message, yesCallback, noCallback){
+         if(message){
+             $('.dialog-message').html(message);
+        }
+         // 显示遮罩和对话框
+         $('.wrap-dialog').removeClass("hide");
+         // 确定按钮
+         $('#confirm').click(function(){
+             $('.wrap-dialog').addClass("hide");
+             yesCallback();
+         });
+         // 取消按钮
+        $('#cancel').click(function(){
+             $('.wrap-dialog').addClass("hide");
+             noCallback();
+         });
+     }
+     
+    $(function(){  
+        pushHistory();  
+        window.addEventListener("popstate", function(e) {  
+            window.location.href="{:U('user/userinfo')}"
+    }, false);  
+        function pushHistory() {  
+            var state = {  
+                title: "个人中心",  
+                url: "{:U('user/userinfo')}"  
+            };  
+            window.history.pushState(state, "title", "#");  
+        }    
+    }); 
+</script>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>消息详情</title>
+        <!--说明文字编码-->
+        <meta http-equiv="Content-type" content="text/html" charset="utf-8">
+        <!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+        <!--控制状态栏显示样式-->
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!--解决uc字体变大问题-->
+        <meta name="wap-font-scale" content="no">
+        <!--手机号码不被显示为拨号链接-->
+        <meta content="telephone=no" name="format-detection" />
+        <!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        <link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+        <link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+        <link rel="stylesheet" href="__PUBLIC__/agcy/css/kehuxiangq1.css" />
+    </head>
+
+    <body>
+        <div class="header">
+            <a href="{:U('message/index')}">
+                <img src="__PUBLIC__/agcy/images/left.png" />
+            </a>
+            <p>消息详情</p>
+        </div>
+        <ul class="ll">
+            <li>
+                <p><?=$message['msg_title']?><span><?=$message['msg_addtime']?></span></p>
+				
+            </li>
+            <li>
+                <?php if($message['question_id']!="0"):?>
+                    <p onclick="tiao({$message.question_id})"><?=$message['message']?></p>
+                <?php else:?>
+                     <p><?=$message['message']?></p>
+                <?php endif;?>
+            </li>
+        </ul>
+        <script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+        <script type="text/javascript" src="__PUBLIC__/expert/js/jquery-3.1.1.min.js"></script>
+    </body>
+
+</html>
+<script>
+    function tiao(a){
+        location.href="{:U('answer/xiangq')}&questions_id="+a; 
+    }
+    
+    //监听返回按钮返回到指定页面
+    var url= '__SELF__'.replace(/&amp;/ig,'&');  //将url中的&字符转换
+    getHistory();
+    window.addEventListener('popstate',function(e){
+        window.location='{:U("message/index")}';
+        //页面不会跳转，所以需要自己修改文件的title
+        document.title='我的消息';
+        getHistory();
+    },false);   
+    function getHistory(){
+        var state={
+           title:'',
+           url:url
+        }
+        window.history.pushState(state,'title',url);
+    } 
+</script>

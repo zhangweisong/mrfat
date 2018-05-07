@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>跳转提示</title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/top.css"/>
+	</head>
+	<body>
+		<div class="tiaozhuanye_box">
+			<div class="tiaozhuanye">
+			
+				 
+				<i class="img"><img src="__PUBLIC__/admin/images/tiaozhuanye_img.jpg"/></i>
+				<p class="text">{$msg}</p>  
+				<div class="text">
+					<span>页面自动跳转<a style="display:none" id="href" href="{$url}"></a></span>
+					<span>等待时间：<em id="wait">{$wait}</em>秒</span>
+				</div>
+			</div>
+		</div>
+	</body>
+<script type="text/javascript">
+
+	(function(){
+	var wait = document.getElementById('wait'),href = document.getElementById('href').href;
+	var interval = setInterval(function(){
+		var time = --wait.innerHTML;
+		if(time <= 0) {
+			location.href = href;
+			clearInterval(interval);
+			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+		    parent.location.reload();
+            parent.layer.close(index); //再执行关闭
+		};
+	}, 1000);
+	})();
+</script>
+</html>

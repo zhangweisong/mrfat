@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>厂家</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css"> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 
+        <script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script> 
+        <script type="text/javascript">
+            $(function () {
+                $('input, textarea').placeholder();
+            });
+        </script> 
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a href="###">厂家管理</a></li>
+                    <li> > </li>
+                    <li><a href="{:U('fgoods/index')}">厂家产品</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <!--查询-->
+                <div class="query">
+                    <form name="seachform" id="seachform" action="{:U('fgoods/index')}"  method="post" class="form">
+                        <div class="form_input mg_trb">
+                            <label class="text">产品名</label>
+                            <input type="text" name="info[fgoods_name]"  value="{$fgoods_name}"  placeholder="产品名"  maxlength="20"/>
+                        </div> 
+                        <div class="form_input mg_trb">
+                            <label class="text">所属厂家</label>
+                            <input type="text" name="info[factory_name]"  value="{$factory_name}"  placeholder="所属厂家"  maxlength="20"/>
+                        </div> 
+                        <div class="select mg_trb">
+                            <span class="text">类别</span>
+                            <select name="info[add_person]">
+                                <option value="">--请选择--</option> 
+                                <option value="1" <?php if($add_person==="1"){echo 'selected';}?>>平台添加</option>  
+                                <option value="2" <?php if($add_person==="2"){echo 'selected';}?>>厂家添加</option>  
+                            </select>
+                        </div>
+                        <div class="button mg_trb" onclick="location.href = '{:U(\'fgoods/index\')}'">
+                            <i class="fa fa-refresh ico"></i>
+                            <input type="button" value="刷新" class="but chongzhi" />
+                        </div>
+                        <div class="button mg_trb chaxun">
+                            <i class="fa fa-search ico"></i>
+                            <input type="submit" value="查询" class="but " style="position: absolute; background: none;z-index: 2;"/>
+                        </div>
+                    </form>
+                </div> 
+                <div class="tianjia">
+                    <a class="tianjia_but" href="{:U('fgoods/addfgoods')}">
+                        <i class="fa fa-plus"></i>
+                        添加商品       
+                    </a>
+                </div>
+                <div class="table_box">
+                    <table class="table" border="" cellspacing="" cellpadding=""> 
+                        <colgroup>
+                            <col width="50">
+                            <col width="100">
+                            <col width="100">
+                            <col width="100">
+                            <col width="100"> 
+                            <col width="100"> 
+                            <col width="100"> 
+                            <col width="100"> 
+                            <!--<col width="80">--> 
+                            <col width="150"> 
+                            <col>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>产品名</th>
+                                <th>主图</th>
+                                <th>一级分类</th>
+                                <th>二级分类</th>
+                                <th>所属厂家</th>
+                                <th>规格</th>
+                                <th>单位价格</th>  
+                                <!--<th>上下架</th>-->
+                                <th>审核</th>
+                                <th>类别</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="fgoodslist" id="goods">
+                            <tr>
+                                <td>{$goods.fgoods_id}</td> 
+                                <td>{$goods.fgoods_name}</td> 
+                                <td>
+                                <?php if($goods['fgoods_images']):?> 
+                                <img src="<?php $s=explode("|",$goods['fgoods_images']); echo $s[0];?>" style="width: 50px;height: 50px"> 
+                                <?php endif;?>
+                                </td>
+                                <td>{$goods.name1}</td> 
+                                <td>{$goods.name2}</td>
+                                <td>{$goods.factory_name}</td>
+                                <td>{$goods.fgoods_spec}</td>
+                                <td>{$goods.fgoods_tonprice}</td> 
+                                <td> 
+                                    <?php if($goods['add_person']==1):?>
+                                    ----
+                                    <?php else:?>
+                                    <?php if($goods['fgoods_state']==0):?>
+                                    <a onclick="adopt({$goods['fgoods_id']})" class="but chaxun">
+                                        <i class="fa fa-check"></i>
+                                        通过
+                                    </a>  
+                                    <a onclick="refuse({$goods['fgoods_id']})" class="but chongzhi">
+                                        <i class="fa fa-ban"></i>
+                                        驳回
+                                    </a>   
+                                    <?php elseif($goods['fgoods_state']==1):?> 
+                                    已通过 
+                                    <?php else:?>
+                                    已驳回
+                                    <?php endif;?>
+                                    <?php endif;?>
+                                </td> 
+                                <td><?=$goods['add_person']==1?"平台添加":"厂家添加";?></td>
+                                <td> 
+                                <if condition="$fgoods.fgoods_state eq 0">
+                                <a href="{:U('fgoods/editfgoods',array('fgoods_id'=>$goods['fgoods_id']))}"  class="but chaxun">
+                                    <i class="fa fa-edit"></i>
+                                    编辑
+                                </a>
+<!--                                <a href="{:U('fgoods/delete',array('fgoods_id'=>$fgoods['fgoods_id']))}" onclick="{
+                                                if (confirm('确认删除?')) {
+                                                    return true;
+                                                }
+                                                return false;
+                                            }"  class="but chongzhi">
+                                    <i class="fa fa-trash-o"></i>
+                                    删除
+                                </a> -->
+                            </if>
+							 <a onclick="xiangQing({$goods.fgoods_id})"  class="but chaxun">
+                                <i class="fa fa-eye"></i>
+                                查看详情
+                            </a>
+                            </td>
+                            </tr> 
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                {$pageshow}
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $("#p_id").change(function () {
+                    $("#c_id").html("<option value='0' >--请选择市--</option> ")
+                    $("#a_id").html("<option value='0' >--请选择区县--</option> ")
+                    var province_id = $("#p_id").val()
+                    if (province_id == 0)
+                        return;
+                    $.getJSON("{:U('department/getCityName')}&p_id=" + province_id, function (res) {
+                        data = res.data
+                        var html = "<option value='0' >--请选择市--</option>";
+                        for (var i = 0; i < data.length; i++) {
+                            html += "<option value=" + data[i].c_id + ">" + data[i].c_name + "</option>";
+                        }
+                        $("#c_id").html(html);
+                    });
+                })
+                $("#c_id").change(function () {
+                    $("#a_id").html("<option value='0' >--请选择区县--</option> ")
+                    var city_id = $("#c_id").val()
+                    if (city_id == 0)
+                        return;
+                    $.getJSON("{:U('department/getAreaName')}&c_id=" + city_id, function (res) {
+                        data = res.data
+                        var html = "<option value='0' >--请选择区县--</option>";
+                        for (var i = 0; i < data.length; i++) {
+                            html += "<option value=" + data[i].a_id + ">" + data[i].a_name + "</option>";
+                        }
+                        $("#a_id").html(html);
+                    });
+                })
+            })
+        </script> 
+        <script src="__PUBLIC__/admin/js/layer/layer.js"></script> 
+        <script>
+            $(function () {
+                $('input, textarea').placeholder();
+            });
+        </script> 
+		<script>
+		    
+			$(".right_min").height($(window).height());
+			var body_w = $(".right_min").width() - 200;
+			var body_h = $(".right_min").height() - 100;
+			//通过申请
+			function adopt(goods_id){
+			layer.open({
+			        type: 2,
+					title: false,
+					skin: "layui-layer-molv",
+					shade: [0.8, '#000000'],
+					scrollbar: false,
+					maxmin: false,
+					shadeClose: false, //点击遮罩关闭层
+					area: [body_w + "px", body_h + "px"],
+					content: "{:U('fgoods/adopt')}&goods_id=" + goods_id
+			});
+			}
+			//驳回申请
+			function refuse(goods_id){
+			layer.open({
+			        type: 2,
+					title: false,
+					skin: "layui-layer-molv",
+					shade: [0.8, '#000000'],
+					scrollbar: false,
+					maxmin: false,
+					shadeClose: false, //点击遮罩关闭层
+					area: [body_w + "px", body_h + "px"],
+					content: "{:U('fgoods/refuse')}&goods_id=" + goods_id
+			});
+			}
+		 function xiangQing(fgoods_id) {
+			layer.open({
+				type: 2,
+				title: false,
+				skin: "layui-layer-molv",
+				shade: [0.8, '#000000'],
+				scrollbar: false,
+				maxmin: false,
+				shadeClose: false, //点击遮罩关闭层
+				area: [body_w + "px", body_h + "px"],
+				content: "{:U('fgoods/fgoods_xq')}&fgoods_id=" + fgoods_id
+			});
+        }
+		</script>
+    </body>
+</html>

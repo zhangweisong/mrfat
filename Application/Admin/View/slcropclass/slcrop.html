@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>农作物管理</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css"> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a href="###">三农服务</a></li> 
+                    <li> > </li>
+                    <li><a href="{:U('slcropclass/slcrop')}">农作物</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <!--查询-->
+                <div class="query">
+                    <form name="seachform" id="seachform" action="{:U('slcropclass/slcrop')}"  method="post" class="form">
+                        <div class="form_input mg_trb">
+                            <label class="text">农作物名称</label>
+                            <input type="text" name="info[goods_name_s]" value="{$cp_title}" placeholder="农作物名称" maxlength="50"/>
+                        </div> 
+                        <div class="select mg_trb">
+                            <span class="text">一级分类</span>
+                            <select name="info[yiji_s]" onchange="get_erji(this)">
+                                <option value="0">--请选择--</option> 
+                                <?php foreach($yiji AS $v):?>
+                                <option value="<?=$v['cpc_id']?>" <?php if($v['cpc_id']==$yiji_s){echo "selected";}?>><?=$v['cpc_title']?></option> 
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                        <div class="select mg_trb">
+                            <span class="text">二级分类</span>
+                            <select name="info[erji_s]" id='erji'>
+                                <option value="">--请选择--</option>
+                                <?php foreach($erji AS $v):?>
+                               <option value="<?=$v['cpc_id']?>" <?php if($v['cpc_id']==$erji_s){echo "selected";}?>><?=$v['cpc_title']?></option> 
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                        <div class="button mg_trb" onclick="location.href = '{:U(\'slcropclass/slcrop\')}'">
+                            <i class="fa fa-refresh ico"></i>
+                            <input type="button" value="刷新" class="but chongzhi" />
+                        </div>
+                        <div class="button mg_trb chaxun">
+                            <i class="fa fa-search ico"></i>
+                            <input type="submit" value="查询" class="but " style="position: absolute; background: none;z-index: 2;"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="tianjia">
+                    <a class="tianjia_but" href="{:U('slcropclass/add_slcrop')}">
+                        <i class="fa fa-plus"></i>
+                        新增农作物
+                    </a>
+                </div>
+                <div class="table_box">
+                    <table class="table" border="" cellspacing="" cellpadding=""> 
+                        <thead>
+                            <tr>
+                                <th>编号</th> 
+                                <th>农作物名称</th>
+                                <th>一级分类</th>
+                                <th>二级分类</th> 
+                                <th>状态</th>
+                                <th>农作物简介</th>  
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="listinfo" id="content">
+                            <tr>
+                                <td>{$content.cp_id}</td>  
+                                <td>{$content.cp_title}</td> 
+                                <td>{$content.yiji_name}</td>
+                                <td>{$content.erji_name}</td> 
+                                <td>{$flag[$content['cp_isable']]}</td> 
+                                <td>{$content.cp_remarks}</td>  
+                                <td> 
+                                    <a href="{:U('slcropclass/edit_slcrop',array('cp_id'=>$content['cp_id']))}"  class="but chaxun">
+                                        <i class="fa fa-edit"></i>
+                                        编辑
+                                    </a>
+                                    <a href="{:U('slcropclass/delete_slcrop',array('cp_id'=>$content['cp_id']))}" onclick="{
+                                                if (confirm('确认删除?')) {
+                                                    return true;
+                                                }
+                                                return false;
+                                            }"  class="but chongzhi">
+                                        <i class="fa fa-trash-o"></i>
+                                        删除
+                                    </a> 
+                                </td>
+                            </tr> 
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                {$pageshow}
+            </div>
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $(".right_min").height($(window).height());
+    });
+    //二级分类 
+    function get_erji(obj) {
+        $("#erji").html("<option value='0' >--请选择--</option> ");
+        var yiji_id = $(obj).val()
+        if (yiji_id == 0)
+            return;
+        $.getJSON("{:U('slcropclass/get_erji')}&yiji_id=" + yiji_id, function (data) {
+            var html = "";
+            for (var i = 0; i < data.length; i++) {
+                html += "<option value=" + data[i].cpc_id + ">" + data[i].cpc_title + "</option>";
+            }
+            $("#erji").append(html);
+        });
+    }
+</script>  
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function () { 
+        $('input, textarea').placeholder();
+    });
+</script>

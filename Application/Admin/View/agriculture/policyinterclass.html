@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>政策解读分类</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">三农服务</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">政策解读分类</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <!--查询-->
+
+        <div class="query">
+            <form  name="seachform" id="seachform"  action="{:U('agriculture/policyinterclass')}"  method="post" class="form"  >
+                <div class="form_input mg_trb">
+                    <label class="text">快速检索</label>
+                    <input type="text" name="info[pic_title]" id="pic_title" value="{$pic_title}"  placeholder="请输入政策解读分类名称"  maxlength="15"/>
+                </div>
+                <div class="select mg_trb">
+                    <span class="text">分类状态</span>
+                    <select name="info[pic_isable]">
+                        <option value="">--请选择分类状态--</option>
+                        <volist name="cpc_isable" id="data">
+                            <option value="{$key}" <if condition="$key eq $pic_isable ">selected</if>>{$data}</option>
+                        </volist>
+                    </select>
+                </div>
+                <div class="button mg_trb" onclick="location.href='{:U('agriculture/policyinterclass')}'">
+                    <i class="fa fa-refresh ico"></i>
+                    <input type="button" value="刷新" class="but chongzhi" />
+                </div>
+
+                <div class="button mg_trb chaxun">
+                    <i class="fa fa-search ico"></i>
+                    <input type="submit" value="查询" class="but " style="    position: absolute; background: none;z-index: 2;" />
+                </div>
+            </form>
+        </div>
+        <!--添加分类-->
+        <div class="tianjia">
+            <a class="tianjia_but" href="{:U('agriculture/addpolicyclass')}">
+                <i class="fa fa-plus"></i>
+                添加政策解读分类
+            </a>
+        </div>
+        <div class="table_box">
+            <table class="table" border="" cellspacing="" cellpadding="">
+                <thead>
+                <tr>
+                    <th>分类编号</th>
+                    <th>政策解读分类名称</th>
+                    <!--<th>政策解读分类排序</th>-->
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="policyInfo" id="policyclass">
+                    <tr>
+                        <td>{$policyclass.pic_id}</td>
+                        <td>{$policyclass.pic_title}</td>
+                        <!--<td>{$policyclass.pic_order}</td>-->
+                        <td>
+                            <label class="switch-btn circle-style" style="margin: 0 auto;">
+                                <input class="checked-switch" type="checkbox" onchange="checkedswitchs(this,{$policyclass.pic_id},'pic_isable')"
+                                <if condition="$policyclass['pic_isable'] eq 1">checked</if> />
+                                <span class="text-switch" data-yes="启用" data-no="禁用"></span>
+                                <span class="toggle-btn"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <a href="{:U('agriculture/editpolicyclass',array('pic_id'=>$policyclass['pic_id']))}" class="but chaxun">
+                                <i class="fa fa-edit"></i>
+                                编辑</a>
+                            <a href="{:U('agriculture/delpolicyclass',array('pic_id'=>$policyclass['pic_id']))}" onclick="{if(confirm('确认删除?')){return true;}return false;}" class="but chongzhi">
+                                <i class="fa fa-trash-o"></i>
+                                删除</a>
+                        </td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </div>
+        {$pageshow}
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    //显示开关1显示；2隐藏
+    function checkedswitchs(obj,cpc_id,field){
+        if($(obj).is(':checked')){	//true
+            console.log("显示"+cpc_id);
+            $.getJSON("{:U('skill/ajaxable_onn')}&id="+cpc_id+"&field="+field,function(){
+            });
+        }else{	//false
+            console.log("隐藏"+cpc_id);
+            $.getJSON("{:U('skill/ajaxable_offf')}&id="+cpc_id+"&field="+field,function(){
+            });
+
+        }
+    }
+    $(function(){
+        $(".right_min").height($(window).height());
+    });
+</script>

@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>经销商订单</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="javascript:void(0);">订单详情</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <div class="message">
+                    <div class="message-block message-border-t">
+                        <h4 class="message-left_block">订单详情</h4>
+                    </div>
+                    <table class="table" border="" cellspacing="" cellpadding="">
+                        <tr>					
+                            <th style="font-weight:bold;">经销商名称</th>
+                            <td>{$forderinfo.agcy_name}</td>
+                            <!--<th style="font-weight:bold">运费</th>
+                            <td>{$forderinfo.forder_tpcost}</td> 
+                            <th style="font-weight:bold">商品总价</th>
+                            <td>{$forderinfo.forder_price}</td>-->
+                            <th style="font-weight:bold;">合计</th>
+                            <td>{$forderinfo.forder_total}</td>
+
+                        </tr> 
+                        <tr>					
+                           
+                            <th style="font-weight:bold">订单时间</th>
+                            <td>{$forderinfo.forder_addtime}</td> 
+                            <th style="font-weight:bold">状态</th>
+                            <td>{$forderinfo.forder_flagstr}</td> 
+
+                        </tr> 
+                        <tr>					
+                            <th style="font-weight:bold;" >备注</th>
+                            <td colspan="5">{$forderinfo.forder_memo}</td> 
+
+                        </tr> 
+                    </table>         			
+                    <div style="width:30px; height:30px;"></div>
+                    <div class="message-block message-border-t">
+                        <h4 class="message-left_block">商品信息</h4>  
+                    </div>
+
+                    <div class="table_box">
+                        <table class="table" border="" cellspacing="" cellpadding=""> 
+                            <colgroup>
+                                <col width="150">
+                                <col width="150">
+                                <col width="200">
+                                <col width="100">
+                                <col width="100"> 
+                                <col>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>商品名</th>
+                                    <th>图片</th> 
+                                    <th>规格</th>
+                                    <th>吨数</th>
+                                    <th>商品总价</th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <volist name="forderlist" id="list">
+                                <tr>
+                                    <td>{$list.fgoods_name}</td>  
+                                    <td><img src="{$list.fgoods_images}" style="width: 50px;height: 50px"></td>
+                                    <td>{$list.forderlist_spec}</td>
+                                    <td>{$list.forderlist_tonnum}</td>
+                                    <td>{$list.forderlist_totprice}</td>  
+                                </tr> 
+                            </volist>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script src="/foodsking/Public/admin/js/layer/layer.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".right_min").height($(window).height());
+        $('.table_box input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        var index = parent.layer.getFrameIndex(window.name);
+        $('#net').on('click', function () {
+            parent.layer.close(index);
+        });
+    });
+</script>

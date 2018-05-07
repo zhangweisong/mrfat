@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>完善经销商信息</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/wanshangjinxiaoshangxx.css" />
+		<link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" /> 
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/kindeditor/kindeditor-min.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/kindeditor/lang/zh-CN.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/admin/js/stringOperate.js"></script>
+		
+	</head> 
+	<script type="text/javascript">
+            var editor;
+            KindEditor.ready(function (K) {
+                editor = K.create('textarea[id="agcy_content"]', {
+                    uploadJson: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}',
+                    fileManagerJson: '{:U(\'kindeditor/file_manager_json\')}',
+                    allowFileManager: true,
+                    urlType: 'domain',
+                    afterCreate: function () {
+                        this.sync();
+                    },
+                    afterBlur: function () {
+                        this.sync();
+                    }
+                });
+
+                //多图
+                var uploadbutton = K.uploadbutton({
+                    button: K('#uploadButton')[0],
+                    fieldName: 'imgFile',
+                    url: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}', 
+                    afterUpload: function (data) { 
+                        if (data.error === 0) {
+                            var url = K.formatUrl(data.url, 'domain');
+							layer.msg('上传成功',{icon:6,time:1000});
+                            K('#imagemore').val(url);
+                            add_album_img(url);
+                        } else { 
+                            layer.msg(data.message,{icon:5,time:1000}); 
+                        }
+                    },
+                    afterError: function (str) {
+                        layer.msg('自定义错误信息: ' + str,{icon:5,time:1000});
+                    }
+                });
+                uploadbutton.fileBox.change(function (e) {
+                    uploadbutton.submit();
+                    layer.msg('上传中，请稍后...',{icon:6,time:3000});
+                });
+                 
+                //LOGO
+                var uploadbutton3 = K.uploadbutton({
+                    button: K('#uploadButton3')[0],
+                    fieldName: 'imgFile',
+                    url: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}',
+                    afterUpload: function (data) { 
+                        if (data.error === 0) {
+                            var url = K.formatUrl(data.url, 'domain');
+							layer.msg('上传成功',{icon:6,time:1000});
+                            K('#agcy_logo').val(url);
+                            add_album_img3(url);
+                        } else { 
+                            layer.msg(data.message,{icon:5,time:2000});
+							 
+                        }
+                    },
+                    afterError: function (str) { 
+                        layer.msg('自定义错误信息: ' + str,{icon:5,time:2000});
+                    }
+                });
+                uploadbutton3.fileBox.change(function (e) {
+                    uploadbutton3.submit();
+                    layer.msg('上传中，请稍后...',{icon:6,time:3000});
+                });
+            });
+            //图片插件
+            function add_album_img(imgurl) {
+                var val = StringOperate.add($("#agcy_face_images").val(), imgurl);
+                $("#agcy_face_images").val(val);
+                if($("#toollist_pic li").length<2){
+                    $("#toollist_pic").append("<li onclick=\"del_album_img(\'" + imgurl + "\',this);\"><a><img src='" + imgurl + "'><i class=\"fa fa-times-circle\"></i></a></li>");
+                    $('#imagemore').val("");
+                }else{ 
+                    layer.msg('只能上传两张图片！',{icon:5,time:2000});
+					return false;
+				}
+            }
+            function del_album_img(imgurl, obj) {
+                var val = StringOperate.remove($("#agcy_face_images").val(), imgurl);
+                $("#agcy_face_images").val(val);
+                $(obj).remove();//删除元素
+            } 
+            
+			
+            function add_album_img3(imgurl) {
+                $("#toollist_pic3").html("<li onclick=\"del_album_img3(this);\"><a><img src='" + imgurl + "'><i class=\"fa fa-times-circle\"></i></a></li>");
+
+
+            }
+            function del_album_img3(obj) {
+                $("#agcy_logo").val("");
+                $(obj).remove();//删除元素
+            }
+           
+        </script>
+		<style>
+            body{background:#fff;}
+            /*多图上传样式*/
+            .toollist_pic{clear: both;width: 100%;text-align: center;margin-right: 10px; margin-top:10px;}
+            .toollist_pic li{float: left;list-style:none; clear: initial; width:100px;height:100px; overflow:hidden;position: relative;}
+            .toollist_pic li a{display:block; width:100%; height:100%;}
+            .toollist_pic li img{width:100px;height:100px;}
+            .toollist_pic li i{display:block; position:absolute; top:0; right:0; width:16px; height:16px; background:green; z-index:888; margin:0;background-image:url("__PUBLIC__/agcy/images/274C.png")}
+            .toollist_pic li .fa-times-circle{ font-size:20px; color:#fff;}
+            .span{display:inline-block; height:34px; line-height:34px;color: #ff0000;font-size:1.8rem;vertical-align: middle;}      
+            .form-button .ke-inline-block.but{margin-top:0;}
+            .form-button .ke-button-common{display:block;width:100%; height:100%; line-height:38px; background:none;}
+            .form-button .ke-button-common.ke-button{color:#fff; font-size:16px;}
+            .form-button .ke-upload-area.ke-form .ke-upload-file{display:block;width:100% !important; height:100%;     cursor: pointer;}
+        </style> 
+		<style> 
+		.c:before,.c:after {content:"";display:table}
+		.c:after {clear:both}
+		.c {zoom:1}			
+		.ke-button-common{opacity: 0;}
+		.form-item {margin-bottom: 15px;margin-left:12px;clear: both;min-height: 35px;}
+		.form-label {float: left;display: block;font-weight: 400;height: 30px;line-height: 30px;padding-right: 15px;font-size: 14px;
+		}
+		.ke-upload-area .ke-upload-file{height:30px;}
+		.form-input-inline{overflow:hidden; height:30px; position:relative;}
+		.form-input-inline span{ display:block; width:100px; height:30px; background:#3ab849; font-size:14px; text-align:center; line-height:30px; color:#fff; border-radius:5px;}
+		.form-input-inline .shenhe{position:absolute; top:0; left:0;}
+		.toollist_pic li{margin-right:10px; margin-bottom:10px;}
+
+        .txt{
+				width: 73%;
+				height: 10rem;
+				resize: none;
+				display: block;
+				border: 1px solid #dfdfdf;
+				border-radius: 0.4rem;
+				line-height: 180%;
+				font-size: 1.2rem;
+				padding: 0.5rem;
+		}
+   
+		</style>
+	<body>
+		<div class="header">
+			<a href="{:U('index/index')}">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>完善经销商信息</p>
+		</div>
+		<ul class="cont">
+			<li>
+				<p>店铺名称：</p>
+				<input type="text" style="font-family:微软雅黑;" id="agcy_name" value="{$agcy.agcy_name}" readonly />
+				<div class="clear"></div>
+			</li>
+			<li>
+				<p>店铺地址：</p>
+				<p type="text"  style="font-family:微软雅黑;" id="agcy_address"  maxlength="50">{$agcy.agcy_address}</p>
+				<div class="clear"></div>
+			</li>
+			<li>
+				<p>负责人：</p>
+				<input type="text" style="font-family:微软雅黑;" id="agcy_manager" value="{$agcy.agcy_manager}" maxlength="11" />
+				<div class="clear"></div>
+			</li>
+			<li>
+				<p>电话：</p>
+				<input type="tel" style="font-family:微软雅黑;" id="agcy_tel" value="{$agcy.agcy_tel}"  onkeyup="this.value=this.value.replace(/\D/gi,&quot;&quot;)" maxlength="11" />
+				<div class="clear"></div>
+			</li>
+			<li>
+				<p>店铺公告：</p>
+                <div class="you">
+                <textarea class="txt"  style="font-family:微软雅黑;" id="agcy_slogan"  placeholder="请输入店铺公告" maxlength="200" >{$agcy.agcy_slogan}</textarea>
+                </div> 
+				<div class="clear"></div>
+			</li>
+			 
+		</ul> 
+		
+		<div class="cards"> 
+			<div class="form-item">
+				<label class="form-label">门店照片</label>
+				<div class="form-text form-input-inline w40">
+					<input type="hidden"  value="{$agcy.agcy_face_images}"  name="agcy_face_images"  id="agcy_face_images"  maxlength="255"  readonly/>
+					<span>点击上传</span>
+					<input class="but shenhe mg_t0" type="button" id="uploadButton"  class="chaxun but" value="上传"/>	
+				</div>  
+				<input name="agcy_face_images" id="imagemore" type="hidden" class="dfinput" value="" readonly />				 
+				<div class="form-text form-input-block w50 c">
+					<ul class="toollist_pic c" id="toollist_pic">
+						<?php if($agcy['agcy_face_images']):?>
+						<?php foreach(explode("|",$agcy['agcy_face_images']) AS $k=>$v):?>
+						<li onclick="del_album_img('{$v}', this)"><a><img src="{$v}"><i class="fa fa-times-circle"></i></a></li>
+						<?php endforeach;?>
+						<?php endif;?>
+					</ul>
+				</div>
+			</div>  
+			<div class="form-item">
+				<label class="form-label">营业执照</label>
+				<div class="form-text form-input-inline w40">
+					<input type="hidden"  name="info[agcy_logo]" id="agcy_logo"  maxlength="255" readonly value="{$agcy.agcy_logo}"/>
+					<span>点击上传</span>
+					<input class="but shenhe mg_t0 chaxun but" type="button" id="uploadButton3" value="上传" /> 
+				</div> 
+				<div class="form-text form-input-block w50"></div>
+				<div class="form-text form-input-block w50">
+					<ul class="toollist_pic c" id="toollist_pic3"> 
+						<?php if($agcy['agcy_logo']):?>
+						<li onclick="del_album_img3(this)"><a><img src="{$agcy.agcy_logo}"><i class="fa fa-times-circle"></i></a></li> 
+						<?php endif;?>
+					</ul>
+				</div>
+			</div>  
+			
+			<div class="form-item">
+				<label class="form-label">法人身份证</label> 
+				<div class="form-text form-input-block w50">
+					<ul class="toollist_pic c" id="toollist_pic4">
+						<?php if($agcy['agcy_license_images']):?>
+						<?php foreach(explode("|",$agcy['agcy_license_images']) AS $k=>$v):?>
+						<li><a><img src="{$v}"></a></li>
+						<?php endforeach;?>
+						<?php endif;?>
+					</ul>
+				</div>
+			</div> 
+		</div>  
+		<div id="loading" style="width:85px;height:85px;position:fixed;left:50%;top:50%;margin-top:-43px;display:none;z-index:99999;">
+			<img src="__PUBLIC__/agcy/images/loading_page.gif">
+        </div>
+		<button class="btnn" onclick="tijiao()" >提交</button>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+        <script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script> 
+	</body>
+
+</html>
+<script>
+	var agcy_id={$agcy.agcy_id}; 
+	function tijiao(){ 
+		var agcy_address = $("#agcy_address").text();
+		var agcy_manager = $("#agcy_manager").val();
+		if(agcy_manager==""){ 
+            layer.msg('请输入负责人！',{icon:5,time:1000});
+            $("#agcy_manager").focus();
+			return false;
+		}
+		
+		var agcy_tel = $("#agcy_tel").val();
+		if(agcy_tel==""){ 
+            layer.msg('请输入电话！',{icon:5,time:1000});
+            $("#agcy_tel").focus();
+			return false;
+		}
+		if (!(/^1\d{10}$/.test(agcy_tel))) { 
+            layer.msg('请输入正确的手机号！',{icon:5,time:1000});
+            $("#agcy_tel").focus();
+			$("#agcy_tel").val("")
+            return false;
+        }
+		
+		var agcy_slogan = $("#agcy_slogan").val();
+		if(agcy_slogan==""){ 
+            layer.msg('请输入店铺公告！',{icon:5,time:1000});
+            $("#agcy_slogan").focus();
+			return false;
+		} 
+		
+		var agcy_face_images=$("#agcy_face_images").val(); 
+		if(agcy_face_images==""){ 
+            layer.msg('请上传门店照片！',{icon:5,time:1000});
+			return false;
+		} 
+			 
+		var res=agcy_face_images.split('|');
+		var length=res.length;
+		if(length!=2){
+            layer.msg('请上传2张门店照片！',{icon:5,time:1000}); 
+			return false;
+		}
+		
+		var agcy_logo=$("#agcy_logo").val(); 
+		if(agcy_logo==""){ 
+            layer.msg('请上传营业执照！',{icon:5,time:1000}); 
+			return false;
+		}
+		
+		$.getJSON("{:U('index/editshop')}&agcy_id="+agcy_id+"&agcy_address="+agcy_address+"&agcy_tel="+agcy_tel+"&agcy_manager="+agcy_manager+"&agcy_slogan="+agcy_slogan+"&agcy_logo="+agcy_logo+"&agcy_face_images=" + agcy_face_images, function (res) { 
+            data = res.data  
+			if(data==1){   
+                layer.msg('商家信息编辑成功！',{icon:6,time:1000}, function () {
+                    window.location = "{:U('index/index')}";
+                });
+			}else{  
+                layer.msg('商家信息未做修改！',{icon:5,time:1000}, function () {
+                    window.location = "{:U('index/index')}";
+                });
+			} 
+		});
+		
+	}
+</script>
+ 
+
+ 

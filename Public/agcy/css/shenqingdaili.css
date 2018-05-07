@@ -1,0 +1,63 @@
+.tit {
+	padding: 0 0.64rem;
+	border-bottom: 0.6rem solid #f0f0f0;
+}
+
+.title {
+	font-size: 1.04rem;
+	line-height: 3.2rem;
+	color: #363636;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.tit img {
+	width: 6.08rem;
+	height: 6.28rem;
+	float: left;
+	margin-top: 0.8rem;
+	margin-bottom: 2rem;
+}
+
+.tit p:nth-of-type(2) {
+	font-size: 1.12rem;
+	margin-top: 1.6rem;
+	margin-left: 7.58rem;
+	line-height: 180%;
+}
+
+.tit p:nth-of-type(3) {
+	font-size: 1.12rem;
+	margin-top: 1.6rem;
+	margin-left: 7.58rem;
+}
+
+.cont {
+	padding: 0 0.64rem;
+	background: #FFFFFF;
+	margin-bottom: 3.5rem;
+}
+
+.cont li {
+	min-height: 3.6rem;
+	position: relative;
+	margin-top: 1rem;
+}
+
+.cont li p:nth-of-type(1) {
+	line-height: 2.72rem;
+	font-size: 1.2rem;
+	float: left;
+	margin-right: 0.5rem;
+}
+.cont li p:nth-of-type(2) {
+	line-height: 2.72rem;
+	font-size: 1.2rem;
+}
+.cont li input {
+	width: 20rem;
+	height: 2.72rem;
+	font-size: 1.2rem;
+	border: 1px solid #dcdcdc;
+	border-radius: 0.4rem;
+	padding: 0 0.5rem;
+}

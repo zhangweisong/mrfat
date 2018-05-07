@@ -1,0 +1,38 @@
+.left-body{background: #2b3245;}
+.left_box{width: 220px;}
+.left-top{ width: 100%;height: 120px;overflow: hidden;background: #f5f5f5;}
+.left-top img{display: block;width: 100%;}
+
+.nav-box{width: 100%; border-right: 2px solid #2a1f30; height: 100%; overflow-y: auto;}
+.nav{width: 100%;border-bottom: 1px solid #2a1f30; position: relative;}
+.nav .ico-left{display: block;  width: 25px; position: absolute;top: 0;left: 30px; z-index: 2;}
+.nav .ico-right{display: block; width: 25px; position: absolute;top: 0;right: 24px;z-index: 2;}
+.tit_nav{ height: 70px;display: block; line-height: 70px; font-size: 18px; color: #c4cbdb; padding-left: 70px; padding-right: 24px;width: 100%;background: #333a4d;}
+
+.nav:hover .tit_nav{ color: #fff;}
+.nav:hover .iconfont{color: #fff;}
+.nav.link .tit_nav{background: #2cb184; color: #fff;}
+.iconfont{ color: #c4cbdb; font-size:18px; line-height: 70px; text-align: center;}
+.nav.link .iconfont{color: #fff;}
+.nav.hove .icon-jiantou2{transform:rotateZ(180deg);transition:.4s all;}
+
+.nav_1{display: none;}
+.nav_1 li{border-top: 1px solid #2a1f30; position: relative;}
+.nav_1 li .iconfont.icon-dot{ color: #2cb184;left: 40px; font-size:24px; line-height:50px; text-align: center;}
+.nav_1 li .iconfont.icon-202-copy{line-height:50px;}
+
+.nav_1 li a{display: block;padding-left:70px;color: #fff; height:50px;line-height: 50px; background: #3d455a; border-left: 5px solid #394155;}
+.nav_1 li.li_1:hover > a{border-left: 5px solid #2cb184;}
+.nav_1 li.li_1.link > a{border-left: 5px solid #2cb184;}
+.nav_1 li.li_1.link .iconfont.icon-202-copy{transform:rotateZ(180deg);transition:.4s all;}
+
+.nav_2{display: none;}
+.nav_2 li{border-top: 1px solid #2a1f30; position: relative; border-left: 5px solid #2b3245;}
+.nav_2 li:hover{cursor: pointer;}
+.nav_2 li .iconfont.icon-dot{ color: #fff;left:50px; font-size:24px; line-height:50px; text-align: center;}
+.nav_2 li a{display: block;padding-left:80px;color: #fff; height:50px;line-height: 50px; background: #2b3245; border-left: none;}
+.nav_2 li:hover .iconfont.icon-dot,.nav_2 li:hover a{color:#2cb184;}
+.nav_2 li.link .iconfont.icon-dot,.nav_2 li.link a{color:#2cb184;}
+
+
+

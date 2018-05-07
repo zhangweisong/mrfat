@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>经销商管理</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css"> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 
+        <script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+       
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a >经销商管理</a></li>
+                    <li> > </li>
+                    <li><a href="{:U('agcy/index')}">经销商列表</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <!--查询-->
+                <div class="query">
+                    <form name="seachform" id="seachform" action="{:U('agcy/index')}"  method="post" class="form">
+                        <div class="form_input mg_trb">
+                            <label class="text">快速检索</label>
+                            <input type="text" name="info[agcy_manager]"  value="{$agcy_manager}"  placeholder="店铺名称/负责人/负责电话"  maxlength="20"/>
+                        </div>                      
+                        <div class="select mg_trb">
+                            <label class="text">所属地</label>
+
+                            <select name="info[p_id]" id="p_id">
+                                <option value="0" >--请选择省--</option> 
+                                <?php foreach($province AS $v):?>
+                                <option value="<?=$v['p_id']?>" <?php if($v['p_id'] == $p_id){echo "selected";}?> ><?=$v['p_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                            <select name="info[c_id]" id="c_id">
+                                <option value="0"  >--请选择市--</option>
+                                <?php foreach($city AS $v):?>
+                                <option value="<?=$v['c_id']?>" <?php if($v['c_id'] == $c_id){echo "selected";}?>><?=$v['c_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                            <select name="info[a_id]" id="a_id">
+                                <option value="0" >--请选择区县--</option>
+                                <?php foreach($area AS $v):?>
+                                <option value="<?=$v['a_id']?>" <?php if($v['a_id'] == $a_id){echo "selected";}?>><?=$v['a_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+							
+                            <select name="info[v_id]" id="v_id">
+                                <option value="0" >--请选择乡镇--</option>
+                                <?php foreach($villages AS $v):?>
+                                <option value="<?=$v['v_id']?>" <?php if($v['v_id'] == $v_id){echo "selected";}?>><?=$v['v_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div> 
+                        
+                        <div class="select mg_trb">
+                            <span class="text">状态</span>
+                            <select name="info[agcy_state]">
+                                <option value="">--请选状态-</option>
+                                <volist name="agcystate_" id="vo">
+                                    <option value="{$key}" <if condition="$key eq $agcy_state ">selected</if>>{$vo}</option>
+                                </volist>
+                            </select>
+                        </div>
+                        <div class="form_input mg_trb form-date">
+                            <label class="text">注册时间</label>
+                            <input type="text" class="laydate-icon layer-date" name="info[starttime]"  value="{$starttime}"  id="start" placeholder="开始时间" readonly/>
+                            <span>--</span>
+                            <input type="text" class="laydate-icon layer-date" name="info[endtime]"  value="{$endtime}"  id="end" placeholder="结束时间" readonly/>
+                        </div>
+                        <div class="button mg_trb" onclick="location.href = '{:U(\'agcy/index\')}'">
+                            <i class="fa fa-refresh ico"></i>
+                            <input type="button" value="刷新" class="but chongzhi" />
+                        </div>
+                        <div class="button mg_trb chaxun">
+                            <i class="fa fa-search ico"></i>
+                            <input type="submit" value="查询" class="but " style="position: absolute; background: none;z-index: 2;"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="tianjia">
+                    <a class="tianjia_but" href="{:U('agcy/addagcy')}">
+                        <i class="fa fa-plus"></i>
+                        新增经销商
+                    </a>
+                </div>
+                <div class="table_box">
+                    <table class="table" border="" cellspacing="" cellpadding=""> 
+                        <thead>
+                            <tr>
+                                <th>店铺名称</th>
+                                <th>所属地</th>
+                                <!--<th>店铺地址</th>-->
+                                <th>负责人</th>
+                                <th>负责电话</th>
+                                <th>账号</th> 
+                                <th>状态</th> 
+                                <th>注册时间</th> 
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="agcylist" id="agcy">
+                            <tr>
+                                <td>{$agcy.agcy_name}</td>
+                                <td>{$agcy.p_name}-{$agcy.c_name}-{$agcy.a_name}-{$agcy.v_name}</td>
+                                <!--<td>{$agcy.agcy_address}</td>-->
+                                <td>{$agcy.agcy_manager}</td>
+                                <td>{$agcy.agcy_tel}</td>
+                                <td>{$agcy.agcy_username}</td> 
+                                <td>
+                                    <label class="switch-btn circle-style" style="margin: 0 auto;">
+                                        <input  class="checked-switch" type="checkbox" onchange="checkedswitchs(this, {$agcy.agcy_id}, 'isshow')" <?php if($admininforole == 2){echo 'disabled';}?>
+                                               <if condition="$agcy['agcy_state'] eq 1">checked</if> />
+                                        <span class="text-switch" data-yes="启用" data-no="禁用"></span>
+                                        <span class="toggle-btn"></span> 
+                                    </label>
+                                </td> 
+                                <td>{$agcy.agcy_addtime}</td> 
+                                <td> 
+                                    <a href="{:U('agcy/editagcy',array('agcy_id'=>$agcy['agcy_id']))}"  class="but chaxun">
+                                        <i class="fa fa-edit"></i>
+                                        编辑
+                                    </a>
+                                    <a href="{:U('agcy/chongzhi',array('agcy_id'=>$agcy['agcy_id']))}" class="but chaxun" onclick="{if (confirm('你确定要重置密码为123456吗?')){return true; }return false; }">
+                                        <i class="fa fa-lock"></i>
+                                        重置密码
+                                    </a>
+                                    <a  onclick="xiangQing({$agcy['agcy_id']})" class="but chaxun" >
+                                        <i class="fa fa-eye"></i>
+                                        查看详情
+                                    </a>
+                                    <a href="{:U('agcy/delagcy',array('agcy_id'=>$agcy['agcy_id']))}" class="but chongzhi" onclick="{if(confirm('确定要删除该经销商吗?')){return true;}return false;}">
+                                <i class="fa fa-trash-o"></i>
+                                删除</a>									
+                                </td>
+                            </tr> 
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                {$pageshow}
+            </div>
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $("#p_id").change(function () {
+            $("#c_id").html("<option value='0' >--请选择市--</option> ")
+            $("#a_id").html("<option value='0' >--请选择区县--</option> ")
+            var province_id = $("#p_id").val()
+            //alert(province_id);
+            if (province_id == 0)
+                return;
+            $.getJSON("{:U('agcy/cityofprovince')}&p_id=" + province_id, function (data) {  
+                var html = "<option value='0' >--请选择市--</option>";
+                for (var i = 0; i < data.length; i++) {
+                    html += "<option value=" + data[i].c_id + ">" + data[i].c_name + "</option>";
+                }
+                $("#c_id").html(html);
+            });
+        })
+        $("#c_id").change(function () {
+            $("#a_id").html("<option value='0' >--请选择区县--</option> ")
+            var city_id = $("#c_id").val()
+            if (city_id == 0)
+                return;
+            $.getJSON("{:U('agcy/areaofcity')}&c_id=" + city_id, function (data) { 
+                var html = "<option value='0' >--请选择区县--</option>";
+                for (var i = 0; i < data.length; i++) {
+                    html += "<option value=" + data[i].a_id + ">" + data[i].a_name + "</option>";
+                }
+                $("#a_id").html(html);
+            });
+        })
+		
+		$("#a_id").change(function () {
+            $("#v_id").html("<option value='0' >--请选择乡镇--</option> ")
+            var area_id = $("#a_id").val()
+            if (area_id == 0)
+                return;
+            $.getJSON("{:U('agcy/villagesofcity')}&a_id=" + area_id, function (data) { 
+                var html = "<option value='0' >--请选择乡镇--</option>";
+                for (var i = 0; i < data.length; i++) {
+                    html += "<option value=" + data[i].v_id + ">" + data[i].v_name + "</option>";
+                }
+                $("#v_id").html(html);
+            });
+        })
+    })
+</script> 
+<script src="__PUBLIC__/admin/js/layer/layer.js"></script> 
+<script src="__PUBLIC__/admin/js/laydate/laydate.js"></script>
+<script>
+    //laydate({elem: "#hello", event: "focus"});
+    var start = {
+    elem: "#start",
+            format: "YYYY-MM-DD",
+            min: "2000-06-16",
+            max: "2099-06-16",
+            istime: false,
+            istoday: false,
+            choose: function (datas) {
+            end.min = datas;
+            end.start = datas
+            }
+    };
+    var end = {
+    elem: "#end",
+            format: "YYYY-MM-DD",
+            min: "2000-06-16",
+            max: "2099-06-16",
+            istime: false,
+            istoday: false,
+            choose: function (datas) {
+            start.max = datas
+            }
+    };
+    laydate(start);
+    laydate(end);
+    </script>
+<script type="text/javascript">
+    $(function () {
+        $('input, textarea').placeholder();
+    });
+    //显示开关1显示；2隐藏
+    function checkedswitchs(obj, id, field){
+        if ($(obj).is(':checked')){	//true
+        //console.log("开启" + id);
+            $.getJSON("{:U('agcy/ajax_on')}&agcy_id=" + id + "&field=" + field, function(){
+            });
+        } else{	//false
+        //console.log("关闭" + id);
+            $.getJSON("{:U('agcy/ajax_off')}&agcy_id=" + id + "&field=" + field, function(){
+            });
+        }
+    }
+	$(".right_min").height($(window).height());
+	var body_w = $(".right_min").width() - 200;
+    var body_h = $(".right_min").height() - 100;
+    //查看详情
+    function xiangQing(agcy_id) {
+        layer.open({
+        type: 2,
+                title: false,
+                skin: "layui-layer-molv",
+                shade: [0.8, '#000000'],
+                scrollbar: false,
+                maxmin: false,
+                shadeClose: false, //点击遮罩关闭层
+                area: [body_w + "px", body_h + "px"],
+                content: "{:U('agcy/details')}&agcy_id=" + agcy_id
+        });
+    }
+</script>
+
+

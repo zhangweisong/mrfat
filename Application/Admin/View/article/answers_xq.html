@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>回答详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+	<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+</head>
+<body>
+<div class="right_min">
+	<div class="crumbs_nav">
+		<i class="iconfont icon-shouye"></i>
+		<ul>
+			<li><a href="javascript:void(0);">回答详情</a></li>
+		</ul>
+	</div>
+	<div class="min">
+		<div class="message">
+			<div class="message-block message-border-t">
+				<h4 class="message-left_block">回答详情</h4>
+			</div>
+			<table class="table" border="" cellspacing="" cellpadding="">
+				<tr>					
+					<th style="font-weight:bold;">回答编号</th>
+					<td>{$orderinfo.answers_id}</td>
+					<th style="font-weight:bold">专家姓名</th>
+					<td>{$orderinfo.expert_realname}</td>
+				</tr>
+				<tr>
+					<!--<th style="font-weight:bold">回答审核状态</th>
+					<if condition="$orderinfo['answers_state'] eq 1"><td style="color:green">{$state[$orderinfo['answers_state']]}</td></if>
+					<if condition="$orderinfo['answers_state'] eq 2"><td style="color:red">{$state[$orderinfo['answers_state']]}</td></if>-->
+					<th style="font-weight:bold">回答时间</th>
+					<td >{$orderinfo.answers_addtime|date="Y-m-d H:i:s",###}</td>
+                    <th style="font-weight:bold">问题内容</th>
+					<td >{$orderinfo.questions_content}</td>
+				</tr>
+				<tr>
+					<th style="font-weight:bold" >回答内容</th>
+					<td colspan="3">{$orderinfo.answers_content}</td>
+				</tr>
+			
+			</table>         			
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src="/foodsking/Public/admin/js/layer/layer.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+        $('.table_box input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        var index = parent.layer.getFrameIndex(window.name);
+        $('#net').on('click', function(){
+            parent.layer.close(index);
+        });
+    });
+</script>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>直播专区</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="renderer" content="webkit">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/js/Swiper/swiper.min.css"/>
+    <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script>
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+</head>
+<body>
+<style type="text/css">
+    body{background: #fff;}
+</style>
+<div class="njzs_xiangxifenlei">
+    <div class="xiangxifenlei_video">
+        <ul class="c" id="content">
+            <volist name="living" id="data">
+                <li>
+                    <a
+                        <if condition="$data.nj_url neq null">
+                            href="{$data.nj_url}"
+                            <else/>
+                            onclick="zanwu()"
+                        </if>
+                    >
+                        <i>
+                            <img src="{$data.nj_image}"/>
+                            <em></em>
+                        </i>
+                        <p>{$data.nj_name}</p>
+                    </a>
+                </li>
+            </volist>
+        </ul>
+    </div>
+</div>
+<div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+    <img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+</div>
+<button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button>
+<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+<div class="dibufengexian">
+    <p>亲，到底了</p>
+</div>
+<div class="meiyouneirong" style="display:none;margin-top:10%;">
+    <i><img src="__PUBLIC__/user/images/li_wdxx_img.png"/></i>
+    <p>暂无相关直播，敬请期待！</p>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script>
+    function  zanwu(){
+        layer.msg('博主正在化妆，请稍候...',{icon:5,time:1000});
+    }
+</script>
+<script>
+    var count={$count};
+    if(count<=0){
+        $(".meiyouneirong").show();
+    }
+
+    //滚动加载
+    $(window).scroll(function () {
+        getData();
+    });
+    var totalheight = 0;     //定义一个总的高度变量
+    function getData() {
+        totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());
+        //浏览器的高度加上滚动条的高度 （页面总高度）
+        if ($(document).height() <= totalheight) {
+            //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+            //加载
+            $("#loadings").fadeIn();
+            //根据条件获取对应的项目条数
+            getmore();//使用模板加载更多
+            //加载完毕
+            $("#loadings").fadeOut();
+        }
+    }
+    //加载更多
+    function getmore(){
+        var nj_classify_fatherid={$nj_classify_fatherid};
+        var nj_classify_id={$nj_classify_id};
+        var page=parseInt($("#more").attr("data"))+1;
+        $('#more').attr("data",page);//重置当前页数
+        $.getJSON("{:U('live/living')}&nj_classify_fatherid="+nj_classify_fatherid+"&nj_classify_id="+nj_classify_id+"&p="+page,function(data){
+            console.log(data);
+            var info=data.living;
+            var appendcontent="";
+            if(info.length>0){
+                for(var i=0;i<info.length;i++){
+                    appendcontent+='<li>';
+                    appendcontent+='<a ';
+                    if(info[i].nj_url != null ){
+                        appendcontent+=' href='+info[i].nj_url+' ';
+                    }else{
+                        appendcontent+=' onclick="zanwu()"';
+                    }
+                    appendcontent+=' >';
+                    appendcontent+='    <i>';
+                    appendcontent+='    <img src='+info[i].nj_image+' >';
+                    appendcontent+='    <em></em>';
+                    appendcontent+='    </i>';
+                    appendcontent+='    <p>'+info[i].nj_name+'</p>';
+                    appendcontent+='</a>';
+                    appendcontent+='</li>';
+                }
+                $('#content').append(appendcontent);
+            } else{
+                $("#loadings").fadeOut();
+                $('.dibufengexian').show();
+            }
+        })
+    }
+</script>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>提现详情</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+</head>
+<body >
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="javascript:void(0);">提现详情({$pop.realname})</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <div class="message">
+            <div class="message-block message-border-t">
+                <h4 class="message-left_block">提现详情</h4>
+            </div>
+            <div class="table_box">
+                <table class="table" border="" cellspacing="" cellpadding="">
+                    <tr>
+                        <th style="font-weight:bold">提现编号</th>
+                        <td>{$pop.pop_id}</td>
+                        <th style="font-weight:bold">用户姓名</th>
+                        <td>{$pop.realname}</td>
+                        <th style="font-weight:bold">手机号码</th>
+                        <td>{$pop.phone}</td>
+                        <th style="font-weight:bold">申请提现金额</th>
+                        <td>{$pop.pop_money}</td>
+                    </tr>
+                    <tr>
+                        <th style="font-weight:bold">申请提现时间</th>
+                        <td>{$pop.pop_addtime|date='Y-m-d H:i:s',###}</td>
+                        <th style="font-weight:bold">申请状态</th>
+                        <td>{$popFlag[$pop['pop_flag']]}</td>
+						<th style="font-weight:bold">银行开户主姓名</th>
+                        <td>{$pop.pop_name}</td>
+                        <th style="font-weight:bold">银行卡卡号</th>
+                        <td>{$pop.pop_code}</td>
+                    </tr>
+                    <tr>
+					    <th style="font-weight:bold">银行卡名称</th>
+                        <td>{$pop.pop_account}</td>
+                        <th style="font-weight:bold">银行卡预留手机号</th>
+                        <td>{$pop.pop_phone}</td>
+                        <th style="font-weight:bold">银行卡预留户主身份证号</th>
+                        <td>{$pop.pop_idcard}</td>
+						<th style="font-weight:bold">提现备注说明</th>
+                        <td>{$pop.pop_remarks}</td>
+                    </tr>
+                   <tr>
+                         <!--<th style="font-weight:bold">提现审核人</th>
+                        <td>{$getAdminName[$pop['pop_check_person']]}</td>-->
+						<th style="font-weight:bold">出金订单号</th>
+                        <td colspan="3">{$pop.pop_paynum}</td>
+						<th style="font-weight:bold">提现审核备注</th>
+                        <td colspan="3">{$pop.pop_reviewnotesr}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+
+        $('.form-checkbox input,.form-radio input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        $('input').on('ifChecked', function(event){
+            //alert($(this).val());
+        });
+        $(".checkbox-title dd i").click(function(){
+            $(this).toggleClass("fa-flip-vertical");
+            $(this).parents().siblings(".skin-section").slideToggle(500);
+        });
+    });
+</script>
+
+
+
+
+

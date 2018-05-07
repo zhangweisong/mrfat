@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>选择商品分类</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<style>
+			.cont{
+				padding: 0 0.64rem;
+				border-bottom: solid 0.6rem #f0f0f0;
+			}
+			.cont p{
+				font-size: 1.2rem;
+				line-height: 4rem;
+			}
+			.btns button{
+				width: 7.52rem;
+				height: 2.4rem;
+				font-size:1.04rem;
+				border: none;
+				background: #f0f0f0;
+				border-radius: 0.4rem;
+				margin-right: 2.4rem;
+				margin-bottom: 1.8rem;
+			}
+			.btns button:nth-of-type(3n){
+				margin-right: 0;
+			}
+			.red{
+				color: #fd3a3a;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="header">
+			<a href="{:U('ordermanagement/index')}">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>选择商品分类</p>
+		</div>
+        <volist name="type" id="type" key="key">
+            <div class="cont">
+                <p>{$type.f_classify_name}</p>
+                <div class="btns flexbb">
+                <volist name="type['child']" id="child_1" key="k">
+                <!-- <if condition="$k eq 1" > class="red" </if> -->
+                    <button 
+                    type1="{$child_1.f_classify_fatherid}" type2="{$child_1.f_classify_id}" >{$child_1.f_classify_name}</button>
+                </volist>
+                </div>
+            </div>
+        </volist>
+        <div class="meiyouneirong" style="display:none;margin-top:10%;">
+                <i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+                <p>还没有添加任何分类</p>
+        </div>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-3.1.1.min.js" ></script>
+		<script>
+			$(".btns button").click(function(){
+				$(this).addClass("red").siblings("button").removeClass("red");
+                var type1=$(this).attr('type1');
+                var type2=$(this).attr('type2');
+                window.location.href="{:U('ordermanagement/ordershop')}&f_classify_fatherid="+type1+"&f_classify_id="+type2;
+			})
+		</script>
+	</body>
+
+<script>
+ if({$typelen}<=0){
+    $(".meiyouneirong").show();
+ }else{
+    $(".meiyouneirong").hide();
+ }
+
+</script>
+</html>

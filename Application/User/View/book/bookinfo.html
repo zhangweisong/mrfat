@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>书籍详情</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/js/Swiper/swiper.min.css"/>
+        <script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-1.10.2.min.js"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+        <style>
+            .sjxq_title_bt ul{
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .sjxq_title_bt ul li{
+                width:50%;
+            }
+            .sjxq_banner .swiper-pagination-bullet{
+                width:12px;
+                height:3px;
+                border-radius: inherit;
+            }
+            .sjxq_banner .swiper-pagination-bullet-active{
+                    background: #ef404c;
+            }
+            .sjxq_box .spxq_text .jiage span,.sjxq_box .spxq_text .jiage i,.sjxq_box .spxq_text .jiage em{
+                font-size:1rem;
+            }
+        </style>
+		<div>
+			<!--banner-->
+	    	<div class="sjxq_banner">
+			    <div class="swiper-container">
+			        <div class="swiper-wrapper">
+                        <?php $res = explode('|',$bookinfo['book_image']); foreach($res as $k=>$v):?>
+			            <div class="swiper-slide">
+			            	<a href="#">
+			            		<img src="{$v}"/>
+			            	</a>
+			            </div>
+                        <?php endforeach;?>
+			        </div>
+			        <div class="swiper-pagination"></div>
+			    </div>
+	    	</div>
+	    	<!---->
+	    	<div class="sjxq_box mg_t5">
+    			<div class="spxq_text">
+    				<h4 class="title">{$bookinfo.book_name}</h4>
+    				<p class="jiage c">
+    					<span>￥:{$bookinfo.book_price}</span>
+    					<i>￥:{$bookinfo.book_oldprice}</i>
+    					<em>销量：{$bookinfo.book_buynum}</em> 
+    				</p>
+    				<div class="shuliang c">
+    					<dl class="shuliang_fl">
+    						<dt>数量：</dt>
+    						<dd>
+    							<span class="jian">-</span>
+    							<i class="shuzi" data="{$bookinfo.book_num}">1</i>
+    							<span class="jia">+</span>
+    						</dd>
+    					</dl>
+    					<span class="shuliang_fr">库存：{$bookinfo.book_num}</span>
+    				</div>
+    			</div>
+	    		<div class="sjxq_title_bt mg_t5">
+	    			<ul>
+	    				<li>作者：{$bookinfo.book_author}</li>
+	    				<li>出版社：{$bookinfo.book_publish}</li>
+	    				<li>开本：{$bookinfo.book_size}</li>
+	    				<li>ISBN编号: {$bookinfo.book_isbn}</li>
+	    			</ul>
+	    		</div>
+ 				<div class="spxq_zdy">
+    				<h4 class="title">商品信息</h4>
+    				<div class="spxq_zdy_xq">
+    					{$bookinfo.book_remark}
+    				</div>
+    			</div>
+	    	</div>
+    	</div>
+    	<div class="xpxq_footer">
+    		<ol>
+    			<li class="li1" onclick="addcar('{$bookinfo.book_id}')">加入购物车</li>
+    			<li class="li2" onclick="direct('{$bookinfo.book_id}')">立即购买</li>
+    		</ol>
+    	</div>
+		<div class="gouwuchetubiao">
+			<a href="{:U('book/car')}">
+				<span></span>
+				<em class="carnum"></em>
+			</a>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/user/js/Swiper/swiper.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script type="text/javascript">
+    var swiper = new Swiper('.sjxq_banner .swiper-container', {
+        pagination : '.sjxq_banner .swiper-pagination',    
+        slidesPerView: 1,
+        paginationClickable: true,
+        loop: true,
+        centeredSlides: true,
+        autoplay: 350000,
+        autoplayDisableOnInteraction: false
+
+    });
+</script>
+<script type="text/javascript">
+	$(function(){
+        show_car_num();
+        function nbsp2Space(str) {
+            var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'};
+            return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];});
+        }
+		var _xinshu;
+		var _shu=parseInt($('.shuzi').text());
+		var _jian=$('.jian');
+		var _jia=$('.jia');
+        var kucun = $(".shuzi").attr('data');
+		_jia.click(function(){
+			_xinshu=++_shu; 
+			$('.shuzi').text(_xinshu);
+            if(parseInt(_xinshu)>parseInt(kucun)){
+                layer.msg('库存不足！',{icon:5,time:1000});
+                $('.shuzi').text(kucun);
+            } 
+		});
+		_jian.click(function(){
+			if(_shu===1){
+				return;
+			};
+			_xinshu=--_shu;
+			$('.shuzi').text(_xinshu);
+           
+		}) 
+        
+	})
+</script>
+<script>
+    var kucun = {$bookinfo.book_num}; 
+    function addcar(a){
+        //数量
+        var num = $('.shuzi').text();
+        if(num<1){
+            return false;
+        }
+        if(parseInt(num)>parseInt(kucun)){
+            layer.msg('库存不足！',{icon:5,time:1000});
+            $('.shuzi').text(kucun);
+            return false;
+        }
+        //图书id
+        var book_id = a;
+        $.getJSON("{:U('book/addcar')}&num="+num+"&book_id="+book_id,function(data){  
+            var info  = data.data; 
+            var counts = data.count; 
+            if(info==1){
+                layer.msg('加入成功',{icon:6,time:1000}); 
+                $(".carnum").html(counts);
+                $(".carnum").show();
+            }else if(info==2){
+                $(".carnum").html(counts);
+                $(".carnum").show();
+                layer.msg('此商品在购物车中已经存在',{icon:5,time:1000},function(){
+                    location.href = "{:U('book/car')}";
+                });
+                return false;
+            }else if(info==3){
+                layer.msg('库存不足！',{icon:5,time:1000});
+                return false;
+            }
+            
+        })    
+         
+    } 
+
+    //显示购物车的数量
+    // var sh=setInterval(function(){ 
+        
+    // },1000);
+    function show_car_num(){
+        var str=$.ajax({ async:false,cache:false,url:"{:U('book/carnum')}",data: "" }).responseText; 
+        if(str>0){
+                $(".carnum").css("display","block"); 
+                $(".carnum").html(str);
+        }else{
+            $(".carnum").css("display","none"); 
+        }
+        return false;   
+    }
+    //直接购买
+    function direct(a){
+        //图书id
+        var book_id = a;
+        //购买数量
+        var num = $('.shuzi').text();
+        if(num<1){
+            return false;
+        }
+        if(parseInt(num)>parseInt(kucun)){
+            layer.msg('购买数量不能大于库存！',{icon:5,time:1000});
+            return false;
+        }
+        //添加temp临时表记录
+        var str=$.ajax({ async:false,cache:false,url:"{:U('book/direct')}&book_id="+book_id+"&num="+num+" ",data: "" }).responseText;
+        if(str>0){
+            location.href="{:U('book/pay')}&bookorder="+str;
+        }
+           
+        
+    }
+
+
+</script>

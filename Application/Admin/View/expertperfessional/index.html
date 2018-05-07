@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>专家职称</title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+		<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="right_min">
+			<div class="crumbs_nav">
+				<i class="iconfont icon-shouye"></i>
+				<ul>
+					<li><a href="{:U('index/welcome')}">首页</a></li>
+					<li> > </li>
+					<li><a href="#">专家管理</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">专家职称</a></li>
+				</ul>
+			</div>
+			<div class="min">
+                <!--查询-->
+				<div class="query">
+					<form name="seachform" id="seachform" action="{:U('expertperfessional/index')}"  method="post" class="form">
+						<div class="form_input mg_trb">
+							<label class="text">快速检索</label>
+							<input type="text" name="info[keyword]" id="keyword" value="{$keyword}" placeholder="请输入职称名称" maxlength="15"/>
+						</div>
+						<div class="select mg_trb">
+							<span class="text">状态</span>
+							<select  id="sclassify_isable" name="info[sclassify_isable]">
+								<option value="">请选择状态</option>
+								<volist name="sclassify_isables" id="data">
+								<option value="{$key}" <if condition="$key eq $sclassify_isable ">selected</if>>{$data}</option>
+								</volist>
+							</select>
+						</div>
+						<div class="button mg_trb" onclick="location.href='{:U('expertperfessional/index')}'">
+							<i class="fa fa-refresh ico"></i>
+							<input type="button" value="刷新" class="but chongzhi" />
+						</div>
+						<div class="button mg_trb chaxun">
+							<i class="fa fa-search ico"></i>
+							<input type="submit" value="查询" class="but " style="    position: absolute; background: none;z-index: 2;" />
+						</div>
+					</form>
+				</div>
+				<!--添加角色-->
+				<div class="tianjia">
+					<a class="tianjia_but" href="{:U('expertperfessional/add')}">
+						<i class="fa fa-plus"></i>
+						添加
+					</a>
+				</div>
+				<div class="table_box">
+					<table class="table" border="" cellspacing="" cellpadding="">
+						<thead>
+							<tr>
+								<th>职称名称</th>
+                               <!-- <th>职称图标</th>-->
+								<!--<th>职称说明</th>-->
+								<th>状态</th>
+								<!--<th>排序</th>-->
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+						<volist name="listinfo" id="listinfo">
+						<tr>
+							<td>{$listinfo.sclassify_name}</td>
+                           <!-- <td>
+                            <if condition="$listinfo['sclassify_image'] neq '' ">
+                            <img src='{$listinfo.sclassify_image}' width="50" height="50"/>
+                            </if>
+                            <if condition="$listinfo['sclassify_image'] eq '' ">
+                                &#45;&#45;
+                            </if>
+                            </td>-->
+							<!--<td>
+                                <?php echo mb_substr($listinfo['sclassify_remarks'], 0,20,'utf-8');
+                                if(mb_strlen($listinfo['sclassify_remarks'],'utf-8')>20){echo '...';}?>
+                            </td>-->
+                            <td>
+                                <label class="switch-btn circle-style" style="margin: 0 auto;">
+                                    <input class="checked-switch" type="checkbox" onchange="checkedswitchs(this,{$listinfo.sclassify_id},'sclassify_isable')"
+                                    <if condition="$listinfo['sclassify_isable'] eq 1">checked</if> />
+                                    <span class="text-switch" data-yes="启用" data-no="禁用"></span>
+                                    <span class="toggle-btn"></span> 
+                                </label>
+                            </td>
+							<!--<td>{$listinfo.sclassify_sort}</td>-->
+                            <td>
+                            <a href="{:U('expertperfessional/edit',array('sclassify_id'=>$listinfo['sclassify_id']))}" class="but chaxun">
+                            <i class="fa fa-edit"></i>
+                            编辑</a>
+                            <a href="{:U('expertperfessional/del',array('sclassify_id'=>$listinfo['sclassify_id']))}" onclick="{if(confirm('确认删除?')){return true;}return false;}" class="but chongzhi">
+                            <i class="fa fa-trash-o"></i>
+                            删除</a>
+                            </td>
+                        </tr>
+                        </volist>
+
+                        </tbody>
+                    </table>
+                </div>
+                {$pageshow}
+            </div>
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+    });
+    //显示开关1显示；2隐藏
+    function checkedswitchs(obj,sclassify_id,field){
+        if($(obj).is(':checked')){	//true
+            console.log("显示"+sclassify_id);
+            $.getJSON("{:U('expertperfessional/ajaxable_on')}&id="+sclassify_id+"&field="+field,function(){
+            });
+        }else{	//false
+            console.log("隐藏"+sclassify_id);
+            $.getJSON("{:U('expertperfessional/ajaxable_off')}&id="+sclassify_id+"&field="+field,function(){
+            });
+
+        }
+    }
+</script>

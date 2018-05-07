@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>编辑分类</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>  
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+        <script type="text/javascript" src="__PUBLIC__/admin/js/stringOperate.js"></script> 
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+					 <li><a href="javascript:void(0);">公司展示</a></li>
+					<li> > </li>
+					 <li><a href="javascript:void(0);">新闻分类</a></li>
+                    <li> > </li>  
+                    <li><a href="javascript:void(0);">编辑分类</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <div class="form_box">
+                    <form  name="myform" id="myform" action="{:U('newlist/editnewtype',array('id'=>$content['class_id']))}" method="post" onsubmit="return checkfrom()">
+                        <div class="form-item">
+                            <label class="form-label">标题名称</label>
+                            <div class="form-text form-input-block">
+                                <input type="text" name="info[class_name]" value="{$content.class_name}" placeholder="请输入分类名称" id="name" maxlength="60"/>
+                                <i class="name" style="display:none;color:red;">分类名称不能为空</i>
+                            </div>
+                        </div>  
+						<div class="form-item">
+                            <label class="form-label">状态</label>
+                            <div class="form-radio form-input-block">
+                                <div class="skin-section">
+                                    <ul>
+                                        <li>
+                                            <input type="radio" name="info[class_isshow]" value="1"  <if condition="1 eq $content.class_isshow ">checked</if> >
+                                            <span>显示</span>
+                                        </li>
+                                        <li>
+                                            <input  type="radio" name="info[class_isshow]" value="2"   <if condition="2 eq $content.class_isshow ">checked</if>>
+                                            <span>隐藏</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>  
+                       
+                        <div class="form-item">
+                            <div class="form-button form-input-block">
+                                <input class="chaxun but" type="submit" id="tijiao" value="提交"/> 
+								<button class="but chongzhi" type="button" onclick="location.href='{:U('newlist/newtype')}'">返回</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+//提交时验证
+	 function checkfrom() {
+		var name = document.getElementById("name").value;
+        if (name == '') {
+            $(".name").show();
+            $('#name').focus();
+            return false;
+        }
+        $(".name").hide(); 
+        
+	document.getElementById("tijiao").disabled=true;
+
+    }
+    $(function () {
+        $(".right_min").height($(window).height());
+
+        $('.skin-section input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });      
+    });
+	 
+</script>

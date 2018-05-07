@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>其他管理</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css"> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 
+        <script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+       
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a >其他管理</a></li>
+                    <li> > </li>
+                    <li><a href="{:U('agcyapply/index')}">产品代理列表</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <!--查询-->
+                <div class="query">
+                    <form name="seachform" id="seachform" action="{:U('agcyapply/index')}"  method="post" class="form">
+                        <div class="form_input mg_trb">
+                            <label class="text">快速检索</label>
+                            <input style="width:380px;" type="text" name="info[key]"  value="{$keys}"  placeholder="经销商店铺名称/产品名/厂商名/厂商联系人/厂家电话"  maxlength="20"/>
+                        </div>    
+                        <div class="select mg_trb">
+                            <span class="text">申请状态</span>
+                            <select name="info[state]">
+                                <option value="">--请选择--</option>
+                                <volist name="state" id="vo">
+                                    <option value="{$key}" <if condition="$key eq $states ">selected</if>>{$vo}</option>
+                                </volist>
+                            </select>
+                        </div>
+                        <div class="form_input mg_trb form-date">
+                            <label class="text">申请时间</label>
+                            <input type="text" class="laydate-icon layer-date" name="info[starttime]"  value="{$starttime}"  id="start" placeholder="开始时间" readonly/>
+                            <span>--</span>
+                            <input type="text" class="laydate-icon layer-date" name="info[endtime]"  value="{$endtime}"  id="end" placeholder="结束时间" readonly/>
+                        </div>
+                        <div class="button mg_trb" onclick="location.href = '{:U(\'agcyapply/index\')}'">
+                            <i class="fa fa-refresh ico"></i>
+                            <input type="button" value="刷新" class="but chongzhi" />
+                        </div>
+                        <div class="button mg_trb chaxun">
+                            <i class="fa fa-search ico"></i>
+                            <input type="submit" value="查询" class="but " style="position: absolute; background: none;z-index: 2;"/>
+                        </div>
+                    </form>
+                </div> 
+                <div class="table_box">
+                    <table class="table" border="" cellspacing="" cellpadding=""> 
+                        <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>经销商店铺名称</th>
+								<th>产品名</th>
+								<th>产品图片</th> 
+                                <th>申请时间</th> 
+                                <th>申请状态</th> 
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="agcyapply" id="agcy">
+                            <tr>
+                                <td>{$agcy.agcy_apply_id}</td>
+								<td>{$agcy.agcy_name}</td>
+								<td>{$agcy.fgoods_name}</td>
+                                <td><img src="{$agcy.fgoods_images}" style="width:60px;height:50px;"/></td> 
+                                <td><?php echo date('Y-m-d H:i:s',$agcy['agcy_apply_addtime']);?></td>
+								<?php if($agcy['agcy_apply_flag']==1):?>
+								<td style="color:green">{$state[$agcy['agcy_apply_flag']]}</td>
+								<?php elseif($agcy['agcy_apply_flag']==2):?>
+								<td>{$state[$agcy['agcy_apply_flag']]}</td>
+								<?php elseif($agcy['agcy_apply_flag']==3):?>
+								<td style="color:red">{$state[$agcy['agcy_apply_flag']]}</td>
+								<?php endif;?> 
+                                <td> 
+                                    <a onclick="xiangQing({$agcy['agcy_apply_id']})" class="but chaxun" >
+                                        <i class="fa fa-eye"></i>
+                                        查看详情
+                                    </a>  
+                                </td>
+								
+                            </tr> 
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                {$pageshow}
+            </div>
+        </div>
+    </body>
+</html>
+ 
+<script src="__PUBLIC__/admin/js/layer/layer.js"></script> 
+<script src="__PUBLIC__/admin/js/laydate/laydate.js"></script>
+<script>
+    //laydate({elem: "#hello", event: "focus"});
+    var start = {
+    elem: "#start",
+            format: "YYYY-MM-DD",
+            min: "2000-06-16",
+            max: "2099-06-16",
+            istime: false,
+            istoday: false,
+            choose: function (datas) {
+            end.min = datas;
+            end.start = datas
+            }
+    };
+    var end = {
+    elem: "#end",
+            format: "YYYY-MM-DD",
+            min: "2000-06-16",
+            max: "2099-06-16",
+            istime: false,
+            istoday: false,
+            choose: function (datas) {
+            start.max = datas
+            }
+    };
+    laydate(start);
+    laydate(end);
+    </script>
+<script type="text/javascript">
+    $(function () {
+        $('input, textarea').placeholder();
+    });
+    
+	$(".right_min").height($(window).height());
+	var body_w = $(".right_min").width() - 200;
+    var body_h = $(".right_min").height() - 100;
+    //查看详情
+    function xiangQing(agcy_apply_id) {
+        layer.open({
+        type: 2,
+                title: false,
+                skin: "layui-layer-molv",
+                shade: [0.8, '#000000'],
+                scrollbar: false,
+                maxmin: false,
+                shadeClose: false, //点击遮罩关闭层
+                area: [body_w + "px", body_h + "px"],
+                content: "{:U('agcyapply/info')}&agcy_apply_id=" + agcy_apply_id
+        });
+    }
+    
+</script>
+
+

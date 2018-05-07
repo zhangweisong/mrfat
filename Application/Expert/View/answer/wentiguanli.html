@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>问题管理</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/expert/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/expert/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/expert/css/wentiguanli.css" />
+        <script src="__PUBLIC__/user/js/mui/mui.min.js"></script>
+        <script src="__PUBLIC__/user/js/mui/mui.zoom.js"></script>
+        <script src="__PUBLIC__/user/js/mui/mui.previewimage.js"></script>
+	</head>
+    <style>
+		.sousuokuang_box{padding: 0 10px; height: 45px; background: #ef404c}
+		.daan{word-wrap:break-word}
+		.wenti{word-wrap:break-word}
+		.wen ul{display:flex; margin-left: 4rem; margin-top:0.6rem;}
+		.wen ul li{width:50%; padding:0 0.5rem; height:7.2rem; overflow:hidden; -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
+		.wen ul li img{display:block; width:100%; height:100%; }
+		.wen ul li i{display:block; width:100%; height:100%;}
+        .wen>p:nth-of-type(1) i{display:inline-block; font-style:normal; font-size:0.96rem; margin-left:0.5rem;}
+	</style>
+	<body>
+		<div class="header">
+			<a href="{:U('index/index')}">
+				<img src="__PUBLIC__/expert/images/left.png" />
+			</a>
+			<p>问题管理</p>
+		</div>
+		<div class="top flex">
+			<button onclick="window.location.href='{:U('answer/lishihuida')}'" style="border-right: 1px solid #fff;">历史回答</button>
+			<button onclick="window.location.href='{:U('problembase/index')}'">答案库</button>
+		</div>
+		<div class="tit">
+			<ul>
+				<li  ><a data-value="0" onclick="get2(this)" <?php if($questions_type_id==0):?> class="red" <?php endif;?>   >全部</a></li>
+				<?php foreach($type as $k=>$v): ?>
+				<li ><a data-value="{$k}" onclick="get2(this)" <?php if($questions_type_id==$k):?> class="red" <?php endif;?>  >{$v}</a></li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+		<div class="cont">
+			<div class="wenda"> 
+			</div>
+		</div>
+		<div class="meiyouneirong" style="display:none;margin-top:10%;">
+			<i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+			<p>暂时还没有问题哦</p>
+		</div>
+		 
+		<div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+			<img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+		</div> 
+		<button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button> 
+		<script type="text/javascript" src="__PUBLIC__/expert/js/screenSize.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/expert/js/jquery-3.1.1.min.js" ></script>
+        <script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+		<script>
+			init();
+			//初始化页面
+			 function init(){  
+					var data = {$question}; 
+					console.log(data);
+					var info = data.question; 
+					if(info.length > 0){
+					   var html = htmlinfo(info);
+						$(".wenda").html(html);
+					}else{
+						$(".meiyouneirong").css("display","block");
+					} 
+			 }
+			//数据列表
+			function htmlinfo(info){         
+				var html="";
+				for(var i=0;i<info.length;i++){ 
+					html+='<div class="wen"  >';
+					html+='<img src='+info[i].avatar+' />';
+                    if(info[i].questions_aim==1){
+                        html+='<p>'+info[i].realname+'<span>'+info[i].type_name+'</span><i>@me</i></p>'; 
+                    }else{
+                        html+='<p>'+info[i].realname+'<span>'+info[i].type_name+'</span></p>'; 
+                    }
+					html+='<p>'+info[i].questions_addtime+'</p>';
+					html+='<p class="wenti" onclick="answer_xq('+info[i]['questions_id']+');">'+info[i].questions_content+'</p>';
+					html+='<ul>';
+					if(info[i].questions_image[0]){
+					html+='<li>';
+					html+='<i><img src='+info[i].questions_image[0]+'></i>';
+					html+='</li>';
+					}
+					if(info[i].questions_image[1]){
+					html+='<li>';
+					html+='<i><img src='+info[i].questions_image[1]+'></i>';
+					html+='</li>';
+					}
+					html+='</ul>';
+					html+='<div class="footerr flexb">';
+					html+='<div class="flexb" onclick="like_questions('+info[i].questions_id+')">';
+					html+='<img src="__PUBLIC__/expert/images/good.png" />';
+					html+='<p id="questions_like'+info[i].questions_id+'">'+info[i].questions_like+'</p>';
+					html+='</div>';
+					html+='<div class="flexb" onclick="answer_xq('+info[i]['questions_id']+');">';
+					html+='<img src="__PUBLIC__/expert/images/message.png" />';
+					html+='<p id="questions_answers" class="daan" >'+info[i].questions_answers+'</p>';
+					html+='</div>';
+					html+='</div>';
+					html+='</div>';
+				}
+				 return html;    
+				
+			 }
+			 
+			 function aaa(){
+				 $(".wen ul").each(function(){
+					var _length=$(this).find("li").length;
+					if(_length==1){
+						$(this).css({
+							'display':'block'
+						})
+						$(this).find("li").css({
+							'width':'50%'
+						})
+					}
+				 })
+			 }
+			 aaa();
+			 
+			 //滚动加载  
+			$(window).scroll(function () { 
+				getData();
+			});
+			var totalheight = 0;     //定义一个总的高度变量
+			function getData() {
+				 totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()); 
+				 //浏览器的高度加上滚动条的高度 （页面总高度）  
+				if ($(document).height() <= totalheight) {          
+					//当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+					//加载
+					$("#loadings").fadeIn(); 
+					//根据条件获取对应的项目条数
+					getmore();//使用模板加载更多
+					//加载完毕          
+					$("#loadings").fadeOut(); 
+				}
+			}  
+			//加载更多
+			function getmore(){  
+			  var questions_type_id=<?php echo $questions_type_id?$questions_type_id:0; ?>	;
+			  var page=parseInt($("#more").attr("data"))+1; 
+			  $('#more').attr("data",page);//重置当前页数  			  
+			  $.getJSON("{:U('answer/wentiguanli')}&questions_type_id="+questions_type_id+"&p="+page,function(data){  
+				   var info = data.question;     
+				   if(info.length>0){
+						var html = htmlinfo(info);
+						$(".wenda").append(html);
+				   }else{
+						$("#loadings").fadeOut(); 
+						$(".li_myxx_zt").show();                  
+				   }
+				}) 
+			 }
+			//点击选择分类的时候
+			function get2(o){
+				$(o).addClass("red");
+				$(o).parent('li').siblings("li").find("a").removeClass("red");
+				type_name = $(o).attr('data-value');
+				$(".li_myxx_zt").hide();   
+				$.getJSON("{:U('answer/wentiguanli')}&questions_type_id=" + type_name , function(question){
+					var info = question.question;     
+					var html = htmlinfo(info);
+					$(".wenda").html(html);
+			        if(info.length<=0){
+						$(".meiyouneirong").css("display","block");
+					} else{
+					$(".meiyouneirong").css("display","none");
+					}
+				});
+			}
+		  
+			//问题详情
+			function answer_xq(questions_id){
+				window.location.href = "{:U('answer/xiangq')}&questions_id=" + questions_id;
+			}
+				
+			//问题点赞
+			//localStorage.getItem(key):获取指定key本地存储的值
+			//localStorage.setItem(key,value)：将value存储到key字段
+			//localStorage.removeItem(key):删除指定key本地存储的值
+			var questions_id_arr=localStorage.getItem("questions_id");
+			if(questions_id_arr==null){
+				questions_id_arr=[];
+			}else{
+				if(questions_id_arr.length<=0){
+					questions_id_arr=[];
+				}else{
+					questions_id_arr=JSON.parse(questions_id_arr);//用于将一个 JSON 字符串转换为对象
+				}
+			}
+            function like_questions(questions_id){
+				//如果已点数组中存在
+				var in_array=false;
+				for(var i=0;i<questions_id_arr.length;i++){
+					if(questions_id_arr[i]==questions_id){
+						in_array=true;
+						break;
+					}
+				}
+				if(in_array){
+					layer.msg('已点过赞了！',{icon:6,time:1000});
+                    //alert('已点过赞了！');
+					return;
+				}else{
+					questions_id_arr.push(questions_id);
+					localStorage.setItem("questions_id",JSON.stringify(questions_id_arr));//给questions_id赋值
+					var url = "{:U('answer/dianzan_q')}";
+					var data = {"questions_id": questions_id}; 
+					$.post(url, data);
+					var id_name = "#questions_like"+questions_id
+					$(id_name).text(parseInt($(id_name).text())+1)
+				}
+			}
+            
+            //监听返回按钮返回到指定页面
+    var url= '__SELF__'.replace(/&amp;/ig,'&');  //将url中的&字符转换
+    getHistory();
+    window.addEventListener('popstate',function(e){
+        window.location='{:U("index/index")}';
+        //页面不会跳转，所以需要自己修改文件的title
+        document.title='首页';
+        getHistory();
+    },false);   
+    function getHistory(){
+        var state={
+           title:'',
+           url:url
+        }
+        window.history.pushState(state,'title',url);
+    } 
+
+
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+    <link href="__PUBLIC__/validform/Validform.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="__PUBLIC__/validform/Validform_v5.3.2.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" />
+    <script type="text/javascript" src="__PUBLIC__/kindeditor/kindeditor-min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/kindeditor/lang/zh-CN.js"></script>
+</head>
+<style>
+	.form-button .ke-inline-block.but{margin-top:0;}
+	.form-button .ke-button-common{display:block;width:100%; height:100%; line-height:38px; background:none;}
+	.form-button .ke-button-common.ke-button{color:#fff; font-size:16px;}
+	.form-button .ke-upload-area.ke-form .ke-upload-file{display:block;width:100% !important; height:100%;     cursor: pointer;}
+</style>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">系统设置</a></li>
+            <li> > </li>
+            <li><a href="{:U('Carouselclass/index')}">轮播分类管理</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">轮播分类管理编辑</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <div class="form_box">
+            <form name="myform" id="myform" action="{:U('Carouselclass/Carouselclassedit',array('focusclassify_id'=>$focus['focusclassify_id']))}" method="post" onsubmit="return checkfrom()">
+                <div class="form-item">
+                    <label class="form-label">分类名称</label>
+                    <div class="form-text form-input-block">
+                        <input name="focusclassify_name" id="focus_title" type="text" class="dfinput" datatype="*2-20" errormsg="分类名称字数在2~20位之间！" maxlength="20" value="{$focus.focusclassify_name}" />
+                          <i class="focus_title" style="display:none;color:red;">请输入分类名称</i>
+                    </div>
+                </div>
+                <div class="form-item">
+                        <label class="form-label">状态</label>
+                        <div class="form-radio form-input-block">
+                            <div class="skin-section">
+                                <ul>
+                                    <li>
+                                        <input type="radio" name="focusclassify_isable" value="1"  <if condition="1 eq $focus.focusclassify_isable ">checked</if>>
+                                        <span>启用</span>
+                                    </li>
+                                    <li>
+                                        <input  type="radio" name="focusclassify_isable" value="2"<if condition="2 eq $focus.focusclassify_isable ">checked</if> >
+                                        <span>禁用</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+                <!--
+                <div class="form-item">
+                    <label class="form-label">分类说明</label>
+                    <div class="form-textarea form-input-block">
+                        <textarea name="focusclassify_remarks" placeholder="请输入分类说明" id="content"  >{$focus.focusclassify_remarks}</textarea>
+                        <i class="content" style="display:none;color:red;">请输入分类说明</i>
+                         
+                    </div>
+                </div>
+                
+                <div class="form-item">
+                    <label class="form-label">排序</label>
+                    <div class="form-select form-input-block">
+                        <select name="focusclassify_sort" class="dfinput" datatype="*" errormsg="请选选择排列序号!" id="sort" >
+                            <option value="">--请选选择排列序号--</option>
+                            <volist name="focusOrder" id="data" >
+                                <option value="{$key}"<if condition="$focus['focusclassify_sort'] eq $key">selected</if>>{$data}</option>
+                            </volist>
+                        </select>
+                        <i class="sort" style="display:none;color:red;">请输入排序</i>
+                    </div>
+                </div>
+                -->
+                <div class="form-item">
+                    <div class="form-button form-input-block">
+                        <input class="chaxun but" type="submit" value="提交"/>
+                        <button class="but chongzhi" type="button" onclick="location.href='{:U('Carouselclass/index')}'">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+
+        $('.skin-section input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        $('input').on('ifChecked', function(event){
+            //alert($(this).val());
+        });
+    });
+</script>
+<script>
+    $(function(){
+        $("#myform").Validform({
+            //tiptype:2
+            tiptype:function(msg,o,cssctl){
+                var objtip=o.obj.siblings(".Validform_checktip");
+                cssctl(objtip,o.type);
+                objtip.text(msg);
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+       //提交时验证
+    function checkfrom() {
+
+    //分类名称   
+    var focus_title = $.trim(document.getElementById("focus_title").value);
+    if (focus_title == '') {
+        $(".focus_title").show();
+        $('#focus_title').focus();
+        return false;
+    }
+    $(".focus_title").hide();
+      
+    //分类说明
+    /*
+    var content = $.trim(document.getElementById("content").value);
+    if (content == '') {
+        $(".content").show();
+        $('#content').focus();
+        return false;
+    }
+    $(".content").hide();
+   
+
+    //排序
+    var sort = document.getElementById("sort").value;
+    if (sort == '') {
+        $(".sort").show();
+        $('#sort').focus();
+        return false;
+    }
+    $(".sort").hide();
+       */  
+    document.getElementById("tijiao").disabled=true;
+    }
+    $(function () {
+        $(".right_min").height($(window).height());
+
+        $('.skin-section input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+       
+    });
+   
+</script>

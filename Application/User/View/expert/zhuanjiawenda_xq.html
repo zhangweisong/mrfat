@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>问答详情</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <link rel="stylesheet" href="__PUBLIC__/user/js/mui/mui.min.css">
+        <link rel="stylesheet" href="__PUBLIC__/user/js/mui/mui-custom.css">
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<style type="text/css">
+			body{background: #fff;}
+			.wenda_ct .wenda_list .zhuanjia{border-bottom: none;}
+			.wenda_ct .wenda_list dl{border-bottom: 1px solid #f5f5f5;}
+			.ct a p{word-wrap:break-word}
+		</style>
+		<div class="njzs_xiangxifenlei">
+	    	<div class="wenda_ct">
+	    		<div class="wenda_list">
+	    			<div class="nonghu">
+		    			<dl class="c">
+		    				<dt>
+		    					<a><img src="{$questions.avatar}"/></a>
+		    				</dt>
+		    				<dd>
+								<div class="top">
+									<a>
+										<h4>{$questions.realname} <em>{$questions.type_name}</em></h4>
+										<span>{$questions.questions_addtime}</span>
+									</a>
+								</div>
+								<div class="ct">
+									<a>
+										<p>
+											{$questions.questions_content}
+										</p>
+									</a>
+								</div>
+								<div class="img c">
+									<a>
+										<!--最多显示两张图片-->
+										<?php if($questions['questions_image'][0]!=''):?>
+										<span><img src="{$questions['questions_image'][0]}" data-preview-src="" data-preview-group="1"/></span>
+										<?php endif;?>
+										<?php if($questions['questions_image'][1]!=''):?>
+										<span><img src="{$questions['questions_image'][1]}" data-preview-src="" data-preview-group="1"/></span>
+										<?php endif;?>
+									</a>
+								</div>
+								<div class="bottom">
+									<span>
+										<i class="icon-zan" onclick="like_questions({$questions.questions_id})"></i>
+										<em onclick="like_questions({$questions.questions_id})" id="questions_like">{$questions.questions_like}</em>
+									</span>
+									<span>
+										<i class="icon-xiaoxi1"></i>
+										<em>{$questions.questions_answers}</em>
+									</span>
+								</div>
+		    				</dd>
+		    			</dl>
+	    			</div>
+	    			<div class="zhuanjia">
+	    				<div class="title">
+	    					<span></span>
+	    					<i>专家回复</i>
+	    				</div>
+		    	        <div class="answer"></div>
+	    			</div>
+	    			
+	    		</div>
+	    	</div>
+			<div class="meiyouneirong" style="display:none;margin-top:1rem;">
+			<i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+			<p>暂时还没有回复哦</p>
+			</div>
+			<div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+			<img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+			</div> 
+			<button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button> 
+			<div class="clear" style="height:5.2rem;"></div>
+			</div>
+	</body>
+</html>
+<script src="__PUBLIC__/user/js/mui/mui.min.js"></script>
+<script src="__PUBLIC__/user/js/mui/mui.zoom.js"></script>
+<script src="__PUBLIC__/user/js/mui/mui.previewimage.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script type="text/javascript">
+	mui.previewImage();
+	mui('body').on('tap','a',function(){
+	    window.top.location.href=this.href;
+	});
+	window.onload = function() {
+		$.each($(".img"), function(){
+			if($(this).find('span').length==1){
+				$(this).find('span').css({
+					'width':'60%'
+				})
+			}			
+		});
+
+	}
+	
+	//问题id
+	var questions_id={$questions.questions_id};
+	init();
+	function init(){
+		var data={$answers};
+		var info=data.answers;
+		console.log(info);
+	    if(info.length>0){
+			var html=htmlinfo(info);
+			$(".answer").html(html);
+		}else{
+		    $(".meiyouneirong").css('display','block');
+		}
+	}
+	function htmlinfo(info){
+		var html="";
+		for(var i=0;i<info.length;i++){
+			html+='<dl class="c">';
+			html+='<dt>';
+			html+='<a><img src='+info[i].expert_avator+'></a>';
+			html+='</dt>';
+			html+='<dd>';
+			html+='<div class="top">';
+			html+='<a>';
+			if(info[i].sclassify_name==null ||info[i].sclassify_name=='' || info[i].sclassify_name=='undefined'){
+			html+='<h4>'+info[i].expert_nickname+'<em>专家</em></h4>';
+			}else{
+			html+='<h4>'+info[i].expert_nickname+'<em>'+info[i].sclassify_name+'</em></h4>';
+			}
+			html+='<span>'+info[i].answers_addtime+'</span>';
+			html+='</a>';
+			html+='</div>';
+			html+='<div class="ct">';
+			html+='<a>';
+			html+='<p>'+info[i].answers_content+'</p>';
+			html+='</a>';
+			html+='</div>';
+			html+='<div class="img c">';
+			html+='<a>';
+			if(info[i].answers_image[0]){
+			html+='<span><img src='+info[i].answers_image[0]+' data-preview-src="" data-preview-group="1"></span>';
+			}
+			if(info[i].answers_image[1]){
+			html+='<span><img src='+info[i].answers_image[1]+' data-preview-src="" data-preview-group="1"></span>';
+			}
+			html+='</a>';
+			html+='</div>';
+			html+='<div class="bottom"  >';
+			html+='<span >';
+			html+='<i class="icon-zan" onclick="like_answer('+info[i].answers_id+');"></i>';
+			html+='<em id="answers_like'+info[i].answers_id+'" onclick="like_answer('+info[i].answers_id+');" >'+info[i].answers_like+'</em>';
+			html+='</span>';
+			html+='</div>';
+			html+='</dd>';
+			html+='</dl>';
+		}
+		return html;
+	}
+	
+	 //滚动加载  
+	$(window).scroll(function () { 
+		getData();
+	});
+	var totalheight = 0;     //定义一个总的高度变量
+	function getData() {
+		 totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()); 
+		 //浏览器的高度加上滚动条的高度 （页面总高度）  
+		if ($(document).height() <= totalheight) {          
+			//当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+			//加载
+			$("#loadings").fadeIn(); 
+			//根据条件获取对应的项目条数
+			getmore();//使用模板加载更多
+			//加载完毕          
+			$("#loadings").fadeOut(); 
+		}
+	}  
+	//加载更多
+	function getmore(){
+	  var page=parseInt($("#more").attr("data"))+1; 
+	  $('#more').attr("data",page);//重置当前页数      
+	  $.getJSON("{:U('expert/zhuanjiawenda_xq')}&questions_id="+questions_id+"&p="+page,function(data){  
+		   var info = data.answers;  
+			console.log(info);				   
+		   if(info.length>0){
+				var html = htmlinfo(info);
+				$(".answer").append(html);
+		   }else{
+				$("#loadings").fadeOut(); 
+				$(".dibufengexian").show();                  
+		   }
+		}) 
+	 }
+	 
+			
+		
+	//回答点赞
+	var answers_id_arr=localStorage.getItem("answers_id");
+	if(answers_id_arr==null){
+		answers_id_arr=[];
+	}else{
+		if(answers_id_arr.length<=0){
+			answers_id_arr=[];
+		}else{
+			answers_id_arr=JSON.parse(answers_id_arr);
+		}
+	}
+	function like_answer(answers_id){
+		//如果已点数组中存在
+		var in_array=false;
+		for(var i=0;i<answers_id_arr.length;i++){
+			if(answers_id_arr[i]==answers_id){
+				in_array=true;
+				break;
+			}
+		}
+		if(in_array){
+			layer.msg('已点过赞了！',{icon:5,time:1000});
+			return;
+		}else{
+			answers_id_arr.push(answers_id);
+			localStorage.setItem("answers_id",JSON.stringify(answers_id_arr));
+			var url = "{:U('expert/dianzan_a')}";
+			var data = {"answers_id": answers_id}; 
+			$.post(url, data);
+			var id_name = "#answers_like"+answers_id
+			$(id_name).text(parseInt($(id_name).text())+1)
+		}
+	}
+	
+	
+	//问题点赞
+	var questions_id_arr=localStorage.getItem("questions_id");
+	if(questions_id_arr==null){
+		questions_id_arr=[];
+	}else{
+		if(questions_id_arr.length<=0){
+			questions_id_arr=[];
+		}else{
+			questions_id_arr=JSON.parse(questions_id_arr);
+		}
+	}
+	function like_questions(questions_id){
+		//如果已点数组中存在
+		var in_array=false;
+		for(var i=0;i<questions_id_arr.length;i++){
+			if(questions_id_arr[i]==questions_id){
+				in_array=true;
+				break;
+			}
+		}
+		if(in_array){
+			layer.msg('已点过赞了！',{icon:5,time:1000});
+			return;
+		}else{
+			questions_id_arr.push(questions_id);
+			localStorage.setItem("questions_id",JSON.stringify(questions_id_arr));
+			var url = "{:U('expert/dianzan_q')}";
+			var data = {"questions_id": questions_id}; 
+			$.post(url, data);
+			var id_name = "#questions_like"
+			$(id_name).text(parseInt($(id_name).text())+1)
+		}
+	}
+</script>

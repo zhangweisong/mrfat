@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>添加培训通告</title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+		<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" />
+        <script type="text/javascript" src="__PUBLIC__/kindeditor/kindeditor-min.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/kindeditor/lang/zh-CN.js"></script>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+		<link href="__PUBLIC__/validform/Validform.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="__PUBLIC__/validform/Validform_v5.3.2.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/validform/Validform_Datatype.js"></script>
+             <script type="text/javascript">
+            var editor;
+            KindEditor.ready(function (K) {
+                editor = K.create('textarea[id="n_content"]', {
+                    uploadJson: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}',
+                    fileManagerJson: '{:U(\'kindeditor/file_manager_json\')}',
+                    allowFileManager: true,
+                    urlType: 'domain',
+                    afterCreate: function () {
+                        this.sync();
+                    },
+                    afterBlur: function () {
+                        this.sync();
+                    }
+                });
+            });
+        </script>
+	</head>
+	<body>
+		<div class="right_min">
+			<div class="crumbs_nav">
+				<i class="iconfont icon-shouye"></i>
+				<ul>
+					<li><a href="{:U('index/welcome')}">首页</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">三农服务</a></li>
+					<li> > </li>
+					<li><a href="{:U('notice/index')}">培训通告</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">添加培训通告</a></li>
+				</ul>
+			</div>
+			<div class="min">
+				<div class="form_box">
+					<form name="myform" id="myform" action="{:U('notice/addnotice')}" method="post">
+						<div class="form-item">
+							<label class="form-label">培训机构名称</label>
+							  <div class="form-select form-input-block">
+                                <select name="info[train_id]" id="train_id" datatype="*" >
+                                    <option value="" >--请选择--</option>
+                                    <?php foreach($train AS $k=>$v):?>
+                                    <option value="{$k}" >{$v}</option> 
+                                    <?php endforeach;?>
+                                </select>
+                                <i class="Validform_checktip"></i>
+                            </div>
+						</div>
+						<div class="form-item">
+							<label class="form-label">通告名称</label>
+							<div class="form-text form-input-block">
+								<input name="info[n_name]" id="n_name" type="text" class="dfinput" datatype="*" maxlength="50" />
+								<i class="Validform_checktip"></i>
+							</div>
+						</div>
+                        <div class="form-item">
+                            <label class="form-label">通告内容</label>
+                            <div class="form-textarea form-input-block">
+                                <textarea name="info[n_content]" id="n_content"  style="height:300px;width:800px" datatype="*" class="dfinput"></textarea> 
+                                <i class="Validform_checktip"></i>
+                            </div>
+                        </div>
+						<div class="form-item">
+							<div class="form-button form-input-block">
+								<input class="chaxun but" type="submit" value="提交"/>
+								<button class="but chongzhi" type="button" onclick="location.href='{:U('notice/index')}'">返回</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	$(function(){
+		$(".right_min").height($(window).height());
+		
+		$('.skin-section input').iCheck({
+			checkboxClass: 'icheckbox_square-green',
+			radioClass: 'iradio_square-green',
+		});
+		$('input').on('ifChecked', function(event){
+		  //alert($(this).val());
+		});
+	});
+</script>
+<script>
+   $(function(){
+        $("#myform").Validform({ 
+            tiptype:function(msg,o,cssctl){
+                var objtip=o.obj.siblings(".Validform_checktip");
+                cssctl(objtip,o.type);
+                objtip.text(msg);
+            },
+            datatype: {
+            //传入自定义datatype类型，可以是正则，也可以是函数（函数内会传入一个参数）;
+                "not0": function (gets, obj, curform, datatype) {
+                     if (gets >0)
+                        return true;
+                    return false;
+                },
+            }
+
+        });
+    });
+
+</script>

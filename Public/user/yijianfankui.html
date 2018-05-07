@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>意见反馈</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="css/mian.css"/>
+        <script src="js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<div class="yijianfankui">
+			<div class="textarea">
+				<textarea name="" placeholder="请输入你的意见和建议"></textarea>
+			</div>
+			<div class="botton_bg">
+				<span onclick="xksxShow()" class="bot">提交</span>
+			</div>
+		</div>
+		<div class="zhezhao"></div>
+		<div class="jizhejvbao_tankuang">
+			<div class="ct">
+				<p>提交成功，感谢您的支持！</p>
+				<div class="botton_bg">
+					<span onclick="xksxHide()" class="bot">确定</span>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+		function xksxShow(){
+			$('.zhezhao').fadeTo(200,1);
+			$('.jizhejvbao_tankuang').show();
+		}
+		function xksxHide(){
+			$('.zhezhao').fadeOut(300);
+			$('.jizhejvbao_tankuang').hide();
+		}
+</script>

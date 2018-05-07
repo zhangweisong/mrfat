@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>真假查询</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/js/Swiper/swiper.min.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<div class="mg_b55">
+			<div class="zhenjiachaxun mg_b10">
+				<h4>
+					<em>肥料查询</em>
+					<i>(请按农业部证书编号格式查询)</i>
+				</h4>
+				<ul>
+					<li>
+						<a href="http://plugin.agri315.com.cn/hfcx/nfcx.aspx">
+							<i><img src="__PUBLIC__/user/images/chaxun_ico1.png"/></i>
+							<p>农肥查询</p>
+						</a>
+					</li>
+					<li>
+						<a href="http://plugin.agri315.com.cn/hfcx/wswfcx.aspx">
+							<i><img src="__PUBLIC__/user/images/chaxun_ico2.png"/></i>
+							<p>微生物肥查询</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="zhenjiachaxun mg_b10">
+				<h4>
+					<em>农药查询</em>
+					<i>(请按农药登记证书编号格式查询)</i>
+				</h4>
+				<ul>
+					<li>
+						<a href="http://plugin.agri315.com.cn/nycx/nydjzh.aspx">
+							<i><img src="__PUBLIC__/user/images/chaxun_ico3.png"/></i>
+							<p>登记证号查询</p>
+						</a>
+					</li>
+					<li>
+						<a href="http://plugin.agri315.com.cn/nycx/nycx.aspx">
+							<i><img src="__PUBLIC__/user/images/chaxun_ico4.png"/></i>
+							<p>生产批件/产品标准查询</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="zhenjiachaxun mg_b10">
+				<h4>
+					<em>种子查询</em>
+					<i>(请按种子登记证书编号格式查询)</i>
+				</h4>
+				<ul>
+					<li>
+						<a href="http://plugin.agri315.com.cn/nycx/nycx.aspx">
+							<i><img src="__PUBLIC__/user/images/chaxun_ico1.png"/></i>
+							<p>登记证号查询</p>
+						</a>
+					</li>
+					<li>
+						<a href="http://plugin.agri315.com.cn/nycx/nycx.aspx">
+							<i><img src="__PUBLIC__/user/images/chaxun_ico2.png"/></i>
+							<p>生产批件/产品标准查询</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="jizhejvbao">
+				<a href="{:U('zhen/jizhejvbao')}">记者举报</a>
+			</div>
+		</div>
+    	<!--底部-->
+    	<div class="footer">
+    		<ul>
+    			<li>
+    				<a href="{:U('index/index')}">
+    					<i></i>
+    					<p>三农服务</p>
+    				</a>
+    			</li>
+    			<li>
+    				<a href="{:U('expert/zhuanjiawenda')}">
+    					<i></i>
+    					<p>专家问答</p>
+    				</a>
+    			</li>
+    			<li class="link">
+    				<a href="#">
+    					<i></i>
+    					<p>真假查询</p>
+    				</a>
+    			</li>
+    			<li>
+    				<a href="{:U('user/userinfo')}">
+    					<i></i>
+    					<p>个人中心</p>
+    				</a>
+    			</li>
+    		</ul>
+    	</div>
+	</body>
+</html>

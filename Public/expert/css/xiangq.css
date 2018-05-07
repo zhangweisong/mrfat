@@ -1,0 +1,141 @@
+.cont{
+	padding: 0 0.64rem;
+}
+.cont>img{
+	height: 1.6rem;
+	float: left;
+	margin-left: 0.8rem;
+}
+.cont>p{
+	margin-top: 0.28rem;
+    color: #f49b1b;
+    font-size: 1.04rem;
+    margin-left: 3rem;
+}
+.wen{
+	border-bottom: 1px solid #e3e3e3;
+	position: relative;
+	padding-bottom: 3.5rem;
+}
+.wen img{
+    display:block;
+    margin: 0 auto;
+}
+img.toux{
+    width: 3.2rem;
+	height: 3.2rem;
+	border-radius: 1.6rem;
+	position: absolute;
+	top: 1.4rem;
+}
+.wen>p:nth-of-type(1){
+	font-size: 1.2rem;
+	color: #363636;
+	padding-top: 1.8rem;
+	margin-left: 4rem;
+}
+.wen>p:nth-of-type(1) span{
+	margin-left: 1rem;
+	border: #ff0000 solid 1px;
+	color: #ff0000;
+	font-size: 0.72rem;
+	padding: 0.1rem 0.2rem;
+	border-radius: 0.3rem;
+}
+.wen>p:nth-of-type(2){
+	padding-top: 0.8rem;
+	margin-left: 4rem;
+	color: #7a8291;
+	font-size: 1rem;
+    margin-bottom: 1rem;
+}
+.wen>p:nth-of-type(3){
+	/*padding-top: 1.08rem;
+	margin-left: 4rem;
+	color: #7a8291;
+	font-size: 0.96rem;
+	line-height: 140%;*/
+}
+
+.da{
+	position: relative;
+	padding-bottom: 3rem;
+	border-bottom: 1px solid #e3e3e3;
+}
+
+.da>img:nth-of-type(1){
+	width: 3.2rem;
+	height: 3.2rem;
+	border-radius: 1.6rem;
+	position: absolute;
+	top: 2.6rem;
+}
+.da>p:nth-of-type(1){
+	font-size: 1.2rem;
+	color: #363636;
+	padding-top: 3rem;
+	margin-left: 4rem;
+}
+.da>p:nth-of-type(1) span{
+	margin-left: 1rem;
+	color: #ffffff;
+	background: #f49b1b;
+	font-size: 0.72rem;
+	padding: 0.1rem 0.2rem;
+	border-radius: 0.3rem;
+}
+.da>p:nth-of-type(2){
+	padding-top: 0.8rem;
+	margin-left: 4rem;
+	color: #7a8291;
+	font-size: 1rem;
+}
+.da>p:nth-of-type(3){
+	padding-top: 1.08rem;
+	margin-left: 4rem;
+	color: #7a8291;
+	font-size: 1rem;
+	line-height: 140%;
+}
+.da>p:nth-of-type(4){
+	position: absolute;
+	left: 2.48rem;
+	top: 0.28rem;
+	color: #f49b1b;
+	font-size: 1.04rem;
+}
+.footerr{
+	width:10.6rem ;
+	position: absolute;
+	right: 0;
+	bottom: 1.12rem;
+}
+.footerr img{
+	height: 1.04rem;
+}
+.footerr p{
+	font-size: 0.88rem;
+	height: 1.04rem;
+	margin-left: 0.5rem;
+	color: #7a8291;
+	width:3rem;
+	line-height:153%;
+}
+.foot{
+	width:5rem ;
+	position: absolute;
+	right: 0;
+	bottom: 1.12rem;
+}
+.foot img{
+	height: 1.04rem;
+}
+.foot p{
+	font-size: 0.88rem;
+	height: 1.04rem;
+	margin-left: 0.5rem;
+	color: #7a8291;
+	width:3rem;
+	line-height:153%;
+}
+

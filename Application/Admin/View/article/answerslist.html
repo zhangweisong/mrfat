@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>问题回答管理</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">专家管理</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">问题回答管理</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <!--查询--> 
+        <div class="query">
+            <form  name="seachform" id="seachform"  action="{:U('article/answerslist',array('questions_id'=>$questions_id))}"  method="post" class="form"  >
+                <div class="form_input mg_trb">
+                    <label class="text">快速检索</label>
+                    <input type="text" name="info[keyword]" id="keyword" value="{$keyword}"  placeholder="专家姓名/回答内容"  maxlength="60" style="width:220px;"/>
+                </div>
+                <!--<div class="select mg_trb">
+                    <span class="text">回答审核状态</span>
+                    <select name="info[answers_state]">
+                        <option value="">请选择状态</option>
+                        <volist name="state" id="data">
+                            <option value="{$key}" <if condition="$key eq $answers_state ">selected</if>>{$data}</option>
+                        </volist>
+                    </select>
+                </div>-->
+                 <div class="form_input mg_trb form-date">
+                    <label class="text">回答时间</label>
+                    <input type="text" class="laydate-icon layer-date" name="info[starttime]"  value="{$starttime}"  id="start" placeholder="开始时间" readonly/>
+                    <span>--</span>
+                    <input type="text" class="laydate-icon layer-date" name="info[endtime]"  value="{$endtime}"  id="end" placeholder="结束时间" readonly/>
+                </div>		
+                <div class="button mg_trb" onclick="location.href='{:U('article/answerslist',array('questions_id'=>$questions_id))}'">
+                    <i class="fa fa-refresh ico"></i>
+                    <input type="button" value="刷新" class="but chongzhi" />
+                </div>
+
+                <div class="button mg_trb chaxun">
+					<i class="fa fa-search ico"></i>
+					<input type="submit" value="查询" class="but " style="    position: absolute; background: none;z-index: 2;" />
+			    </div> 
+            </form>
+        </div>
+        <div class="table_box">
+            <table class="table" border="" cellspacing="" cellpadding="">
+                <thead>
+                <tr>
+					<th>专家姓名</th>
+                    <th>回答内容</th>
+                    <th>回答时间</th>
+                    <!--<th>回答审核状态</th>-->
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="orderinfo" id="vo">
+                    <tr>
+                        <td>{$vo.expert_realname}</td>
+						<td>
+                            <?php echo mb_substr($vo['answers_content'], 0,15,'utf-8');
+                            if(mb_strlen($vo['answers_content'],'utf-8')>15){echo '...';}?>
+                        </td> 
+						<td><?php echo date('Y-m-d H:i:s',$vo['answers_addtime']);?></td>
+                        <!--<td>{$state[$vo['answers_state']]}</td>-->
+                        <td>
+							<p onclick="xiangqing({$vo.answers_id})"  class="but chaxun">
+                            <i class="fa fa-eye" ></i>
+                            查看详情</p>
+							<a href="{:U('article/delete_answers',array('answers_id'=>$vo['answers_id']))}" 
+								onclick="{
+										if (confirm('确认删除?')) {
+											return true;
+										}
+										return false;
+									}"  class="but chongzhi">
+                            <i class="fa fa-trash-o"></i>
+                            删除</a>
+							<!--<if condition="$vo.answers_state eq 1">
+							<p onclick="shenhe({$vo.answers_question_id},{$vo.answers_id})"  class="but chaxun">
+                            <i class="fa fa-eye" ></i>
+                            增加活跃值</p>
+							</if>-->
+                        </td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </div>
+        {$pageshow}
+    </div>
+</div>
+</body>
+</html> 
+<script src="__PUBLIC__/admin/js/laydate/laydate.js"></script>
+<script> 
+    var start = {
+        elem: "#start",
+        format: "YYYY-MM-DD",
+        min: "2000-06-16",
+        max: "2099-06-16",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            end.min = datas;
+            end.start = datas
+        }
+    };
+    var end = {
+        elem: "#end",
+        format: "YYYY-MM-DD",
+        min: "2000-06-16",
+        max: "2099-06-16",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            start.max = datas
+        }
+    };
+    laydate(start);
+    laydate(end);
+</script>
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	$(function(){
+		$('input, textarea').placeholder();
+	});
+</script>
+<script src="__PUBLIC__/admin/js/layer/layer.js"></script>
+<script>  
+$(".right_min").height($(window).height());
+    var body_w=$(".right_min").width()-100;
+    var body_h=$(".right_min").height()-50;
+    function xiangqing(a){   
+        layer.open({
+            type: 2,
+            title: false,
+            skin:"layui-layer-molv",
+            shade: [0.5, '#000000'],
+            scrollbar:false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area : [body_w+"px",body_h+"px"],
+            content: '{:U("article/answers_xq")}&answers_id='+a
+        });
+    } 
+	function shenhe(a,b){   
+		location.href="{$Think.WEB_HOST}index.php?m=admin&c=article&a=shenhe_answers&answers_question_id="+a+"&answers_id="+b;		
+    } 
+
+</script>
+

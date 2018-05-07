@@ -1,0 +1,26 @@
+.tit{
+	padding: 0 0.64rem;
+	margin-top: 1rem;
+}
+.tit p{
+	font-size: 1.12rem;
+	line-height: 2.8rem;
+}
+.tit input{
+	width: 24rem;
+	box-sizing: border-box;
+	font-size: 1.12rem;
+	padding: 0 0.5rem;
+}
+.tit select{
+	width: 24rem;
+	font-size: 1.12rem;
+	padding: 0 0.5rem;
+}
+.cont{
+	padding: 0 0.64rem;
+	margin-top: 2rem;
+}
+.title{
+	font-size: 1.12rem;
+}

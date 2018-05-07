@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>查询结果</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="css/mian.css"/>
+        <script src="js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<style type="text/css">
+			body{background: #fff;}
+		</style>
+		<div class="chaxunjieguo_box">
+			<div class="top">
+				<table border="0" cellspacing="1" cellpadding="1">
+					<tr>
+						<td>登记证号</td>
+						<td>农肥（2018）准字7610号</td>
+					</tr>
+				</table>
+			</div>
+			<div class="ct">
+				<table border="0" cellspacing="1" cellpadding="1">
+					<tr>
+						<td>企业名称</td>
+						<td>菏泽市艾农生态肥有限公司</td>
+					</tr>
+					<tr>
+						<td>产品通用名称</td>
+						<td>掺混肥料</td>
+					</tr>
+					<tr>
+						<td>产品商品名称</td>
+						<td>硫酸钾掺混肥料</td>
+					</tr>
+					<tr>
+						<td>产品形体</td>
+						<td>粉剂</td>
+					</tr>
+					<tr>
+						<td>登记技术指标</td>
+						<td>氨基酸≥10.0%；Ca+Mg≥3.0%</td>
+					</tr>
+					<tr>
+						<td>适宜作物</td>
+						<td>小麦</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>产品代理申请详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+	<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+	<link rel="stylesheet" href="__PUBLIC__/tupian/css/lightbox.css">
+</head>
+<body>
+<div class="right_min" id="myform">
+	<div class="crumbs_nav">
+		<i class="iconfont icon-shouye"></i>
+		<ul>
+			<li><a href="javascript:void(0);">产品代理申请详情</a></li>
+		</ul>
+	</div>
+	<div class="min" >
+		<div class="message">
+			<div class="message-block message-border-t">
+				<h4 class="message-left_block">产品代理申请详情</h4>
+			</div>
+			<table class="table" border="" cellspacing="" cellpadding="" >
+				<tr>					
+					<th style="font-weight:bold;">店铺名称</th>
+					<td>{$agcyapply.agcy_name}</td>
+					<th style="font-weight:bold;">负责人</th>
+					<td>{$agcyapply.agcy_manager}</td>
+					<th style="font-weight:bold;">负责人电话</th>
+					<td>{$agcyapply.agcy_tel}</td>
+					<th style="font-weight:bold;">店铺地址</th>
+					<td>{$agcyapply.agcy_address}</td> 
+				</tr>
+				<tr>  
+					<th style="font-weight:bold">产品名称</th>
+					<td colspan="3">{$agcyapply.fgoods_name}</td>  
+					<th style="font-weight:bold">产品图片</th>
+					<td colspan="3">
+                    <?php $res = explode('|',$agcyapply['fgoods_images']); foreach($res as $k=>$v):?>
+					<a class="example-image-link" href="{$v}" data-lightbox="example-1" >
+						<img class="example-image" style="width:50px;height:50px;" src="{$v}"/>
+					</a> 
+                    <?php endforeach;?>
+					</td> 
+				</tr>
+				<tr>  
+					<th style="font-weight:bold">厂商名</th>
+					<td>{$agcyapply.factory_name}</td>  
+					<th style="font-weight:bold">厂商联系人</th>
+					<td>{$agcyapply.factory_man}</td>
+					<th style="font-weight:bold">厂家电话</th>
+					<td>{$agcyapply.factory_tel}</td>
+					<th style="font-weight:bold">厂商地址</th>
+					<td>{$agcyapply.factory_address}</td> 
+				</tr> 
+				<tr>
+					<th style="font-weight:bold">申请状态</th> 
+					<if condition="$agcyapply['agcy_apply_flag'] eq 1"><td colspan="3" style="color:green">{$state[$agcyapply['agcy_apply_flag']]}</td></if>
+					<if condition="$agcyapply['agcy_apply_flag'] eq 2"><td colspan="3">{$state[$agcyapply['agcy_apply_flag']]}</td></if>
+					<if condition="$agcyapply['agcy_apply_flag'] eq 3"><td colspan="3" style="color:green">{$state[$agcyapply['agcy_apply_flag']]}</td></if> 
+					<th style="font-weight:bold">申请时间</th>
+					<td><?php echo date('Y-m-d H:i:s',$agcyapply['agcy_apply_addtime']);?></td>
+					<th style="font-weight:bold">审核备注</th>
+					<td>{$agcyapply.agcy_apply_check_remark}</td>
+				</tr>   
+			</table>   
+		</div>
+	</div>
+</div>
+</body>
+</html> 
+<script src="__PUBLIC__/tupian/js/lightbox-plus-jquery.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+        $('.table_box input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        var index = parent.layer.getFrameIndex(window.name);
+        $('#net').on('click', function(){
+            parent.layer.close(index);
+        });
+    });
+</script>
+ 

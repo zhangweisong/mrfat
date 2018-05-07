@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+		<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+		<link href="__PUBLIC__/validform/Validform.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="__PUBLIC__/validform/Validform_v5.3.2.js"></script>
+	</head>
+	<body>
+		<div class="right_min">
+			<div class="crumbs_nav">
+				<i class="iconfont icon-shouye"></i>
+				<ul>
+					<li><a href="{:U('index/welcome')}">首页</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">系统设置</a></li>
+					<li> > </li>
+					<li><a href="{:U('system/index')}">参数设置</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">添加参数设置</a></li>
+				</ul>
+			</div>
+			<div class="min">
+				<div class="form_box">
+					<form name="myform" id="myform" action="{:U('system/addinfo')}" method="post">
+						<div class="form-item">
+							<label class="form-label">配置key</label>
+							<div class="form-text form-input-block">
+								<input name="info[set_key]" id="set_key" type="text" class="dfinput" datatype="*2-20" ajaxurl="{:U('system/exist')}" errormsg="配置key范围在2~20位之间！" maxlength="20" />
+								<i class="Validform_checktip"></i>
+							</div>
+						</div>
+						<div class="form-item">
+							<label class="form-label">配置值</label>
+							<div class="form-textarea form-input-block">
+								<textarea name="info[set_value]" id="set_value" class="dftextarea" datatype="*1-500" errormsg="配置值范围在1~500位之间！" maxlength="500" style="width:100%;outline: 0;border: 1px solid #e6e6e6;"></textarea>
+								<i class="Validform_checktip"></i>
+							</div>
+						</div>
+						<div class="form-item">
+							<label class="form-label">配置详情</label>
+							<div class="form-text form-input-block">
+								<input name="info[set_remark]" id="set_remark" type="text" class="dfinput" datatype="*1-100" errormsg="配置详情范围在1~100位之间！" maxlength="100" />
+								<i class="Validform_checktip"></i>
+							</div>
+						</div>
+						<div class="form-item">
+							<div class="form-button form-input-block">
+								<input class="chaxun but" id="submit" type="submit" value="提交"/>
+								<button class="but chongzhi" type="button" onclick="location.href='{:U('system/index')}'">返回</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	$(function(){
+		$(".right_min").height($(window).height());
+		
+		$('.skin-section input').iCheck({
+			checkboxClass: 'icheckbox_square-green',
+			radioClass: 'iradio_square-green',
+		});
+		$('input').on('ifChecked', function(event){
+		  //alert($(this).val());
+		});
+	});
+</script>
+<script>
+	$(function(){
+		$("#myform").Validform({
+			//tiptype:2
+			tiptype:function(msg,o,cssctl){
+				var objtip=o.obj.siblings(".Validform_checktip");
+				cssctl(objtip,o.type);
+				objtip.text(msg);
+			},
+			beforeSubmit:function(curform){
+						//在验证成功后，表单提交前执行的函数，curform参数是当前表单对象。
+						//这里明确return false的话表单将不会提交;	
+							var b=document.getElementById('submit');
+							b.disabled=true;
+			}
+
+		});
+	}); 
+	
+</script>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>意见反馈</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div class="yijianfankui">
+			<div class="textarea">
+				<textarea id="feedback" maxlength="200" placeholder="请输入你的意见和建议,最多输入200个字"></textarea>
+			</div>
+			<div class="botton_bg">
+				<span onclick="xksxShow(this)" class="bot">提交</span>
+			</div>
+		</div>
+		
+	</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+ <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+			function xksxShow(a){
+				var title=$.trim($('#feedback').val());
+				if(title==''){
+					layer.msg('请填写信息！',{icon:5,time:1000});
+					return;
+				}
+				$(a).removeAttr('onclick');
+				var url="{:U('user/feedback')}";
+				$.ajax({
+					url:url,
+					method:'post',
+					data:{
+						title:title
+					},
+					success:function(res){
+						if(res.data==1){
+							layer.msg(res.msg,{icon:5,time:1000});
+							$(a).attr('onclick','xksxShow(this)');
+						}else{
+							layer.msg('提交成功',{icon:6,time:1000},function(){
+							window.location.href="{:U('help/index')}";
+						});
+						}
+					}
+				});
+				
+			}
+</script>
+
+

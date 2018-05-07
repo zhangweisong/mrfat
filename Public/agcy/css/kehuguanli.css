@@ -1,0 +1,45 @@
+.title{
+	height: 3.2rem;
+	background: #FFFFFF;
+}
+.title p{
+	line-height: 3.2rem;
+	font-size: 1.04rem;
+	padding-left: 1.6rem;
+}
+.title button{
+	width: 4.8rem;
+	height: 1.72rem;
+	background: #3ab849;
+	color: #FFFFFF;
+	font-size: 0.88rem;
+	margin-right: 1.08rem;
+	margin-top: 0.74rem;
+	border: none;
+	border-radius: 0.4rem;
+}
+.list{
+	padding:0 0.64rem;
+	background: #FFFFFF;
+}
+.list li{
+	height: 4rem;
+	border-top: 1px solid #ebebeb;
+}
+.list li a{
+	
+}
+.list li a p:nth-of-type(1){
+	font-size: 1.36rem;
+	line-height: 4rem;
+	width: 12rem;
+}
+.list li a p:nth-of-type(2){
+	font-size: 0.88rem;
+	line-height: 4rem;
+	width: 12rem;
+}
+.list li a img{
+	height: 0.88rem;
+	margin-top: 1.56rem;
+}

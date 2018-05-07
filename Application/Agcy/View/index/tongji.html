@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>数据统计</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/dingdanguanli.css" />
+		<!--<link rel="stylesheet" href="css/app.css" />-->
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/mui.min.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/mui.picker.min.css" /> 
+	</head>
+    <style>
+	    .li_myxx_zt{height: 30px; line-height: 30px; background: #f5f5f5;}
+		.li_myxx_zt p{ text-align:center; font-size:12px; color:#cacaca;}
+		.sousuokuang_box{padding: 0 10px; height: 45px; background: #ef404c}
+        .sou{height:4rem;}
+        
+        .table{width:100%;}
+        .table table{width:100%; border:1px solid #f5f5f5;}
+        .table table td,.table table th{padding:10px 0; text-align:center; font-size:14px; color:#363636;}
+	</style>
+	<body>
+		<div class="header">
+			<a href="{:U('index/index')}">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>数据统计</p>
+		</div>
+		<div class="sou">  
+			<div class="search flexb">
+				<div class="time flexb">
+					<div>
+						<button id='demo2'  data-options='{"type":"date","beginYear":2000,"endYear":2018}' class="btn1">
+                        {$starttime}
+                        </button>
+						<img src="__PUBLIC__/agcy/images/icon-calendar.png" />
+					</div>
+					<div>
+						<button id='demo3' data-options='{"type":"date","beginYear":2000,"endYear":2018}' class="btn2">
+                        {$endtime}</button>
+						<img src="__PUBLIC__/agcy/images/icon-calendar.png" />
+					</div>
+				</div>
+				<button onclick="search()">查询</button>
+			</div>
+		</div> 
+        <div class="table">
+            <?php if(count($infolist)>0):?>
+            <table border="1">
+                <tr>
+                  <th>日期</th>  
+                  <th>笔数(单)</th>  
+                  <th>订单金额(元)</th>  
+                </tr>
+                <?php foreach($infolist as $k=>$v):?>
+                <tr> 
+                    <td>{$v.dayinfo}</td>
+                    <td>{$v.num}</td>
+                    <td>{$v.pop_fact}</td> 
+                </tr>
+                <?php endforeach;?>
+            </table>
+			<?php else:?>
+            <div class="meiyouneirong" style="display:block;margin-top:10%;">
+					<i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+					<p>暂无数据</p>
+				</div>
+		    <?php endif;?>
+			 
+				
+		</div>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/mui.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/mui.picker.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-1.10.2.min.js"></script>
+
+		<script>
+			(function($) {
+				$.init();
+				var result = $('#demo2')[0];
+				var btns = $('.btn1');
+				btns.each(function(i, btn) {
+					btn.addEventListener('tap', function() {
+						var _self = this;
+						if(_self.picker) {
+							_self.picker.show(function (rs) {
+								result.innerText =  rs.text;
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+						} else {
+							var optionsJson = this.getAttribute('data-options') || '{}';
+							var options = JSON.parse(optionsJson);
+							var id = this.getAttribute('id');
+							/*
+							 * 首次显示时实例化组件
+							 * 示例为了简洁，将 options 放在了按钮的 dom 上
+							 * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+							 */
+							_self.picker = new $.DtPicker(options);
+							_self.picker.show(function(rs) {
+								/*
+								 * rs.value 拼合后的 value
+								 * rs.text 拼合后的 text
+								 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+								 * rs.m 月，用法同年
+								 * rs.d 日，用法同年
+								 * rs.h 时，用法同年
+								 * rs.i 分（minutes 的第二个字母），用法同年
+								 */
+								result.innerText = rs.text;
+								/* 
+								 * 返回 false 可以阻止选择框的关闭
+								 * return false;
+								 */
+								/*
+								 * 释放组件资源，释放后将将不能再操作组件
+								 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+								 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+								 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+								 */
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+						}
+						
+					}, false);
+				});
+			})(mui);
+		</script>
+		<script>
+			(function($) {
+				$.init();
+				var result = $('#demo3')[0];
+				var btns = $('.btn2');
+				btns.each(function(i, btn) {
+					btn.addEventListener('tap', function() {
+						var _self = this;
+						if(_self.picker) {
+							_self.picker.show(function (rs) {
+								result.innerText =  rs.text;
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+						} else {
+							var optionsJson = this.getAttribute('data-options') || '{}';
+							var options = JSON.parse(optionsJson);
+							var id = this.getAttribute('id');
+							/*
+							 * 首次显示时实例化组件
+							 * 示例为了简洁，将 options 放在了按钮的 dom 上
+							 * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+							 */
+							_self.picker = new $.DtPicker(options);
+							_self.picker.show(function(rs) {
+								/*
+								 * rs.value 拼合后的 value
+								 * rs.text 拼合后的 text
+								 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+								 * rs.m 月，用法同年
+								 * rs.d 日，用法同年
+								 * rs.h 时，用法同年
+								 * rs.i 分（minutes 的第二个字母），用法同年
+								 */
+								result.innerText = rs.text;
+								/* 
+								 * 返回 false 可以阻止选择框的关闭
+								 * return false;
+								 */
+								/*
+								 * 释放组件资源，释放后将将不能再操作组件
+								 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+								 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+								 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+								 */
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+						}
+						
+					}, false);
+				});
+			})(mui);
+		</script> 
+        <script>
+            function  search(){ 
+                var  demo2 = $('#demo2').html(); 
+                var  demo3 = $('#demo3').html();
+                if(demo2!=0 || demo3!=0){
+                     location.href="{:U('index/tongji')}&starttime="+demo2+"&endtime="+demo3; 
+                }
+            }  
+        </script>
+         
+	</body>
+</html>
+ 

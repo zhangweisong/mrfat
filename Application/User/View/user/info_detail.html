@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>个人信息</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<style type="text/css">
+			body{background: #fff;}
+			.shangjxx .liebiao ul li table tr td:nth-of-type(2){text-align:left;padding-right: 20px;}
+            .shangjxx .botton_bg{margin:50px auto;}
+		</style>
+		<div class="mg_b55">
+			<div class="shangjxx">
+				<div class="touxiang c">
+					<span>头像</span>
+					<i><img src="{$info.avatar}"/></i>
+				</div>
+				<div class="liebiao">
+					<ul>
+						<li>
+							<a>
+								<h4>昵称</h4>
+								<p>{$info.nickname}</p>
+							</a>
+						</li>
+						<li>
+							<a class="c" href="{:U('user/edit_realname')}">
+								<h4>真实姓名</h4>
+								<p>{$info.realname}</p>
+							</a>
+						</li>
+						<li>
+							<a class="c" href="{:U('user/edit_phone')}">
+								<h4>手机号</h4>
+
+								
+								<empty name="info.phone">
+								<strong style="background:#ff7f50">去认证</strong>
+								<else/>
+								<strong>去更换</strong>
+								<p>{$info.phone}</p>
+								</empty>
+							</a>
+						</li>
+						<li>
+							<a class="c" href="#">
+								<h4>微信账号</h4>
+								<p>已绑定</p>
+							</a>
+						</li>
+						<li>
+							<a href="{:U('user/edit_wx_address')}">
+								<table border="0" cellspacing="" cellpadding="">
+									<tbody>
+										<tr>
+											<td>地址</td>
+											<td>
+												{$info.address}
+												<i></i>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</a>
+						</li>
+					</ul>
+				</div>
+ 
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+//监听返回按钮返回到指定页面
+    var url= '__SELF__'.replace(/&amp;/ig,'&');  
+    getHistory();
+    window.addEventListener('popstate',function(e){
+        window.location='{:U("user/userinfo")}';
+        //alert(document.title);
+        document.title='个人中心';
+        getHistory();
+    },false);   
+    function getHistory(){
+        var state={
+           title:'',
+           url:url
+        }
+        window.history.pushState(state,'title',url);
+    }
+</script>
+

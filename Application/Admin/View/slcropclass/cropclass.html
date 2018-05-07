@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>农作物分类管理</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css"> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 	        
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a href="###">三农服务</a></li>
+					<li> > </li>
+                    <li><a href="###">农作物分类</a></li>
+                    <?php if($father_id == 0):?> 
+                    <?php else:?> 
+                    <li> > </li>
+                    <li><a href="###">{$father_name}</a></li> 
+                    <?php endif;?>
+                </ul>
+            </div>
+            <div class="min">
+                <!--查询-->
+                <div class="query">
+                    <form name="seachform" id="seachform" action="{:U('slcropclass/cropclass',array('cpc_fid'=>$father_id))}"  method="post" class="form">
+                        <div class="form_input mg_trb">
+                            <label class="text">分类名称</label>
+                            <input type="text" name="info[classify_name_s]" value="{$classify_name_s}" placeholder="分类名称" maxlength="50"/>
+                        </div>
+						<if condition="$father_id neq 0">
+                        <div class="select mg_trb">
+							<select name="info[father_id_s]">
+								<option value="">--请选择--</option> 
+									<?php foreach($father AS $v):?>
+									<option value="<?=$v['cpc_id']?>" <?php if($v['cpc_id']==$father_id_s){echo "selected";}?>><?=$v['cpc_title']?></option> 
+									<?php endforeach;?>
+							</select>
+                        </div>
+						</if>
+                        <div class="select mg_trb">
+                            <span class="text">状态</span>
+                            <select name="info[cpc_isable]">
+                                <option value="">--请选择状态--</option>
+                                <volist name="cpc_isable" id="data">
+                                    <option value="{$key}" <if condition="$key eq $cpc_isablee ">selected</if>>{$data}</option>
+                                </volist>
+                            </select>
+                        </div>
+                        <div class="button mg_trb" onclick="location.href = '{:U(\'slcropclass/cropclass\',array(\'cpc_fid\'=>$father_id))}'">
+                            <i class="fa fa-refresh ico"></i>
+                            <input type="button" value="刷新" class="but chongzhi" />
+                        </div>
+                        <div class="button mg_trb chaxun">
+                            <i class="fa fa-search ico"></i>
+                            <input type="submit" value="查询" class="but " style="position: absolute; background: none;z-index: 2;"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="tianjia"> 
+                    <?php if($father_id == 0):?> 
+                    <a class="tianjia_but" href="{:U('slcropclass/add')}">
+                        <i class="fa fa-plus"></i>
+                        新建分类
+                    </a>
+                    <?php else:?> 
+                    <a class="tianjia_but" href="{:U('slcropclass/add',array('cpc_fid'=>$father_id))}">
+                        <i class="fa fa-plus"></i>
+                        新建子分类
+                    </a>
+                    <?php endif;?>
+                </div>
+                <div class="table_box">
+                    <table class="table" border="" cellspacing="" cellpadding=""> 
+                        <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>分类名称</th>
+                                <th>分类图标</th>
+								<?php if($father_id != 0):?>
+                                <th>父级分类</th> 
+								<?php endif;?>
+                                <th>状态</th> 
+                                <!--<th>分类说明</th>-->
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="listinfo" id="content">
+                            <tr>
+                                <td>{$content.cpc_id}</td>
+								<?php if($father_id != 0):?>
+                                <td><a href="{$content.cpc_url}" style="color:black;">{$content.cpc_title}</a></td>
+								<?php else:?>
+								<td>{$content.cpc_title}</td>
+								<?php endif;?>
+                                <td><img src="{$content.cpc_image}" style="width:40px;height:40px;"></td>
+								<?php if($father_id != 0):?>
+                                <td>{$father_name}</td>
+								<?php endif;?>
+								<td>
+                                <label class="switch-btn circle-style" style="margin:0 auto;">
+                                    <input class="checked-switch" type="checkbox" onchange="checkedswitchs(this,{$content.cpc_id},'cpc_isable')"
+                                    <if condition="$content['cpc_isable'] eq 1">checked</if> />
+                                    <span class="text-switch" data-yes="启用" data-no="禁用"></span>
+                                    <span class="toggle-btn"></span> 
+                                </label>
+								</td>	
+                                <!--<td title="{$content.remarks}">{$content.cpc_remarks}</td>-->
+                                <td> 
+                                    <a href="{:U('slcropclass/edit',array('cpc_id'=>$content['cpc_id']))}"  class="but chaxun">
+                                        <i class="fa fa-edit"></i>
+                                        编辑
+                                    </a>
+                                    <?php if($father_id == 0):?>
+                                    <a href="{:U('slcropclass/cropclass',array('cpc_fid'=>$content['cpc_id']))}"  class="but chaxun">
+                                        <i class="fa fa-edit"></i>
+                                        子分类({$content.child_count})
+                                    </a>
+                                    <?php endif;?>
+                                    <a href="{:U('slcropclass/delete',array('cpc_id'=>$content['cpc_id']))}" onclick="{
+                                                if (confirm('确认删除?')) {
+                                                    return true;
+                                                }
+                                                return false;
+                                            }"  class="but chongzhi">
+                                        <i class="fa fa-trash-o"></i>
+                                        删除
+                                    </a> 
+                                </td>
+                            </tr> 
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                {$pageshow}
+            </div>
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $(".right_min").height($(window).height());
+    });
+</script>  
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function () {
+        $('input, textarea').placeholder();
+    });
+	//显示开关1显示；2隐藏
+	function checkedswitchs(obj,cpc_id,field){
+		if($(obj).is(':checked')){	//true
+			console.log("启用"+cpc_id);
+			$.getJSON("{:U('slcropclass/ajaxable_on')}&id="+cpc_id+"&field="+field,function(){
+			});
+		}else{	//false
+			console.log("禁用"+cpc_id);
+			$.getJSON("{:U('slcropclass/ajaxable_off')}&id="+cpc_id+"&field="+field,function(){
+			});
+			
+		}
+	}
+</script>

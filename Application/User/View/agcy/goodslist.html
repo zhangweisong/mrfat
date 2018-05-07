@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>经销商产品</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/js/Swiper/swiper.min.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+            (function (doc, win) {
+                var docEl = doc.documentElement,
+                        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                        recalc = function () {
+                            var clientWidth = docEl.clientWidth;
+                            if (!clientWidth)
+                                return;
+                            docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+                        };
+                if (!doc.addEventListener)
+                    return;
+                win.addEventListener(resizeEvt, recalc, false);
+                doc.addEventListener('DOMContentLoaded', recalc, false);
+            })(document, window);
+        </script>
+    </head>
+    <body>
+        <style type="text/css">
+            .tushushangcheng .top{background: #fff;}
+            .tushu_list_box{margin-top:0px;}
+            .shousuo_fenlei{padding: 10px; border-bottom: 1px solid #f5f5f5;}
+            .tushu_list_box .title{ border-bottom: 1px solid #f5f5f5;}
+            .tushu_list_box .tushu_list{padding-top: 10px;}
+        </style>
+        <div class="tushushangcheng">
+            <div class="tushu_list_box">
+                <div class="top">
+                    <div class="shousuo_fenlei c">
+                        <div class="form_input">
+                            <span class="bot" onclick="search()">搜索</span>
+                            <i><input type="text" id="keyword" placeholder="请搜索关键词" value="{$keyword}"/></i>
+                        </div>
+                    </div>
+                    <div class="title">
+                        <ul>
+                            <li class="link"  datatype="all">
+                                <span>综合排序</span>
+                                <i data="1" style="display:none"></i>
+                            </li>
+                            <li datatype="sale">
+                                <span>销量</span>
+                                <i data="2"></i>
+                            </li>
+                            <li datatype="price">
+                                <span>价格</span>
+                                <i data="2"></i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tushu_list">
+                    <ul class="c" id='content'> 
+                        <?php if(count($listAgcyGoods)>0):?>
+                        <?php foreach($listAgcyGoods AS $k=>$v):?>
+                        <li> 
+                            <a href="{:U('shopcar/xiangqing',array('agcy_goods_id'=>$v['agcy_goods_id']))}">
+                                <i class="img"><img src="<?= explode('|',$v['agcy_goods_images'])[0]?>"/></i>
+                                <div class="text">
+                                    <h5>{$v.agcy_goods_name}</h5>
+                                    <div class="jiage">
+                                        <span>￥{$v.agcy_default_price}</span>
+                                        <em>￥{$v.agcy_default_price}</em>
+                                    </div>
+                                    <div class="xiaoliang">
+                                        <span>销量：{$v.agcy_goods_salenum}</span>
+                                        <em></em>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <?php endforeach;?> 
+                        <?php else:?> 
+                        <div class="meiyouneirong" style='display:block;margin-top:10%;'>
+                            <i><img src="__PUBLIC__/user/images/li_wdxx_img.png"/></i>
+                            <p>没有产品</p>
+                        </div>
+                        <?php endif;?> 
+                    </ul> 
+                </div>
+                <div class="li_myxx_zt" id="li_myxx_zt" style="display:none" >
+                    <p>亲，到底了</p>
+                </div>
+                <div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+                    <img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+                </div>
+                <style>
+                    .li_myxx_zt{height: 30px; line-height: 30px; background:#f5f5f5;}
+                    .li_myxx_zt p{ text-align:center; font-size:12px; color:#cacaca;}
+                    .meiyouneirong {
+                        width: 100%;
+                        margin-top: 100px;
+                        display: none;
+                    }
+                    .meiyouneirong i {
+                        display: block;
+                        width: 100px;
+                        margin: 0 auto;
+                    }
+                    .meiyouneirong i img {
+                        display: block;
+                        width: 100%;
+                    }
+                    .meiyouneirong p {
+                        text-align: center;
+                        font-size: 13px;
+                        color: #cacaca;
+                        margin-top: 8px;
+                    }
+                </style>
+                <button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button>
+                <input type='hidden' id='condition' >
+                <input type='hidden' id='order' >
+                <input type='hidden' id='fenlei1' value="{$fenlei1}">
+                <input type='hidden' id='fenlei2' value="{$fenlei2}">
+                <input type='hidden' id='agcy_id' value="{$agcy_id}"> 
+            </div>
+        </div>
+        <script type="text/javascript" src="__PUBLIC__/user/js/jquery.pin.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $(".tushushangcheng .top").pin({
+                    containerSelector: ".tushu_list_box"
+                })
+                var liClick = "";
+                $(".title li").click(function () {
+                    $(this).addClass("link").siblings().removeClass("link link1")
+                    if ($(this).attr('datatype') == "sale" && liClick != "sale") {
+                        $(this).find('i').attr('data', 2)
+                        liClick = "sale"
+                    } else if ($(this).attr('datatype') == "price" && liClick != "price") {
+                        $(this).find('i').attr('data', 1)
+                        liClick = "price"
+                    } else if ($(this).attr('datatype') == "all") {
+                        liClick = ""
+                    }
+                    if ($(this).attr('datatype') != "all") {
+                        if ($(this).find('i').attr('data') == "2") {
+                            $(this).addClass("link").removeClass("link1")
+                            $(this).find('i').attr('data', 1)
+                        } else if ($(this).find('i').attr('data') == "1") {
+                            $(this).addClass("link1").removeClass("link")
+                            $(this).find('i').attr('data', '2')
+                        }
+                    }
+                    $("#condition").val($(this).attr('datatype'))
+                    $("#order").val($(this).find('i').attr('data'))
+                    //获取商品列表信息
+                    $.get("{:U('agcy/goodslist')}", {"agcy_id": <?=$agcy_id?>,"condition": $(this).attr('datatype'), "order": $(this).find('i').attr('data'),"fenlei1": $('#fenlei1').val(),"fenlei2": $('#fenlei2').val(),"keyword":$('#keyword').val()}, function (data) {
+                        $('#more').attr("data", 1);//重置当前页数  
+                        $(".li_myxx_zt").hide();
+                        //获取数据更新
+                        if (data) {
+                            $("#content").html(data);
+                        } else {
+                            $("#content").html("");
+                            $("#meiyouneirong").show();
+                        }
+                    })
+                })
+            })
+            //滚动加载
+            $(function () {
+                //页面滚动的时候绑定事件    
+                $(window).scroll(function () {
+                    getData();
+                });
+            })
+
+            function getData() {
+                totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()) + 1;
+                //浏览器的高度加上滚动条的高度 （页面总高度）
+                if ($(document).height() <= totalheight) {
+                    //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+                    //加载
+                    $("#loadings").fadeIn();
+                    //根据条件获取对应的项目条数
+                    getmore();//使用模板加载更多
+                    //加载完毕          
+                    $("#loadings").fadeOut();
+                }
+            }
+            function getmore() {
+                var page = parseInt($("#more").attr("data")) + 1;
+                $('#more').attr("data", page);//重置当前页数  
+                $.get("{:U('agcy/goodslist')}", {"agcy_id": <?=$agcy_id?>,"p": page, "condition": $("#condition").val(), "order": $("#order").val(),"fenlei1": $('#fenlei1').val(),"fenlei2": $('#fenlei2').val(),"keyword":$('#keyword').val()}, function (data) {
+                    if (data) {
+                        $("#content").append(data);
+                    } else {
+                        $(".li_myxx_zt").show();
+                    }
+                })
+            }
+
+            function search(){
+                var keyword =  $('#keyword').val()
+                var fenlei1 =  $('#fenlei1').val()
+                var fenlei2 =  $('#fenlei2').val()
+                var agcy_id =  $('#agcy_id').val()
+                location.href = "{:U('agcy/goodslist')}&agcy_id="+agcy_id+"&fenlei1="+fenlei1+"&fenlei2="+fenlei2+"&keyword="+keyword
+            }
+        </script>
+    </body>
+</html>

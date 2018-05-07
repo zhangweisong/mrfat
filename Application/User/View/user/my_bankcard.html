@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>绑定银行卡</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script src="__PUBLIC__/user/js/bankinput.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<div>
+			<div class="shenqingtixian">
+				<form action="" method="post">
+					<div class="form_input">
+						<ul>
+							<li>
+								<span>银行户主姓名：</span>
+								<i>
+									<input type="text" name="" id="account_name" value="{$info.account_name}" maxlength="20"/>
+								</i>
+							</li>
+							<li>
+								<span>银行卡卡号：</span>
+								<i>
+									<input type="text" name="" id="account_no" value="{$info.account_no}" />
+								</i>
+							</li>
+							<li>
+								<span>开户行名称：</span>
+								<i>
+									<input type="text" id="bank_name" name="" value="{$info.bank_name}" maxlength="30"/>
+								</i>
+							</li>
+							 
+						</ul>
+					</div>
+					<input type="hidden" id="balance" value="{$balance}">
+					<input type="hidden" id="change" value="{$change}">
+					<div class="botton_bg">
+						<!--<input class="bot" type="submit" value="提交"/>-->
+						<a onclick="shenqingShow(this)" class="bot">提交</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script type="text/javascript">
+$('#account_no').bankInput({min:4,max:25,deimiter:' '}); 
+	function shenqingShow(a){
+		var account_name=$("#account_name").val(),account_no=$("#account_no").val(),bank_name=$("#bank_name").val();
+		if(account_name==''){
+			layer.msg('请输入户主姓名',{icon:5,time:1000});
+			return;
+		}
+		
+		if(bank_name==''){
+			layer.msg('请输入开户行名称',{icon:5,time:1000});
+			return;
+		}
+		 
+		var url="{:U('user/my_bankcard')}";
+		$(a).removeAttr("onclick");
+		$.ajax({
+			url:url,
+			method:'post',
+			data:{
+				account_no:account_no,
+				account_name:account_name,
+				bank_name:bank_name, 
+			},
+			success:function(res){
+				if(res.data==2){
+					//成功
+                    layer.msg('提交成功',{icon:6,time:1000},function(){
+                        window.location.href="{:U('user/userinfo')}";
+                    });
+				}else{
+					$(a).attr("onclick","shenqingShow(this)");
+					layer.msg(res.msg,{icon:5,time:1000});
+				}
+			}
+		});
+		 
+	}
+</script>
+

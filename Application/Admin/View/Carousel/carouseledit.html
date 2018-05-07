@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+    <link href="__PUBLIC__/validform/Validform.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="__PUBLIC__/validform/Validform_v5.3.2.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" />
+    <script type="text/javascript" src="__PUBLIC__/kindeditor/kindeditor-min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/kindeditor/lang/zh-CN.js"></script>
+</head>
+<style>
+	.form-button .ke-inline-block.but{margin-top:0;}
+	.form-button .ke-button-common{display:block;width:100%; height:100%; line-height:38px; background:none;}
+	.form-button .ke-button-common.ke-button{color:#fff; font-size:16px;}
+	.form-button .ke-upload-area.ke-form .ke-upload-file{display:block;width:100% !important; height:100%;     cursor: pointer;}
+</style>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">系统设置</a></li>
+            <li> > </li>
+            <li><a href="{:U('Carousel/index')}">轮播管理</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">轮播管理编辑</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <div class="form_box">
+            <form name="myform" id="myform" action="{:U('Carousel/Carouseledit',array('focus_id'=>$focus['focus_id']))}" method="post">
+                <div class="form-item">
+                    <input type="hidden" name="focus_id" value="{$focus.focus_id}"/>
+                    <label class="form-label">标题</label>
+                    <div class="form-text form-input-block">
+                        <input name="focus_title" value="{$focus.focus_title}" id="focus_title" type="text" class="dfinput" datatype="*1-20" errormsg="标题字数在2~20位之间！" maxlength="20" />
+                        <i class="Validform_checktip"></i>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-label">轮播类型</label>
+                    <div class="form-select form-input-block">
+                        <select name="focus_type" class="dfinput" datatype="*"s >
+                            <option value="">--请选择轮播类型--</option>
+                            <volist name="focusType" id="data"  errormsg="请选择幻灯类型!" >
+                                <option value="{$key}" <if condition="$focus['focus_type'] eq $key">selected</if>>{$data}</option>
+                            </volist>
+                        </select>
+						<i class="Validform_checktip"></i>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-label">url地址</label>
+                    <div class="form-text form-input-block">
+                        <input name="focus_url" value="{$focus.focus_url}" id="focus_url" type="url" class="dfinput" maxlength="60"/>
+                        <i class="Validform_checktip"></i>
+                        <span style="font-size: 12px;color:red;">（注：url为点击该轮播图片跳转的地址。）</span>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-label">图片</label>
+                    <div class="form-text form-input-inline w40">
+                        <input type="text" name="focus_image" id="image" value="{$focus.focus_image}" datatype="*" errormsg="请上传图片!" placeholder="请上传图片" readonly/>
+                        <i class="Validform_checktip"></i>
+						<span style="font-size: 12px;color:red;">（注：图片大小：720px*315px）</span>
+                    </div>
+
+                    <div class="form-button form-input-inline">
+                        <input class="but shenhe mg_t0" type="button" id="uploadButton"  class="chaxun but" value="上传" />
+                    </div>
+
+                </div>
+                <!--
+                <div class="form-item">
+                    <label class="form-label">排序</label>
+                    <div class="form-select form-input-block">
+                        <select name="focus_sort" class="dfinput" datatype="*" errormsg="请选选择排列序号!" >
+                            <option value="">--请选排列序号--</option>
+                            <volist name="focusOrder" id="data" >
+                                <option value="{$key}" <if condition="$focus['focus_sort'] eq $key">selected</if>>{$data}</option>
+                            </volist>
+                        </select>
+                    </div>
+                </div>
+                -->
+                <div class="form-item">
+                    <div class="form-button form-input-block">
+                        <input class="chaxun but" type="submit" value="提交"/>
+                        <button class="but chongzhi" type="button" onclick="location.href='{:U('Carousel/index')}'">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+
+        $('.skin-section input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        $('input').on('ifChecked', function(event){
+            //alert($(this).val());
+        });
+    });
+</script>
+<script>
+    $(function(){
+        $("#myform").Validform({
+            //tiptype:2
+            tiptype:function(msg,o,cssctl){
+                var objtip=o.obj.siblings(".Validform_checktip");
+                cssctl(objtip,o.type);
+                objtip.text(msg);
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    var editor;
+    KindEditor.ready(function(K) {
+      
+        var uploadbutton = K.uploadbutton({
+            button : K('#uploadButton')[0],
+            fieldName : 'imgFile',
+            url : '{:U('kindeditor/upload_json',array('dir'=>image))}',
+            afterUpload : function(data) {
+				if (data.error === 0) {
+					var url = K.formatUrl(data.url, 'domain');
+					K('#image').val(url);
+				} else {
+					alert(data.message);
+				}
+			},
+			afterError : function(str) {
+				alert('自定义错误信息: ' + str);
+			}
+		});
+        uploadbutton.fileBox.change(function(e) {
+            uploadbutton.submit();
+        });
+    });
+    
+</script>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>农户订单</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/dingdanguanli.css" />
+		<!--<link rel="stylesheet" href="css/app.css" />-->
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/mui.min.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/mui.picker.min.css" />
+	</head>
+    <style>
+	    .li_myxx_zt{height: 30px; line-height: 30px; background: #f5f5f5;}
+		.li_myxx_zt p{ text-align:center; font-size:12px; color:#cacaca;}
+		.sousuokuang_box{padding: 0 10px; height: 45px; background: #ef404c}
+	</style>
+	<body>
+		<div class="header">
+			<a href="{:U('index/index')}">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>农户订单</p>
+		</div>
+		<div class="sou">
+			<div class="search flexb">
+				<input type="text" id="keyword"  value="{$keyword}" placeholder="输入姓名、电话、订单号快速检索"  maxlength="11"/>
+				<button onclick="search()" style="background:#3ab849;">查询</button>
+			</div>
+			<div class="search flexb">
+				<div class="time flexb">
+					<div>
+						<button id='demo2'  data-options='{"type":"date","beginYear":2000,"endYear":2018}' class="btn1">
+                        {$starttime}
+                        </button>
+						<img src="__PUBLIC__/agcy/images/icon-calendar.png" />
+					</div>
+					<div>
+						<button id='demo3' data-options='{"type":"date","beginYear":2000,"endYear":2018}' class="btn2">
+                        {$endtime}</button>
+						<img src="__PUBLIC__/agcy/images/icon-calendar.png" />
+					</div>
+				</div>
+				
+                <button onclick="refresh()">刷新</button>
+			</div>
+		</div>
+		<div class="table">
+			<div class="title flex">
+				<div>订单时间</div>
+				<!--<div>订单编号</div>-->
+				<div>下单人</div>
+				<div>农户电话</div>
+				<div>订单金额</div>
+				<div>订单状态</div>
+			</div>
+			<?php if(count($data)>0):?>
+				<?php foreach($data as $k=>$v):?>
+					<div class="nr flex"  onclick="location.href='{:U('orderlist/dingdanxiangq',array('order_id'=>$v['order_id']))}'">
+						<div style="line-height: 1.2rem;padding-top:0.56rem ;">{$v.order_addtime}</div>
+						<!--<div>{$v.order_number}</div>-->
+						<div>{$v.realname}</div>
+                        <?php if($v['phone']!=""):?>
+						<div>{$v.phone}</div>
+                        <?php else:?>
+                        <div>未填写</div>
+                        <?php endif;?>
+						<div>{$v.order_money}</div>
+						<div>
+							<?php if($v['order_state']==3):?>
+							 <a href="{:U('orderlist/dingdanxiangq',array('order_id'=>$v['order_id']))}">
+								{$ordertype[$v['order_state']]}
+								<img src="__PUBLIC__/agcy/images/right.png" />
+							 </a>
+							 <?php elseif($v['order_state']==2):?>
+								 <a href="{:U('orderlist/dingdanxiangq',array('order_id'=>$v['order_id']))}" style="color:green">
+									{$ordertype[$v['order_state']]}
+									<img src="__PUBLIC__/agcy/images/right.png" />
+								 </a>
+							 <?php elseif($v['order_state']==1):?>
+								 <a href="{:U('orderlist/dingdanxiangq',array('order_id'=>$v['order_id']))}" style="color:black">
+									{$ordertype[$v['order_state']]}
+									<img src="__PUBLIC__/agcy/images/right.png" />
+								 </a>
+							 <?php endif;?>
+						</div>
+					</div>
+				<?php endforeach;?>
+			<?php else:?>
+				<div class="meiyouneirong" style="display:block;margin-top:10%;">
+					<i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+					<p>暂无数据</p>
+				</div>
+		    <?php endif;?>
+		</div>
+		<div class="li_myxx_zt" id="li_myxx_zt" style="display:none" >
+		<p>亲，到底了~</p> 
+		</div>
+		<div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+			<img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+		</div> 
+		<button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button> 
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/mui.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/mui.picker.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-1.10.2.min.js"></script>
+		<script>
+			(function($) {
+				$.init();
+				var result = $('#demo2')[0];
+				var btns = $('.btn1');
+				btns.each(function(i, btn) {
+					btn.addEventListener('tap', function() {
+						var _self = this;
+						if(_self.picker) {
+							_self.picker.show(function (rs) {
+								result.innerText =  rs.text;
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+						} else {
+							var optionsJson = this.getAttribute('data-options') || '{}';
+							var options = JSON.parse(optionsJson);
+							var id = this.getAttribute('id');
+							/*
+							 * 首次显示时实例化组件
+							 * 示例为了简洁，将 options 放在了按钮的 dom 上
+							 * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+							 */
+							_self.picker = new $.DtPicker(options);
+							_self.picker.show(function(rs) {
+								/*
+								 * rs.value 拼合后的 value
+								 * rs.text 拼合后的 text
+								 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+								 * rs.m 月，用法同年
+								 * rs.d 日，用法同年
+								 * rs.h 时，用法同年
+								 * rs.i 分（minutes 的第二个字母），用法同年
+								 */
+								result.innerText = rs.text;
+								/* 
+								 * 返回 false 可以阻止选择框的关闭
+								 * return false;
+								 */
+								/*
+								 * 释放组件资源，释放后将将不能再操作组件
+								 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+								 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+								 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+								 */
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+						}
+						
+					}, false);
+				});
+			})(mui);
+		</script>
+		<script>
+			(function($) {
+				$.init();
+				var result = $('#demo3')[0];
+				var btns = $('.btn2');
+				btns.each(function(i, btn) {
+					btn.addEventListener('tap', function() {
+						var _self = this;
+						if(_self.picker) {
+							_self.picker.show(function (rs) {
+								result.innerText =  rs.text;
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+						} else {
+							var optionsJson = this.getAttribute('data-options') || '{}';
+							var options = JSON.parse(optionsJson);
+							var id = this.getAttribute('id');
+							/*
+							 * 首次显示时实例化组件
+							 * 示例为了简洁，将 options 放在了按钮的 dom 上
+							 * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+							 */
+							_self.picker = new $.DtPicker(options);
+							_self.picker.show(function(rs) {
+								/*
+								 * rs.value 拼合后的 value
+								 * rs.text 拼合后的 text
+								 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+								 * rs.m 月，用法同年
+								 * rs.d 日，用法同年
+								 * rs.h 时，用法同年
+								 * rs.i 分（minutes 的第二个字母），用法同年
+								 */
+								result.innerText = rs.text;
+								/* 
+								 * 返回 false 可以阻止选择框的关闭
+								 * return false;
+								 */
+								/*
+								 * 释放组件资源，释放后将将不能再操作组件
+								 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+								 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+								 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+								 */
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+						}
+						
+					}, false);
+				});
+			})(mui);
+		</script>
+	</body>
+</html>
+<script>
+//数据列表
+    function htmlinfo(info){
+        var html=""; 
+        for(var i=0;i<info.length;i++){
+			html+='<div class="nr flex"  onclick="xiangqing('+info[i]['order_id']+')">';  
+			html+='<div style="line-height: 1.2rem;padding-top:0.56rem ;">'+info[i]['order_addtime']+'</div>'; 
+			//html+='<div>'+info[i]['order_number']+'</div>';
+			html+='<div>'+info[i]['realname']+'</div>';
+			html+='<div>'+info[i]['phone']+'</div>';
+		    html+='<div>'+info[i]['order_money']+'</div>'; 
+			html+='<div>';
+			if(info[i]['order_state']==1){
+			    html+='<a onclick="xiangqing('+info[i]['order_id']+')" style="color:black" >';
+			    html+='待付款';
+			    html+='<img src="__PUBLIC__/agcy/images/right.png" />';
+			    html+='</a>';
+			} 
+			if(info[i]['order_state']==2){
+			    html+='<a onclick="xiangqing('+info[i]['order_id']+')" style="color:green" >'; 
+			    html+='待发货';
+				html+='<img src="__PUBLIC__/agcy/images/right.png" />';
+			    html+='</a>';
+			}
+			if(info[i]['order_state']==3){
+			    html+='<a onclick="xiangqing('+info[i]['order_id']+')" >';
+			    html+='已完成';
+				html+='<img src="__PUBLIC__/agcy/images/right.png" />';
+			    html+='</a>';
+			}
+			
+			html+='</div>';
+			html+='</div>';
+        }
+        return html;     
+    }
+	//滚动加载  
+    $(window).scroll(function () { 
+        getData();
+    });
+    var totalheight = 0;     //定义一个总的高度变量
+    function getData() {
+         totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()); 
+         //浏览器的高度加上滚动条的高度 （页面总高度）  
+        if ($(document).height() <= totalheight) {          
+            //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+            //加载
+            $("#loadings").fadeIn(); 
+            //根据条件获取对应的项目条数
+            getmore();//使用模板加载更多
+            //加载完毕          
+            $("#loadings").fadeOut(); 
+        }
+    }
+
+	//加载更多 
+    function getmore(){      
+        var page=parseInt($("#more").attr("data"))+1; 
+        $('#more').attr("data",page);//重置当前页数  
+        $.getJSON("{:U('orderlist/index')}&p="+page,function(data){  
+           var info = data.data; 
+           if(info.length>0){
+                var html = htmlinfo(info);
+                $(".table").append(html);
+           }else{
+                $("#loadings").fadeOut(); 
+                $(".li_myxx_zt").show();          
+           }
+        }) 
+    }
+</script>
+<script>
+function  search(){
+	var  keyword=$('#keyword').val();
+	var  demo2 = $('#demo2').html();
+	var  demo3 = $('#demo3').html();
+    if(keyword!='' || demo2!=0 || demo3!=0){
+         location.href="{:U('orderlist/index')}&keyword="+keyword+"&starttime="+demo2+"&endtime="+demo3; 
+    }
+}
+function refresh(){
+    var  keyword=$('#keyword').val();
+	var  demo2 = $('#demo2').html();
+	var  demo3 = $('#demo3').html();
+    if(keyword!='' || demo2!=0 || demo3!=0){
+         location.href="{:U('orderlist/index')}";
+    }
+}
+function xiangqing(a){
+   location.href="{:U('orderlist/dingdanxiangq')}&order_id="+a;
+}
+</script>

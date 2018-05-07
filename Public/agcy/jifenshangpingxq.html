@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>积分商品详情</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="css/public.css" />
+		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/jifenshangpingxq.css" />
+		<link rel="stylesheet" href="css/swiper-3.4.2.min.css" />
+	</head>
+
+	<body>
+		<div class="header">
+			<a href="javascript:history.go(-1)   ">
+				<img src="images/left.png" />
+			</a>
+			<p>积分商品详情</p>
+		</div>
+		<!--积分兑换的商品详情-->
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<img src="images/banner1.png" />
+				</div>
+				<div class="swiper-slide">
+					<img src="images/banner1.png" />
+				</div>
+				<div class="swiper-slide">
+					<img src="images/banner1.png" />
+				</div>
+			</div>
+		</div>
+		<div class="title">
+			<p>张裕冰酒黄金冰谷威代尔冰葡萄酒甜酒</p>
+			<p>所需积分：1500</p>
+		</div>
+		<div class="cont">
+			<p class="tit">商品信息</p>
+		</div>
+		<button class="btnn" onclick="window.location.href='duihuanchenggong.html'">立即兑换</button>
+		<script type="text/javascript" src="js/screenSize.js" ></script>
+		<script type="text/javascript" src="js/jquery-3.1.1.min.js" ></script>
+		<script type="text/javascript" src="js/swiper-3.4.2.jquery.min.js" ></script>
+		<script>
+		    var mySwiper = new Swiper ('.swiper-container', {
+				autoplay:3000,
+		    });
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>我的图书订单</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+    <style> 
+     .wrap-dialog {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         font-size: 16px;
+         text-align: center;
+         background-color: rgba(0, 0, 0, .4);
+         z-index: 999;
+         
+     }
+     .dialog {
+         position: relative;
+         margin: 40% auto;
+         width: 250px;
+         background-color: #FFFFFF;
+         border-radius:10px;
+     } 
+     .dialog .dialog-body {
+         height: 60px;
+         padding: 20px;
+     }
+     .dialog .dialog-footer {
+         padding: 15px;
+         background-color: whitesmoke;
+         border-radius:0 0 10px 10px;
+     }
+     .btn {
+         border-radius:10px;
+         width: 70px;
+         padding: 4px;
+         border:0px;
+     }
+     .hide {
+         display: none;
+     }
+     .ml50 {
+         margin-left: 50px;
+     }
+     .dingdangl_ctbox .dingdangl_ct .shangpin dl dd h4,.dingdangl_ctbox .dingdangl_ct .shangpin dl dd p{
+        font-size:14px;
+     }
+ </style>
+	<body>
+		<div>
+			<div class="dingdangl">
+				<div class="dingdangl_top">
+					<div class="nav">
+						<span <?php if(I('type')==0){echo "class='link'";}?> onclick="changecate(0)" >全部</span>
+						<span <?php if(I('type')==1){echo "class='link'";}?> onclick="changecate(1)">待付款</span>
+						<span <?php if(I('type')==2){echo "class='link'";}?> onclick="changecate(2)">待收货</span>
+						<span <?php if(I('type')==3){echo "class='link'";}?> onclick="changecate(3)">已完成</span>
+					</div>
+				</div>
+				<div class="dingdangl_ctbox">
+                    <?php if(count($orderlist)>0):?>
+                     
+                    <?php foreach($orderlist AS $k=>$v):?>
+					<div class="dingdangl_ct">
+						<div class="danhao">
+							<span>单号：<?=$v['border_number']?></span>
+							<i><?=$v['forder_addtime']?></i>
+						</div>
+                        <?php foreach($v['goodslist'] AS $kk=>$vv):?>
+						<div class="shangpin" onclick="tiao({$vv.book_id})"> 
+							<dl>
+								<dt>
+									<img src="<?php $image = explode('|',$vv['book_image']);echo $image[0];?>" />
+								</dt>
+								<dd>
+									<h4><?=$vv['book_name']?></h4>
+									<p>
+										<span>￥<?=$vv['book_price']?></span>
+										<i>x<?=$vv['book_num']?></i>
+									</p>
+								</dd>
+							</dl> 
+						</div>
+                        <?php endforeach;?> 
+						<div class="beizhu">
+							<table border="0" cellspacing="" cellpadding="">
+								<tr>
+									<td style="width:55px; text-align: center;">备注：</td>
+									<td style="color: #737272;"><?=$v['border_remark']?></td>
+								</tr>
+							</table>
+						</div>
+						<div class="zongjia c"> 
+                             
+							<p>
+								<span>共<?=$v['num']?>件商品</span>
+								<em>合计：<?=$v['border_money']?>(含快递)</em>
+							</p> 
+                            <?php if($v['border_state']==1):?>
+							<strong class="strong_1" onclick="pay({$v.border_id})">去支付</strong> 
+							<strong class="strong_2" onclick="quxiao({$v.border_id})">取消订单</strong>
+                            <?php elseif($v['border_state']==2):?>
+                            <strong class="strong_1">待发货</strong>     
+                            <?php elseif($v['border_state']==3):?>
+                            <strong class="strong_1">已完成</strong>     
+                            <?php endif;?>
+						</div>
+					</div>
+                    <?php endforeach;?>
+                    <?php else:?> 
+					<div class="meiyouneirong" style="display:block;margin-top:10%;">
+						<i><img src="__PUBLIC__/user/images/li_wdxx_img.png"/></i>
+                        <p>该状态下没有订单</p>
+					</div>
+                    <?php endif;?> 
+				</div>
+                <div class="dibufengexian" style="display:none">
+			    		<p>亲，到底了</p>
+                </div>
+                <div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+                    <img src="__PUBLIC__/user/images/5-130H2191536.gif">
+                </div>
+                <button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button>
+                <div class="wrap-dialog hide">
+                    <div class="dialog">
+                        <div class="dialog-body">
+                            <span class="dialog-message">你确认删除？</span>
+                        </div>
+                        <div class="dialog-footer">
+                            <input type="button" class="btn" id="cancel" value="取消" />
+                            <input type="button" class="btn ml50" id="confirm" value="确认" /> 
+                        </div>
+                    </div>
+                </div>
+			</div>
+		</div>
+	</body>
+</html> 
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script>
+//取消订单
+ 
+    function quxiao(a){ 
+        var message = "确认取消该订单?";
+        dialogBox(message,
+            function () {  
+                $.getJSON("{:U('book/delorder')}&border_id="+a,function(data){  
+                    var info  = data.data; 
+                    if(info==1){ 
+                        layer.msg('订单取消成功',{icon:6,time:1000},function(){
+                            location.href="{:U('book/bookorder')}"; 
+                        }); 
+                    } 
+                })    
+            },
+            function(){
+                return false;   
+            }
+        ); 
+    }
+    function dialogBox(message, yesCallback, noCallback){
+         if(message){
+            $('.dialog-message').html(message);
+        }
+         // 显示遮罩和对话框
+        $('.wrap-dialog').removeClass("hide");
+         // 确定按钮
+        $('#confirm').click(function(){
+            $('.wrap-dialog').addClass("hide");
+            yesCallback();
+        });
+         // 取消按钮
+        $('#cancel').click(function(){
+            $('.wrap-dialog').addClass("hide");
+            noCallback();
+        });
+    }
+
+    //去付款
+    function pay(a){
+        location.href = "{:U('book/pay')}&bookorder="+a; 
+    }
+</script>
+<script>
+    $(function () {
+        //页面滚动的时候绑定事件
+        $(window).scroll(function () {
+            getData();
+        });
+    })
+
+    function getData() {
+        totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()) + 1;
+        //浏览器的高度加上滚动条的高度 （页面总高度）
+        if ($(document).height() <= totalheight) {
+            //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+            //加载
+            $("#loadings").fadeIn();
+            //根据条件获取对应的项目条数
+            getmore();//使用模板加载更多
+            //加载完毕          
+            $("#loadings").fadeOut();
+        }
+    }
+    function getmore() {
+        var page = parseInt($("#more").attr("data")) + 1; 
+        $('#more').attr("data", page);//重置当前页数  
+        $.get("{:U('book/bookorder',array('type'=>I('type')))}&p=" + page, function (data) {
+            if (data) {  
+                $(".dingdangl_ctbox").append(data);
+            } else {  
+                $("#loadings").fadeOut(); 
+                $(".dibufengexian").show();
+            }
+        })
+    }
+    function changecate(cat) { 
+        window.location.href = "{:U('book/bookorder')}&type=" + cat;
+    }
+    
+    //跳转到图书详情
+    function tiao(a){
+        window.location.href = "{:U('book/bookinfo')}&book_id=" + a;
+    }
+    
+    $(function(){  
+        pushHistory();  
+        window.addEventListener("popstate", function(e) {  
+            window.location.href="{:U('user/userinfo')}"
+    }, false);  
+        function pushHistory() {  
+            var state = {  
+                title: "个人中心",  
+                url: "{:U('user/userinfo')}"  
+            };  
+            window.history.pushState(state, "title", "#");  
+        }    
+    }); 
+</script>
+
+ 

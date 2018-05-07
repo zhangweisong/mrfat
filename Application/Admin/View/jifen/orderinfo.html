@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>订单详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+	<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+</head>
+<body>
+<div class="right_min">
+	<div class="crumbs_nav">
+		<i class="iconfont icon-shouye"></i>
+		<ul>
+			<li><a href="javascript:void(0);">订单详情</a></li>
+		</ul>
+	</div>
+	<div class="min">
+		<div class="message">
+			<div class="message-block message-border-t">
+				<h4 class="message-left_block">订单详情</h4>
+			</div>
+			<table class="table" border="" cellspacing="" cellpadding="">
+				<tr>					
+					<th style="font-weight:bold;">订单号</th>
+					<td>{$orderinfo.jifen_order_number}</td>
+					<th style="font-weight:bold">所需积分</th>
+					<td>{$orderinfo.jifen_goods_price}</td>  
+				</tr>
+				<tr>
+					<th style="font-weight:bold">订单状态</th>
+					<if condition="$orderinfo['jifen_order_state'] eq 2"><td style="color:green">{$state[$orderinfo['jifen_order_state']]}</td></if>
+					<if condition="$orderinfo['jifen_order_state'] eq 3"><td style="color:red">{$state[$orderinfo['jifen_order_state']]}</td></if>
+					<th style="font-weight:bold">订单时间</th>
+					<td>{$orderinfo.jifen_order_addtime|date="Y-m-d H:i:s",###}</td>							
+				</tr> 
+				<tr>
+					<th style="font-weight:bold">经销商</th>
+					<td>{$orderinfo.agcy_name}</td>
+					<th style="font-weight:bold">收货人电话</th>
+					<td>{$orderinfo.jifen_order_phone}</td> 
+				</tr>
+				<tr>
+					<th style="font-weight:bold">收货人姓名</th>
+					<td>{$orderinfo.jifen_order_name}</td>
+                    <th style="font-weight:bold">收货人详细地址</th>
+					<td colspan="3">{$orderinfo.jifen_order_address}</td> 
+				</tr>	
+                
+			</table>         			
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src="/foodsking/Public/admin/js/layer/layer.js"></script>
+<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+        $('.table_box input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        var index = parent.layer.getFrameIndex(window.name);
+        $('#net').on('click', function(){
+            parent.layer.close(index);
+        });
+    });
+</script>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>地址管理</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="css/mian.css"/>
+        <link rel="stylesheet" type="text/css" href="css/header.css"/>
+        <script src="js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<div>
+			<div class="guanlidizhi">
+				<ul>
+					<li>
+                    	<div class="top">
+                        	<h4>
+                            	<i>张三丰</i>
+                                <span>15029987256</span>
+                            </h4>
+                            <p>陕西省西安市雁塔区锦业路265号绿地世纪城号绿地世纪城号绿地世纪城号绿地世纪城号绿地世纪城号绿城15</p>
+                        </div>
+                        <div class="but c">
+                            <span><input type="radio" name="dizhi"><em>设为默认地址</em></span>
+                            <strong>删除</strong>
+                            <a href="bianjidizhi.html">编辑</a>
+                        </div>
+					</li>
+					<li>
+                    	<div class="top">
+                        	<h4>
+                            	<i>张三丰</i>
+                                <span>15029987256</span>
+                            </h4>
+                            <p>陕西省西安市雁塔区锦业路265号绿地世纪城号绿地世纪城号绿地世纪城号绿地世纪城号绿地世纪城号绿城15</p>
+                        </div>
+                        <div class="but c">
+                            <span><input type="radio" name="dizhi"><em>设为默认地址</em></span>
+                            <strong>删除</strong>
+                            <a href="bianjidizhi.html">编辑</a>
+                        </div>
+					</li>
+					<li>
+                    	<div class="top">
+                        	<h4>
+                            	<i>张三丰</i>
+                                <span>15029987256</span>
+                            </h4>
+                            <p>陕西省西安市雁塔区锦业路265号绿地世纪城号绿地世纪城号绿地世纪城号绿地世纪城号绿地世纪城号绿城15</p>
+                        </div>
+                        <div class="but c">
+                            <span><input type="radio" name="dizhi"><em>设为默认地址</em></span>
+                            <strong>删除</strong>
+                            <a href="bianjidizhi.html">编辑</a>
+                        </div>
+					</li>
+				</ul>
+				<div class="meiyouneirong">
+					<i><img src="images/li_wdxx_img.png"/></i>
+					<p>你还没有地址，赶快去添加吧</p>
+				</div>
+				<div class="botton_bg">
+					<a class="bot" href="#">添加地址</a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

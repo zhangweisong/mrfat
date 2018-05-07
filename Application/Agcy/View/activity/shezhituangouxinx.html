@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设置团购信息</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/app.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/mui.min.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/mui.picker.min.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/shezhituangouxinx.css" />
+	</head>
+
+	<body>
+		<div class="header">
+			<a href="javascript:history.go(-1)">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<if condition="$act_classify eq 2"> 
+			<p>设置团购信息</p>
+			<else/>
+			<p>设置秒杀信息</p>
+			</if>
+		</div>
+		<div class="cont">
+			<div class="time1 flexb">
+				<p>开团时间:</p>
+				<button id='demo3' data-options='{}'  class="btn">选择日期时间</button>
+				<p>至</p>
+				<button id='demo4' data-options='{}'  class="btn1">选择日期时间</button>
+			</div>
+			<input id="getstart" type="hidden" >
+			<input id="getend" type="hidden" >
+			<div class="radios">
+				<p>选择规格:</p>
+				<div class="zts flexbb">
+					<?php foreach($guige as $k=>$v):?>
+					<div class="zt flex">
+						<input type="radio" value="{$v}" name="zt" id="guige_{$k}" <if condition="$k eq 0">checked</if>/>
+						<input type="hidden" value="{$k}" >
+						<p>{$v}</p>
+					</div>
+					<?php endforeach;?>
+				</div>
+			</div>
+			<div class="time2 flexb">
+				<if condition="$act_classify eq 1"> 
+				<p>秒杀价格:</p>
+				<else/>
+				<p>团购价格:</p>
+				</if>
+				<input type="text" maxlength="6" onkeyup="this.value=this.value.replace(/[^0-9.]/gi,&quot;&quot;)"  id="act_price" name="act_price"/>
+				<p>元</p>
+			</div>
+            <div class="time3 flexb">
+                <if condition="$act_classify eq 1"> 
+				<p>商品数量:</p>
+                <else/>
+                <p>库存数量:</p>
+                </if>
+				<input type="tel"  maxlength="4" onkeyup="this.value=this.value.replace(/\D/gi,&quot;&quot;)" id="count" name="count" />
+				<p>件</p>
+			</div>
+			<div class="time5 flexb">
+				<p>活动名称:</p>
+				<input type="text"  maxlength="50" id="act_name" name="act_name"/>
+				<p></p>
+			</div>
+			
+		</div>
+		<button class="btnn" onclick="queding();">确定</button>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/mui.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/mui.picker.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-1.10.2.min.js" ></script>
+        <script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script> 
+		<script> 
+		function queding(){
+		     var act_classify={$act_classify};
+		     var agcy_goods_id={$agcy_goods_id};
+			 var getstart=$("#getstart").val();//开始时间
+			 var getend=$("#getend").val();//结束时间
+			 var act_guige=$("input[name='zt']:checked").val();//规格
+			 var act_guige_key=$("input[name='zt']:checked").next('input').val();
+			 //alert(act_guige_key);
+			 var act_price=$("#act_price").val();//价格
+			 var act_name=$("#act_name").val();//团购名称
+			 var count=$("#count").val();//数量
+			 if(getstart == ''){ 
+                layer.msg('请选择活动开始时间！',{icon:5,time:1000});
+				$('#getstart').focus();
+				return false;
+			 }
+			 if(getend == ''){ 
+                layer.msg('请选择活动结束时间！',{icon:5,time:1000});
+				$('#getend').focus();
+				return false;
+			 }
+			 if(getend<=getstart){ 
+                layer.msg('活动结束时间不能小于或等于开始时间！',{icon:5,time:1000});
+				$('#getstart').focus();
+				$('#getend').focus();
+				return false;
+			 }
+			 if(act_price == ''){
+                layer.msg('价格不能为空！',{icon:5,time:1000}); 
+				$('#act_price').focus();
+				return false;
+			 }
+			 if(count == ''){
+                layer.msg('商品数量不能为空！',{icon:5,time:1000});  
+				$('#count').focus();
+				return false;
+			 }
+			if(act_name == ''){
+                layer.msg('活动名称不能为空！',{icon:5,time:1000});   
+				$('#act_name').focus();
+				return false;
+			 }
+			 $(".btnn").attr('disabled',true);
+				$.post("{:U('activity/shezhituangouxinx')}",{agcy_goods_id:agcy_goods_id,act_classify:act_classify,getstart:getstart,getend:getend,act_guige:act_guige,act_price:act_price,count:count,act_name:act_name,'act_guige_key':act_guige_key},function(data){
+					// console.log(data);
+					if(data.status==1){  
+                        layer.msg("设置"+data.msg+"活动成功！",{icon:6,time:1000}, function () {
+                            window.location.href="{:U('activity/chakantuangouhuodong')}&act_classify="+act_classify;
+                        });
+                        
+					}else{ 
+                        layer.msg("设置"+data.msg+"活动失败！",{icon:6,time:1000}, function () {
+                            window.location.href="{:U('activity/chakantuangouhuodong')}&act_classify="+act_classify;
+                        });
+					}
+				}); 
+			}
+			
+			(function($) {
+				$.init();
+				var result = $('#demo3')[0];
+				var btns = $('.btn');
+				btns.each(function(i, btn) {
+					btn.addEventListener('tap', function() {
+						var _self = this;
+						if(_self.picker) {
+							_self.picker.show(function (rs) {
+								result.innerText =  rs.text;
+								getstart.value=rs.text;
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+						} else {
+							var optionsJson = this.getAttribute('data-options') || '{}';
+							var options = JSON.parse(optionsJson);
+							var id = this.getAttribute('id');
+							/*
+							 * 首次显示时实例化组件
+							 * 示例为了简洁，将 options 放在了按钮的 dom 上
+							 * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+							 */
+							_self.picker = new $.DtPicker(options);
+							_self.picker.show(function(rs) {
+								/*
+								 * rs.value 拼合后的 value
+								 * rs.text 拼合后的 text
+								 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+								 * rs.m 月，用法同年
+								 * rs.d 日，用法同年
+								 * rs.h 时，用法同年
+								 * rs.i 分（minutes 的第二个字母），用法同年
+								 */
+								result.innerText = rs.text;
+								getstart.value=rs.text;
+								/* 
+								 * 返回 false 可以阻止选择框的关闭
+								 * return false;
+								 */
+								/*
+								 * 释放组件资源，释放后将将不能再操作组件
+								 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+								 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+								 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+								 */
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+						}
+						
+					}, false);
+				});
+			})(mui);
+		</script>
+		<script>
+			(function($) {
+				$.init();
+				var result = $('#demo4')[0];
+				var btns = $('.btn1');
+				btns.each(function(i, btn) {
+					btn.addEventListener('tap', function() {
+						var _self = this;
+						if(_self.picker) {
+							_self.picker.show(function (rs) {
+								result.innerText =  rs.text;
+								getend.value=rs.text;//给input赋值
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+						} else {
+							var optionsJson = this.getAttribute('data-options') || '{}';
+							var options = JSON.parse(optionsJson);
+							var id = this.getAttribute('id');
+							/*
+							 * 首次显示时实例化组件
+							 * 示例为了简洁，将 options 放在了按钮的 dom 上
+							 * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+							 */
+							_self.picker = new $.DtPicker(options);
+							_self.picker.show(function(rs) {
+								/*
+								 * rs.value 拼合后的 value
+								 * rs.text 拼合后的 text
+								 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+								 * rs.m 月，用法同年
+								 * rs.d 日，用法同年
+								 * rs.h 时，用法同年
+								 * rs.i 分（minutes 的第二个字母），用法同年
+								 */
+								result.innerText = rs.text;
+								getend.value=rs.text;
+								/* 
+								 * 返回 false 可以阻止选择框的关闭
+								 * return false;
+								 */
+								/*
+								 * 释放组件资源，释放后将将不能再操作组件
+								 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+								 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+								 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+								 */
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+						}
+						
+					}, false);
+				});
+			})(mui);
+		</script>
+        <script language="JavaScript" type="text/javascript">
+            function clearNoNum(obj){
+                obj.value = obj.value.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符
+                obj.value = obj.value.replace(/^\./g,"");  //验证第一个字符是数字而不是.
+                obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个. 清除多余的.
+                obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
+            }  
+        </script>
+	</body>
+
+</html>

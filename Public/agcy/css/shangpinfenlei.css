@@ -1,0 +1,78 @@
+.btns{
+	margin: 0.88rem 0 1.08rem;
+}
+.btns button{
+	width: 13.4rem;
+	height: 3.52rem;
+	border-radius: 0.4rem;
+	border: none;
+	color: #FFFFFF;
+	font-size: 1.36rem;
+}
+.btns button:nth-of-type(1){
+	background: #3ab849;
+}
+.btns button:nth-of-type(2){
+	background: #3aabb8;
+}
+.cont{
+	padding: 0 0.64rem;
+}
+.table{
+	
+}
+.title div{
+	height: 2.24rem;
+	background: #eeeeee;
+	font-size: 1.04rem;
+	line-height: 2.24rem;
+	border: 1px solid #dcdcdc;
+	text-align: center;
+}
+.title div:nth-of-type(1){
+	width: 33%;
+}
+.title div:nth-of-type(2){
+	width: 34%;
+}
+.title div:nth-of-type(3){
+	width: 33%;
+}
+.tit div:nth-of-type(4){
+	background: #FFFFFF;
+	font-size: 1.04rem;
+	line-height: 2.24rem;
+	border: 1px solid #dcdcdc;
+	text-align: center;
+}
+.tit div:nth-of-type(1),.tit div:nth-of-type(2),.tit div:nth-of-type(3){
+	line-height: 180%;
+	padding: 1rem 0;
+	background: #FFFFFF;
+	font-size: 1.04rem;
+	border: 1px solid #dcdcdc;
+	text-align: center;
+}
+.tit div:nth-of-type(1){
+	width: 33%;
+}
+.tit div:nth-of-type(2){
+	width: 34%;
+}
+.tit div:nth-of-type(3){
+	width: 33%;
+}
+.tit div:nth-of-type(3) button{
+	width: 6.2rem;
+	height: 1.42rem;
+	border: none;
+	font-size: 0.72rem;
+	color: #FFFFFF;
+	border-radius: 0.4rem;
+}
+.tit div:nth-of-type(3) button:first-of-type{
+	background: #3ab849;
+}
+.tit div:nth-of-type(3) button:last-of-type{
+	background: #3aabb8;
+}

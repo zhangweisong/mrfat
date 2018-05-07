@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>专家提现管理</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">专家管理</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">专家提现</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <!--查询-->
+        <div class="query">
+            <form  name="seachform" id="seachform"  action="{:U('expertpopinfo/index')}"  method="post" class="form"  >
+				<div class="form_input mg_trb">
+                    <label class="text">专家姓名</label>
+                    <input type="text" name="info[expert_realname]" id="expert_realname" value="{$expert_realname}"  placeholder="请输入专家姓名"  maxlength="20"/>
+                </div>
+                <div class="select mg_trb">
+                    <span class="text">申请状态</span>
+                    <select name="info[pop_flag]">
+                        <option value="">--请选择申请状态--</option>
+                        <volist name="pop_flags" id="data">
+                            <option value="{$key}" <if condition="$key eq $pop_flag ">selected</if>>{$data}</option>
+                        </volist>
+                    </select>
+                </div>
+				<div class="form_input mg_trb form-date">
+					<label class="text">申请时间</label>
+					<input type="text" class="laydate-icon layer-date" name="info[starttime]"  value="{$starttime}"  id="start" placeholder="开始时间" readonly/>
+					<span>--</span>
+					<input type="text" class="laydate-icon layer-date" name="info[endtime]"  value="{$endtime}"  id="end" placeholder="结束时间" readonly/>
+				</div>
+                <!--<div class="form_input mg_trb form-date">
+                    <label class="text">打款时间</label>
+                    <input type="text" class="laydate-icon layer-date" name="info[backstarttime]"  value="{$backstarttime}"  id="backstart" placeholder="开始时间" readonly/>
+                    <span>--</span>
+                    <input type="text" class="laydate-icon layer-date" name="info[backendtime]"  value="{$backendtime}"  id="backend" placeholder="结束时间" readonly/>
+                </div>-->
+                <div class="button mg_trb" onclick="location.href='{:U('expertpopinfo/index')}'">
+                    <i class="fa fa-refresh ico"></i>
+                    <input type="button" value="刷新" class="but chongzhi" />
+                </div>
+
+                <div class="button mg_trb chaxun">
+							<i class="fa fa-search ico"></i>
+							<input type="submit" value="查询" class="but " style="    position: absolute; background: none;z-index: 2;" />
+						</div>
+            </form>
+        </div>
+        <div class="table_box">
+            <table class="table" border="" cellspacing="" cellpadding="">
+                <thead>
+                <tr>
+                    <th>专家姓名</th>
+                    <th>申请金额</th>
+                    <th>银行卡名称</th>
+                    <th>银行卡卡号</th>
+                    <th>户主姓名</th>
+                    <th>预留手机号</th>
+					<th>状态</th>
+                    <th>申请提现时间</th>
+                    <!--<th>打款日期</th>-->
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="listinfo" id="popinfo">
+                    <tr>
+                        <td>{$popinfo.realname}</td>
+                        <td>{$popinfo.pop_money}</td>
+                        <td>{$popinfo.pop_account}</td>
+                        <td>{$popinfo.pop_code}</td>
+                        <td>{$popinfo.pop_name}</td>
+                        <td>{$popinfo.pop_phone}</td>
+						<td>
+							<if condition="$popinfo['pop_flag'] eq 1">
+								<font >申请</font>
+								<elseif condition="$popinfo['pop_flag'] eq 2"/>
+								<font style="color:green;">通过</font>
+                                <else/>
+                                <font style="color:red;">驳回</font>
+							</if>	
+						</td>
+                        <td><?php echo date('Y-m-d H:i:s',$popinfo['pop_addtime']);?></td>
+                        <!--<td>
+                            <if condition="$popinfo.pop_backtime eq 0">
+                                ---
+                                <else/>
+                                <?php echo date('Y-m-d H:i:s',$popinfo['pop_backtime']);?>
+                            </if>
+                        </td>-->
+                        <td>
+                            <a href="javascript:;" onclick="xiangqing({$popinfo['pop_id']})" class="but chaxun">
+								<i class="fa fa-eye"></i>
+                                查看详情
+                            </a>
+                            <if condition="$popinfo['pop_flag'] eq 1">
+                                <a href="javascript:;" onclick="tongguo({$popinfo['pop_id']})" class="but chaxun">
+                                    <i class="fa fa-toggle-off"></i>
+                                      通过
+                                </a>
+								<a href="javascript:;" onclick="bohui({$popinfo['pop_id']})" class="but chongzhi">
+                                    <i class="fa fa-toggle-off"></i>
+									驳回
+                                </a>
+                            </if>
+                            
+                        </td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </div>
+        {$pageshow}
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+    });
+</script>
+<script src="__PUBLIC__/admin/js/laydate/laydate.js"></script>
+<script>
+    //laydate({elem: "#hello", event: "focus"});
+    var start = {
+        elem: "#start",
+        format: "YYYY-MM-DD",
+        min: "2000-06-16",
+        max: "2099-06-16",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            end.min = datas;
+            end.start = datas
+        }
+    };
+    var end = {
+        elem: "#end",
+        format: "YYYY-MM-DD",
+        min: "2000-06-16",
+        max: "2099-06-16",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            start.max = datas
+        }
+    };
+    laydate(start);
+    laydate(end);
+   /* var backstart = {
+        elem: "#backstart",
+        format: "YYYY-MM-DD",
+        min: "2000-06-16",
+        max: "2099-06-16",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            backend.min = datas;
+            backend.start = datas
+        }
+    };
+    var backend = {
+        elem: "#backend",
+        format: "YYYY-MM-DD",
+        min: "2000-06-16",
+        max: "2099-06-16",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            backstart.max = datas
+        }
+    };
+    laydate(backstart);
+    laydate(backend);*/
+</script>
+<script src="__PUBLIC__/admin/js/layer/layer.js"></script>
+<script type="text/javascript">
+    $(".right_min").height($(window).height());
+    var body_w=$(".right_min").width()-200;
+    var body_h=$(".right_min").height()-100;
+    function xiangqing(pop_id) {
+        layer.open({
+            type: 2,
+            title: false,
+            skin: "layui-layer-molv",
+            shade: [0.8, '#000000'],
+            scrollbar: false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area: [body_w + "px", body_h + "px"],
+            content: "{:U('expertpopinfo/xiangqing')}&pop_id=" + pop_id
+        });
+    }
+    function tongguo(pop_id) {
+        layer.open({
+            type: 2,
+            title: false,
+            skin: "layui-layer-molv",
+            shade: [0.8, '#000000'],
+            scrollbar: false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area: [body_w + "px", body_h + "px"],
+            content: "{:U('expertpopinfo/tongguo')}&pop_id=" + pop_id
+        });
+    }
+	function bohui(pop_id) {
+        //alert(user_id);
+        layer.open({
+            type: 2,
+            title: false,
+            skin: "layui-layer-molv",
+            shade: [0.8, '#000000'],
+            scrollbar: false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area: [body_w + "px", body_h + "px"],
+            content: "{:U('expertpopinfo/bohui')}&pop_id=" + pop_id
+        });
+    }  
+</script>
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	$(function(){
+		$('input, textarea').placeholder();
+	});
+</script>
+

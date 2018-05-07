@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>购物车</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+    <style>
+     .wrap-dialog {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         font-size: 16px;
+         text-align: center;
+         background-color: rgba(0, 0, 0, .4);
+         z-index: 999;
+         
+     }
+     .dialog {
+         position: relative;
+         margin: 40% auto;
+         width: 250px;
+         background-color: #FFFFFF;
+         border-radius:10px;
+     } 
+     .dialog .dialog-body {
+         height: 60px;
+         padding: 20px;
+     }
+     .dialog .dialog-footer {
+         padding: 15px;
+         background-color: whitesmoke;
+         border-radius:0 0 10px 10px;
+     }
+     .btn {
+         border-radius:10px;
+         width: 70px;
+         padding: 4px;
+         border:0px;
+     }
+     .hide {
+         display: none;
+     }
+     .ml50 {
+         margin-left: 50px;
+     }
+ </style>
+	<body>
+		<div class="pd_t45 gouwuche_box">
+			<div class="gouwuche_ct">
+				<div class="gouwuche_list mg_b10" id="content">  
+                    
+				</div> 
+			</div>
+            <div class="meiyouneirong" style="display:none;margin-top:10%;">
+					<i><img src="__PUBLIC__/user/images/li_wdxx_img.png"/></i>
+					<p>购物车空空如也~~</p>
+            </div>
+            <div class="dibufengexian">
+                <p>亲，到底了~</p>
+            </div>
+            <div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+                <img src="__PUBLIC__/user/images/5-130H2191536.gif">
+            </div>
+            <button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button> 
+			<div class="heji">
+				<i>合计：￥<em id="all_money">0</em></i> 
+				<span onclick="account()">结算</span>
+			</div>
+            <div class="wrap-dialog hide">
+                <div class="dialog">
+                    <div class="dialog-body">
+                        <span class="dialog-message">你确认删除？</span>
+                    </div>
+                    <div class="dialog-footer">
+                        <input type="button" class="btn" id="cancel" value="取消" />
+                        <input type="button" class="btn ml50" id="confirm" value="确认" /> 
+                    </div>
+                </div>
+            </div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script type="text/javascript"> 
+	//单选
+	function danxuan(obj){ 
+		//获取gouwuche_list_ct的个数
+		var length_=$(obj).parents('.gouwuche_list').find('.gouwuche_list_ct').length;
+		//获取gouwuche_list_ct选中的个数
+		var checked_True=$(obj).parents('.gouwuche_list').find('.gouwuche_list_ct input:checkbox:checked').length
+		if(length_==checked_True){
+			$(obj).parents('.gouwuche_list').find('.gouwuche_list_top input').prop("checked",true);
+		}else{
+			$(obj).parents('.gouwuche_list').find('.gouwuche_list_top input').prop("checked",false);
+		}
+		if($(obj).is(':checked')){
+			$(obj).parents('.gouwuche_list').siblings().find('input[type="checkbox"]').prop("checked",false);
+		}else{
+        
+		}
+		allmoney();
+	}
+	var zongshu=1;
+	//数量加
+	function jia(obj){ 
+		var zongshu=parseInt($(obj).prev().text()) 
+		zongshu++; 
+        var data_num=$(obj).attr('data_num');
+        if(zongshu>data_num){
+            layer.msg('购买数量不能大于库存！',{icon:5,time:1000});
+            zongshu=data_num;
+        }
+		$(obj).prev().text(zongshu); 
+        allmoney();
+        var id=$(obj).attr('data'); 
+        var url = "{:U('book/changenum')}";
+        var data = {"book_id": id,"zongshu":zongshu};
+        $.post(url, data, 'json');
+	}
+	//数量减
+	function jian(obj){
+		var zongshu=parseInt($(obj).next().text())
+		zongshu--; 
+		if(zongshu<1){
+			return false;
+		}
+		$(obj).next().text(zongshu);
+		allmoney();
+        var id=$(obj).attr('data');
+        var url = "{:U('book/changenum')}";
+        var data = {"book_id": id,"zongshu":zongshu};
+        $.post(url, data, 'json');
+	}	
+	//计算总价
+	function allmoney(){ 
+		var money=0; 
+		$(".dangefuxuan").find("input").each(function(i){
+			if($(this).is(':checked')){
+				var price=parseFloat($(this).parents().next().find("em").html());
+				var num=parseInt($(this).parents().next().find(".shuzi").html());
+				money+=price*num;
+			}
+		});
+		$(".heji").find("em").html(money.toFixed(2));
+	}
+</script>
+<script>
+    init();
+    function init(){             
+	    var data = {$info}; 
+	    var info = data.info;  
+	    if(info.length>0){
+			var html = htmlinfo(info);
+			$("#content").html(html);
+	    }else{
+			$(".meiyouneirong").css("display","block");
+	    } 
+    }
+    
+    //数据列表
+    function htmlinfo(info){   
+        var html=""; 
+        for(var i=0;i<info.length;i++){
+            html+='<div class="gouwuche_list_ct">';
+			html+='<i class="dangefuxuan"><input onclick="danxuan(this)" data="'+info[i]['book_id']+'"   type="checkbox"/></i>';
+            html+='<dl class="c">'; 
+            html+='<a href="#">'; 
+            html+='<dt><img src='+info[i].img+' /></dt>';
+			html+='<dd>';
+            html+='<h4>'+info[i]['book_name']+'</h4>';
+            html+='<div class="danjia">';
+            html+='<span>价格：￥<em>'+info[i]['book_price']+'</em></span>'; 
+            html+='</div>';
+            html+='<div class="shuliang c">';
+            html+='<span class="shuliang_fr" onclick="del('+info[i].bcar_id+')">删除</span>';
+            html+='<dl class="shuliang_fl">';
+            html+='<dt>数量：</dt>';
+            html+='<dd>';
+            html+='<span data ="'+info[i]['book_id']+'"  onclick="jian(this)" class="jian">-</span>';
+            html+='<i class="shuzi">'+info[i].book_num+'</i>';
+			html+='<span data ="'+info[i]['book_id']+'" data_num ="'+info[i]['numss']+'"  onclick="jia(this)" class="jia">+</span>';
+			html+='</dd>';
+            html+='</dl>';
+            html+='</dd>';
+            html+='</a>';
+            html+='</dl>';
+            html+='</div>'; 
+            
+        }
+        return html;     
+    }
+    
+    
+    //滚动加载  
+    $(window).scroll(function () { 
+        getData();
+    });
+    var totalheight = 0;     //定义一个总的高度变量
+    function getData() {
+         totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop())+1; 
+         //浏览器的高度加上滚动条的高度 （页面总高度）  
+        if ($(document).height() <= totalheight) { 
+            //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+            //加载
+            $("#loadings").fadeIn(); 
+            //根据条件获取对应的项目条数
+            getmore();//使用模板加载更多
+            //加载完毕          
+            $("#loadings").fadeOut(); 
+        }
+    }
+
+	//加载更多 
+    function getmore(){ 
+        var page=parseInt($("#more").attr("data"))+1; 
+        $('#more').attr("data",page);//重置当前页数  
+        $.getJSON("{:U('book/car')}&p="+page,function(data){  
+           var info = data.info; 
+           if(info.length>0){
+                var html = htmlinfo(info);
+                $("#content").append(html);
+           }else{ 
+                $("#loadings").fadeOut(); 
+                $(".dibufengexian").show();          
+           }
+        }) 
+    }  
+    
+    //结算
+    function account(){
+        //总价
+        var allmoney =  parseFloat($("#all_money").html());
+        //获取被选中商品id
+        var book_id=[];
+        //获取被选中商品的数量
+        var book_num=[];
+        $(".dangefuxuan").find("input").each(function(i){  
+			if($(this).is(':checked')){
+				book_id.push($(this).attr("data"));
+                book_num.push(parseInt($(this).parents('.gouwuche_list_ct').find(".shuzi").text()));
+			}
+		});
+        if(book_id==0||book_id==""){
+            layer.msg('请选择商品！',{icon:5,time:1000});
+            return false;
+          
+        }        
+        if(allmoney!="" || allmoney>0){
+            location.href="{:U('book/account')}&book_id="+book_id.join(",")+"&book_num="+book_num.join(",");
+        }   
+        
+    }
+
+    function del(a){ 
+        var message = "确认删除？";
+        dialogBox(message,
+            function () {  
+                $.getJSON("{:U('book/delcar')}&bcar_id="+a,function(data){
+                    var info  = data.data; 
+                    if(info==1){ 
+                        layer.msg('删除成功',{icon:6,time:1000},function(){
+                            location.href="{:U('book/car')}"; 
+                        }); 
+                    } 
+                })    
+            },
+            function(){
+                return false;   
+            }
+        ); 
+    }
+    function dialogBox(message, yesCallback, noCallback){
+         if(message){
+             $('.dialog-message').html(message);
+        }
+         // 显示遮罩和对话框
+         $('.wrap-dialog').removeClass("hide");
+         // 确定按钮
+         $('#confirm').click(function(){
+             $('.wrap-dialog').addClass("hide");
+             yesCallback();
+         });
+         // 取消按钮
+        $('#cancel').click(function(){
+             $('.wrap-dialog').addClass("hide");
+             noCallback();
+         });
+     }
+</script>
+
+

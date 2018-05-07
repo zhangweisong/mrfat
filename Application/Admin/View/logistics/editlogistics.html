@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>编辑物流公司</title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+		<link href="__PUBLIC__/validform/Validform.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="__PUBLIC__/validform/Validform_v5.3.2.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/validform/Validform_Datatype.js"></script>
+	</head>
+	<body>
+		<div class="right_min">
+			<div class="crumbs_nav">
+				<i class="iconfont icon-shouye"></i>
+				<ul>
+					<li><a href="{:U('index/welcome')}">首页</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">经销商管理</a></li>
+					<li> > </li>
+					<li><a href="{:U('logistics/logistics')}">物流公司</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">编辑物流公司</a></li>
+				</ul>
+			</div>
+			<div class="min">
+				<div class="form_box">
+					<form name="myform" id="myform" action="{:U('logistics/editlogistics',array('logistics_id'=>$logistics_id))}" method="post">
+						<div class="form-item">
+							<label class="form-label">物流公司名称</label>
+							<div class="form-text form-input-block">
+								<input name="info[logistics_name]" id="logistics_name" type="text" class="dfinput"   maxlength="50"  datatype="*" value="{$flag.logistics_name}"/>
+								<i class="Validform_checktip"></i>
+							</div>
+						</div>
+                        <div class="form-item">
+							<label class="form-label">物流公司电话</label>
+							<div class="form-text form-input-block">
+								<input name="info[logistics_phone]" id="logistics_phone" type="text" class="dfinput"   datatype="m"  maxlength="11" value="{$flag.logistics_phone}"/>
+								<i class="Validform_checktip"></i>
+							</div>
+						</div>
+                        <div class="form-item">
+                            <div class="form-button form-input-block">
+                                <input class="chaxun but" type="submit" value="提交"/>
+                                <button class="but chongzhi" type="button" onclick="location.href='{:U('logistics/logistics')}'">返回</button>
+                            </div>
+                        </div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	$(function(){
+		$(".right_min").height($(window).height());
+		
+		$('.skin-section input').iCheck({
+			checkboxClass: 'icheckbox_square-green',
+			radioClass: 'iradio_square-green',
+		});
+		$('input').on('ifChecked', function(event){
+		  //alert($(this).val());
+		});
+	});
+</script>
+<script>
+   $(function(){
+        $("#myform").Validform({ 
+            tiptype:function(msg,o,cssctl){
+                var objtip=o.obj.siblings(".Validform_checktip");
+                cssctl(objtip,o.type);
+                objtip.text(msg);
+            },
+            datatype: {
+            //传入自定义datatype类型，可以是正则，也可以是函数（函数内会传入一个参数）;
+                "not0": function (gets, obj, curform, datatype) {
+                     if (gets >0)
+                        return true;
+                    return false;
+                },
+            }
+
+        });
+    });
+    
+    
+   
+</script>

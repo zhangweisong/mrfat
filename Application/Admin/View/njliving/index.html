@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>农技直播管理</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css"> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a href="###">三农服务</a></li>
+                    <li> > </li>
+                    <li><a href="{:U('njliving/index')}">农技直播管理</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <!--查询-->
+                <div class="query">
+                    <form name="seachform" id="seachform" action="{:U('njliving/index')}"  method="post" class="form">
+                        <div class="form_input mg_trb">
+                            <label class="text">农技直播名称</label>
+                            <input type="text" name="info[nj_name_s]" value="{$nj_name_s}" placeholder="农技直播名称" maxlength="50"/>
+                        </div> 
+                        <div class="select mg_trb">
+                            <span class="text">一级分类</span>
+                            <select name="info[yiji_s]" onchange="get_erji(this)">
+                                <option value="0">--请选择--</option> 
+                                <?php foreach($yiji AS $v):?>
+                                <option value="<?=$v['nj_classify_id']?>" <?php if($v['nj_classify_id']==$yiji_s){echo "selected";}?>><?=$v['nj_classify_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                        <div class="select mg_trb">
+                            <span class="text">二级分类</span>
+                            <select name="info[erji_s]" id='erji'>
+                                <option value="">--请选择--</option>
+                                <?php foreach($erji AS $v):?>
+                                <option value="<?=$v['nj_classify_id']?>" <?php if($v['nj_classify_id']==$erji_s){echo "selected";}?>><?=$v['nj_classify_name']?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+						<div class="select mg_trb">
+							<span class="text">状态</span>
+							<select name="info[nj_isable]">
+								<option value="">--请选择状态--</option>
+								<volist name="nj_isables" id="data">
+								<option value="{$key}" <if condition="$key eq $nj_isable ">selected</if>>{$data}</option>
+								</volist>
+							</select>
+						</div>
+
+                        <div class="button mg_trb" onclick="location.href = '{:U(\'njliving/index\')}'">
+                            <i class="fa fa-refresh ico"></i>
+                            <input type="button" value="刷新" class="but chongzhi" />
+                        </div>
+                        <div class="button mg_trb chaxun">
+                            <i class="fa fa-search ico"></i>
+                            <input type="submit" value="查询" class="but " style="position: absolute; background: none;z-index: 2;"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="tianjia">
+                    <a class="tianjia_but" href="{:U('njliving/add')}">
+                        <i class="fa fa-plus"></i>
+                        添加
+                    </a>
+                </div>
+                <div class="table_box">
+                    <table class="table" border="" cellspacing="" cellpadding=""> 
+                        <thead>
+                            <tr>
+                                <th>农技直播名称</th>
+                                <th>一级分类</th>
+                                <th>二级分类</th>
+                                <th>直播地址</th>
+								<th>状态</th> 	
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="listinfo" id="content">
+                            <tr>
+                                <td>{$content.nj_name}</td>
+                                <td>{$content.yiji_name}</td>
+                                <td>{$content.erji_name}</td>
+                                <td>{$content.nj_url}</td>
+                                <td>
+                                    <label class="switch-btn circle-style" style="margin: 0 auto;">
+                                        <input class="checked-switch" type="checkbox" onchange="checkedswitchs(this,{$content.nj_id},'nj_isable')"
+                                        <if condition="$content['nj_isable'] eq 1">checked</if> />
+                                        <span class="text-switch" data-yes="启用" data-no="禁用"></span> 
+                                        <span class="toggle-btn"></span> 
+                                    </label>
+                                </td>
+                                <td> 
+                                    <a href="{:U('njliving/edit',array('nj_id'=>$content['nj_id']))}"  class="but chaxun">
+                                        <i class="fa fa-edit"></i>
+                                        编辑
+                                    </a>
+                                    <a href="{:U('njliving/delete',array('nj_id'=>$content['nj_id']))}" onclick="{
+                                                if (confirm('确认删除?')) {
+                                                    return true;
+                                                }
+                                                return false;
+                                            }"  class="but chongzhi">
+                                        <i class="fa fa-trash-o"></i>
+                                        删除
+                                    </a> 
+                                   <!-- <p onclick="xiangqing({$content.nj_id})"  class="but chaxun">
+									<i class="fa fa-eye" ></i>
+									查看详情</p>-->
+                                </td>
+                            </tr> 
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                {$pageshow}
+            </div>
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $(".right_min").height($(window).height());
+    });
+    //二级分类 
+    function get_erji(obj) {
+        $("#erji").html("<option value='0' >--请选择--</option> ");
+        var yiji_id = $(obj).val()
+        if (yiji_id == 0)
+            return;
+        $.getJSON("{:U('njliving/get_erji')}&yiji_id=" + yiji_id, function (data) {
+            var html = "";
+            for (var i = 0; i < data.length; i++) {
+                html += "<option value=" + data[i].nj_classify_id + ">" + data[i].nj_classify_name + "</option>";
+            }
+            $("#erji").append(html);
+        });
+    }
+</script>  
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function () { 
+        $('input, textarea').placeholder();
+    });
+</script>
+<script type="text/javascript">
+	$(function(){
+		$(".right_min").height($(window).height());
+	});
+	//显示开关1显示；2隐藏
+	function checkedswitchs(obj,nj_id,field){
+		if($(obj).is(':checked')){	//true
+			console.log("显示"+nj_id);
+			$.getJSON("{:U('njliving/ajaxable_on')}&nj_id="+nj_id+"&field="+field,function(){
+			});
+		}else{	//false
+			console.log("隐藏"+nj_id);
+			$.getJSON("{:U('njliving/ajaxable_off')}&nj_id="+nj_id+"&field="+field,function(){
+			});
+			
+		}
+	}
+</script>
+<script src="__PUBLIC__/admin/js/layer/layer.js"></script>
+<script>  
+$(".right_min").height($(window).height());
+    var body_w=$(".right_min").width()-100;
+    var body_h=$(".right_min").height()-50;
+    function xiangqing(a){ 
+        layer.open({
+            type: 2,
+            title: false,
+            skin:"layui-layer-molv",
+            shade: [0.5, '#000000'],
+            scrollbar:false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area : [body_w+"px",body_h+"px"],
+            content: '{:U("njliving/info")}&nj_id='+a
+        });
+    }
+	 
+</script>

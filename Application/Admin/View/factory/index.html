@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>厂家</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css"> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 
+        <script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script> 
+        <script type="text/javascript">
+            $(function () {
+                $('input, textarea').placeholder();
+            });
+        </script> 
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a href="###">厂家管理</a></li>
+                    <li> > </li>
+                    <li><a href="{:U('factory/index')}">厂家管理</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <!--查询-->
+                <div class="query">
+                    <form name="seachform" id="seachform" action="{:U('factory/index')}"  method="post" class="form">
+                        <div class="form_input mg_trb">
+                            <label class="text">快速检索</label>
+                            <input type="text" name="info[factory_name]"  value="{$factory_name}"  placeholder="厂家名称/联系人/电话"  maxlength="20"/>
+                        </div> 
+                        <div class="select mg_trb">
+                            <label class="text">所属地</label>  
+                            <select name="info[p_id]" id="p_id" onChange="getcity(this)" >
+                                <option  value="0" >--请选择省--</option>   
+                                <?php foreach($province AS $v):?>
+                                <option value="<?=$v['p_id']?>" <?php if($v['p_id']==$p_id){echo 'selected';}?>><?=$v['p_name']?></option> 
+                                <?php endforeach;?>
+                            </select> 
+                            <select name="info[c_id]" id="c_id" onChange="getarea(this)">
+                                <option value="0"  >--请选择市--</option>  
+                                <?php foreach($city AS $v):?>
+                                <option value="<?=$v['c_id']?>" <?php if($v['c_id']==$c_id){echo 'selected';}?>><?=$v['c_name']?></option> 
+                                <?php endforeach;?>
+                            </select>
+                            <select name="info[a_id]" id="a_id" >
+                                <option value="0" >--请选择区县--</option>  
+                                <?php foreach($area AS $v):?>
+                                <option value="<?=$v['a_id']?>"  <?php if($v['a_id']==$a_id){echo 'selected';}?>><?=$v['a_name']?></option> 
+                                <?php endforeach;?> 
+                            </select> 
+                        </div> 
+                        <div class="select mg_trb">
+                            <span class="text">状态</span>
+                            <select name="info[classify_isable]">
+                                <option value="">--请选择状态--</option>
+                                <volist name="classify_isable" id="data">
+                                    <option value="{$key}a" <if condition="$key.'a' eq $classify_ ">selected</if>>{$data}</option>
+                                </volist>
+                            </select>
+                        </div> 
+                        <div class="button mg_trb" onclick="location.href = '{:U(\'factory/index\')}'">
+                            <i class="fa fa-refresh ico"></i>
+                            <input type="button" value="刷新" class="but chongzhi" />
+                        </div>
+                        <div class="button mg_trb chaxun">
+                            <i class="fa fa-search ico"></i>
+                            <input type="submit" value="查询" class="but " style="position: absolute; background: none;z-index: 2;"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="tianjia">
+                    <a class="tianjia_but" href="{:U('factory/addfactory')}">
+                        <i class="fa fa-plus"></i>
+                        添加厂家        
+                    </a>
+                </div>
+                <div class="table_box">
+                    <table class="table" border="" cellspacing="" cellpadding=""> 
+                        <colgroup>
+                            <col width="150">
+                            <col width="200">
+                            <col width="250">
+                            <col width="100">
+                            <col width="200"> 
+                            <col width="100"> 
+                            <col width="100"> 
+                            <col width="100"> 
+                            <col>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>厂家名称</th>
+                                <th>所属地</th>
+                                <th>店铺地址</th>
+                                <th>联系人</th>
+                                <th>电话</th> 
+                                <th>余额</th>
+                                <th>状态</th> 
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="factorylist" id="factory">
+                            <tr>
+                                <td>{$factory.factory_name}</td>
+                                <td>{$factory.p_name}-{$factory.c_name}-{$factory.a_name}</td>
+                                <td>{$factory.factory_address}</td>
+                                <td>{$factory.factory_man}</td>
+                                <td>{$factory.factory_tel}</td> 
+                                <td>{$factory.factory_money}</td> 
+                                <td>
+                                    <label class="switch-btn circle-style" style="margin: 0 auto;">
+                                        <input class="checked-switch" type="checkbox" onchange="checkedswitchs(this, {$factory.factory_id})"
+                                               <if condition="$factory['factory_state'] eq 1">checked</if> />
+                                        <span class="text-switch" data-yes="启用" data-no="禁用"></span> 
+                                        <span class="toggle-btn"></span> 
+                                    </label>
+                                </td> 
+                                <td> 
+                                    <a href="{:U('factory/editfactory',array('factory_id'=>$factory['factory_id']))}"  class="but chaxun">
+                                        <i class="fa fa-edit"></i>
+                                        编辑
+                                    </a>
+                                    <a href="{:U('factory/repassword',array('factory_id'=>$factory['factory_id']))}" class="but chaxun" onclick="{
+                                                if (confirm('你确定要重置密码为a123456吗?')) {
+                                                    return true;
+                                                }
+                                                return false;
+                                            }">
+                                        <i class="fa fa-lock"></i>
+                                        重置密码
+                                    </a>  
+                                </td>
+                            </tr> 
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                {$pageshow}
+            </div>
+        </div>
+        <script type="text/javascript">
+
+            function getcity(obj) {
+                var province_id = $(obj).val()
+                if (province_id == 0) {
+                    return;
+                }
+                $("#c_id").html("<option value='0' >--请选择市--</option>");
+                $("#a_id").html("<option value='0' >--请选择区县--</option>");
+                $.get("{:U('factory/cityofprovince')}", {"p_id": province_id}, function (data) {
+                    var html = "<option value='0' >--请选择市--</option>";
+                    for (var i = 0; i < data.length; i++) {
+                        html += "<option value=" + data[i].c_id + ">" + data[i].c_name + "</option>";
+                    }
+                    $("select#c_id").html(html);
+                });
+            }
+            function getarea(obj) {
+                var city_id = $(obj).val()
+                if (city_id == 0) {
+                    return;
+                }
+                $("#a_id").html("")
+                $.get("{:U('factory/areaofcity')}", {"c_id": city_id}, function (data) {
+                    var html = "<option value='0' >--请选择区县--</option>";
+                    for (var i = 0; i < data.length; i++) {
+                        html += "<option value=" + data[i].a_id + ">" + data[i].a_name + "</option>";
+                    }
+                    $("#a_id").html(html);
+                });
+            }
+
+        </script> 
+        
+        
+        <script>
+            //laydate({elem: "#hello", event: "focus"});
+             
+            $(function () {
+                $('input, textarea').placeholder();
+            });
+            //显示开关1显示；2隐藏
+            function checkedswitchs(obj, id) {
+                if ($(obj).is(':checked')) {
+                    //true 
+                    $.get("{:U('factory/ajax_on')}", {"factory_id": id})
+                } else {
+                    $.get("{:U('factory/ajax_off')}", {"factory_id": id})
+                }
+            }
+            $(".right_min").height($(window).height());
+            var body_w = $(".right_min").width() - 200;
+            var body_h = $(".right_min").height() - 100;
+        </script> 
+    </body>
+</html>

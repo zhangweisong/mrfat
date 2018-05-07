@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+		<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.idTabs.min.js"></script>
+		<link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" />
+        <script type="text/javascript" src="__PUBLIC__/kindeditor/kindeditor-min.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/kindeditor/lang/zh-CN.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/stringOperate.js"></script>
+	</head>
+	<style>
+	/*多图上传样式*/
+	.toollist_pic{clear: both;width: 100%;text-align: center;margin-right: 10px; margin-top:10px;}
+	.toollist_pic li{float: left;list-style:none; clear: initial; width:100px;height:100px; overflow:hidden;position: relative;}
+	.toollist_pic li a{display:block; width:100%; height:100%;}
+	.toollist_pic li img{width:100px;height:100px;}
+	.toollist_pic li i{display:block; position:absolute; top:0; right:0; width:20px; height:20px; background:#2cb184; z-index:888; margin:0;}
+	.toollist_pic li .fa-times-circle{ font-size:20px; color:#fff;}
+	.span{display:inline-block; height:34px; line-height:34px;color: #ff0000;font-size:1.8rem;vertical-align: middle;}
+	</style>
+	<style>
+		.form-button .ke-inline-block.but{margin-top:0;}
+		.form-button .ke-button-common{display:block;width:100%; height:100%; line-height:38px; background:none;}
+		.form-button .ke-button-common.ke-button{color:#fff; font-size:16px;}
+		.form-button .ke-upload-area.ke-form .ke-upload-file{display:block;width:100% !important; height:100%;     cursor: pointer;}
+	</style>
+	
+    <script type="text/javascript">
+    var editor;
+	KindEditor.ready(function(K) {
+		editor = K.create('textarea[id="sclassify_remarks"]', {
+			uploadJson : '{:U('kindeditor/upload_json',array('dir'=>image))}',
+			fileManagerJson : '{:U('kindeditor/file_manager_json')}',
+			allowFileManager : true,
+			urlType : 'domain',
+			afterCreate : function() {
+				this.sync(); 
+			},
+			afterBlur:function(){ 
+				this.sync(); 
+			}
+	  });
+		//单图
+		var uploadbutton = K.uploadbutton({
+			button : K('#uploadbutton')[0],
+			fieldName : 'imgFile',
+			url : '{:U('kindeditor/upload_json',array('dir'=>image))}',
+			afterUpload : function(data) {
+				if (data.error === 0) {
+					var url = K.formatUrl(data.url, 'domain');
+					$("#sclassify_image").val(url);
+				} else {
+					alert(data.message);
+				}
+			},
+			afterError : function(str) {
+				alert('自定义错误信息: ' + str);
+			}
+		});
+		uploadbutton.fileBox.change(function(e) {
+			uploadbutton.submit();
+		});
+		
+		//多图
+		var uploadbutton1 = K.uploadbutton({
+			button : K('#uploadbutton1')[0],
+			fieldName : 'imgFile',
+			url : '{:U('kindeditor/upload_json',array('dir'=>image))}',
+			afterUpload : function(data) {
+				if (data.error === 0) {
+					var url = K.formatUrl(data.url, 'domain');
+					K('#imagemore').val(url);
+					add_album_img(url);
+				} else {
+					alert(data.message);
+				}
+			},
+			afterError : function(str) {
+				alert('自定义错误信息: ' + str);
+			}
+		});
+		uploadbutton1.fileBox.change(function(e) {
+			uploadbutton1.submit();
+		});
+	});
+
+    //图片插件
+	function add_album_img(imgurl) {
+		var val = StringOperate.add($("#imagemoreall").val(), imgurl);
+		$("#imagemoreall").val(val);
+		$(".toollist_pic").append("<li onclick=\"del_album_img(\'" + imgurl +"\',this);\"><a><img src='" + imgurl + "'><i class=\"fa fa-times-circle\"></i></a></li>");
+		$('#imagemore').val("");
+	}
+	function del_album_img(imgurl,obj) {  
+		var val = StringOperate.remove($("#imagemoreall").val(), imgurl); 
+		$("#imagemoreall").val(val);
+		$(obj).remove();//删除元素
+	}
+	</script>
+	
+		<body>
+		<div class="right_min">
+			<div class="crumbs_nav">
+				<i class="iconfont icon-shouye"></i>
+					<ul>
+				    <li><a href="{:U('index/welcome')}">首页</a></li>
+					<li> > </li>
+					<li><a href="#">专家管理</a></li>
+					<li> > </li>
+					<li><a href="{:U('expertperfessional/index')}">专家职称</a></li>
+					<li> > </li>
+					<li><a href="#">编辑专家职称</a></li>
+				</ul>
+			</div>
+			<div class="min">
+				<div class="form_box">
+					<form name="myform" id="myform" action="{:U('expertperfessional/edit',array('sclassify_id'=>$savantclassify['sclassify_id']))}" method="post" onsubmit="return check()">
+						<div class="form-item">
+							<label class="form-label">职称名称</label>
+							<div class="form-text form-input-block w50">
+								<input type="text" name="info[sclassify_name]" id="sclassify_name" value="{$savantclassify.sclassify_name}" placeholder="请输入职称名称" maxlength="20"/>
+								<i class="sclassify_name" style="display:none;color:red;">职称名称不能为空</i>
+							</div>
+						</div>
+						<!--<div class="form-item">
+						        <label class="form-label">职称图标</label>
+								<div class="form-text form-input-inline w50">
+									<input type="text" class="form-control" name="info[sclassify_image]" id="sclassify_image"  value="{$savantclassify.sclassify_image}" maxlength="150" readonly />
+								</div>
+								<div class="form-button form-input-inline">
+									<input type="button" id="uploadbutton" class="but shenhe mg_t0" value="上传" />
+								    <i class="sclassify_image" style="display:none;color:red;">职称图标不能为空</i>
+								</div>
+						</div>-->
+						<!--<div class="form-item">
+                            <label class="form-label">职称说明</label>
+                            <div class="form-textarea form-input-block">
+                                <textarea name="info[sclassify_remarks]" placeholder="请输入职称说明内容" id="sclassify_remarks">{$savantclassify.sclassify_remarks}</textarea>
+                                <i class="sclassify_remarks" style="display:none;color:red;">职称说明不能为空</i>
+                            </div>
+                        </div>-->
+                        <div class="form-item">
+                            <label class="form-label"  >状态</label>
+                            <div class="form-radio form-input-block" style="width:50%">
+                                <div class="skin-section">
+                                    <ul>
+                                        <li>
+                                            <input type="radio" name="radio" value="1" <if condition="$savantclassify['sclassify_isable'] eq 1">
+                                            checked </if>>
+                                            <span>显示</span>
+                                        </li>
+                                        <li>
+                                            <input type="radio" name="radio" value="2" <if condition="$savantclassify['sclassify_isable'] eq 2">
+                                            checked </if>>
+                                            <span>隐藏</span>
+                                        </li>
+                                    </ul>
+                                    <input type="hidden"  name="info[sclassify_isable]"  id="sclassify_isable" value="1" >
+                                </div>
+                                <i class="sclassify_isable" style="display:none;color:red;">状态不能为空</i>
+                            </div>
+                        </div>
+						<!--<div class="form-item">
+                            <label class="form-label">排序</label>
+                            <div class="form-text form-input-block w50">
+                                <input type="text" name="info[sclassify_sort]" id="sclassify_sort" value="{$savantclassify.sclassify_sort}" placeholder="请输入排序" datetype="" maxlength="5" onkeyup='this.value=this.value.replace(/\D/gi,"")'/>
+                                <i class="sclassify_sort" style="display:none;color:red;">排序不能为空</i>
+                            </div>
+                        </div>-->
+                        <div class="form-item">
+                            <div class="form-button form-input-block">
+                                <input class="chaxun but" type="submit" id="submit" value="提交"/>
+
+                                <button class="but chongzhi" type="button" onclick="location.href='{:U('expertperfessional/index')}'">返回</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $('.form-checkbox input,.form-radio input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
+    $(function () {
+        $(".right_min").height($(window).height());
+        $('.form-checkbox input,.form-radio input').on('ifChecked', function (event) {
+            var a = $(this).val();
+            $("#sclassify_isable").val(a);
+        });
+    });
+    
+    function check() { 
+        var all_arr = new Array('sclassify_name','sclassify_image','sclassify_remarks','sclassify_isable','sclassify_sort') 
+        for (var i = 0; i < all_arr.length; i++) {
+            var obj_name = all_arr[i];
+            var obj_id = '#'+obj_name;
+            var obj_class = '.'+obj_name; 
+            var this_obj_val = document.getElementById(obj_name).value;
+            if (this_obj_val == 0) {
+                $(obj_class).show();
+                $(obj_id).focus();
+                return false;
+            }
+            $(obj_class).hide();
+        }  
+        document.getElementById("submit").disabled = true;
+    }
+    
+</script>

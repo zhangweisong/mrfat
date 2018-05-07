@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>专家介绍</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<style type="text/css">
+			body{background: #fff;}
+		</style>
+		<div class="zhuanjiajieshao">
+			<ul class="c">
+				<div class="jieshao"></div>
+			</ul>			
+			<div class="meiyouneirong">
+				<i><img src="__PUBLIC__/user/images/li_wdxx_img.png"/></i>
+				<p>暂时没有专家入驻</p>
+			</div>	    	
+			<div class="dibufengexian">
+	    		<p>亲，到底了</p>
+	    	</div>
+			<div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+				<img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+			</div> 
+			<button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button> 
+		</div>
+	</body>
+</html>
+<script>
+	init();
+	function init(){
+		var data={$expert};
+		var info=data.expert;
+		console.log(info);
+		if(info.length>0){
+			var html=htmlinfo(info);
+			$(".jieshao").html(html);			
+		}else{
+			$(".meiyouneirong").css('display','block');
+		}
+	}
+
+	function htmlinfo(info){
+		var html='';
+		for(var i=0;i<info.length;i++){
+			html+='<li>';
+			html+='<a onclick="xiangqing('+info[i].expert_id+')">';
+			html+='<i><img src='+info[i].expert_avator+'></i>';
+			html+='<h5><span>'+info[i].expert_realname+'</span><em>'+info[i].sclassify_name+'</em></h5>';
+			html+='<p>'+info[i].expert_brief+'</p>';
+			html+='</a>';
+			html+='</li>';
+		}
+		return html;
+	}
+
+	 //滚动加载  
+	$(window).scroll(function () { 
+		getData();
+	});
+	
+	var totalheight = 0;     //定义一个总的高度变量
+	function getData() {
+		 totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()); 
+		 //浏览器的高度加上滚动条的高度 （页面总高度）  
+		if ($(document).height() <= totalheight) {          
+			//当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+			//加载
+			$("#loadings").fadeIn(); 
+			//根据条件获取对应的项目条数
+			getmore();//使用模板加载更多
+			//加载完毕          
+			$("#loadings").fadeOut(); 
+		}
+	}  
+	
+	function getmore(){
+		var page=parseInt($("#more").attr("data"))+1; 
+		$('#more').attr("data",page);//重置当前页数  	
+		$.getJSON("{:U('expert/zhuanjiajieshao')}&p="+page,function(data){
+			var info=data.expert;
+			if(info.length>0){
+				var html=htmlinfo(info);
+				$(".jieshao").append(html);
+			}else{
+				$("#loadings").fadeOut(); 
+				$(".dibufengexian").show();
+			}
+		})
+	}
+    //专家详情
+	function xiangqing(expert_id){
+		window.location.href = "{:U('expert/zhuanjiajieshao_xq')}&expert_id=" + expert_id;
+	}
+	//
+</script>

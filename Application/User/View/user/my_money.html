@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>我的佣金</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+		<style type="text/css">
+			body{ background:#fff;}
+                .li_myxx_zt{height: 30px; line-height: 30px; background:#f5f5f5;}
+                .li_myxx_zt p{ text-align:center; font-size:12px; color:#cacaca;}
+                .meiyouneirong {
+                    width: 100%;
+                    margin-top: 100px;
+                    display: none;
+                }
+                .meiyouneirong i {
+                    display: block;
+                    width: 100px;
+                    margin: 0 auto;
+                }
+                .meiyouneirong i img {
+                    display: block;
+                    width: 100%;
+                }
+                .meiyouneirong p {
+                    text-align: center;
+                    font-size: 13px;
+                    color: #cacaca;
+                    margin-top: 8px;
+                }
+		</style>
+		<div class="wodeyongjin">
+			<div class="top">
+				<ul>
+					<li>
+						<h4>{$money.money}</h4>
+						<p>我的佣金(元)</p>
+					</li>
+					<li>
+						<a href="{:U('start_with')}">申请提现</a>
+						<a href="{:U('user/with_record')}">提现记录</a>
+					</li>
+				</ul>
+			</div>
+			<empty name="info">
+			<div class="meiyouneirong" style="display:block;margin-top:10%;">
+                <i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+                <p>暂无信息</p>
+            </div>
+			<else />
+			<div class="yongjinjilu">
+				<h4>佣金记录</h4>
+				
+				<table border="" cellspacing="" cellpadding="">
+					<tr>
+						<th>时间</th>
+						<th>金额</th>
+						<th>方式</th>
+					</tr>
+				<volist name="info" id="info">
+					<tr>
+						<td>{$info.income_time}</td>
+						<td>￥{$info.money}</td>
+						<td>{$info.income_handwin}</td>
+					</tr>
+				</volist>
+				</table>
+			</div>
+			</empty>
+		</div>
+			
+            <div id="loadings" style="width:30px;height:30px;position:fixed;left:50%;top:50%; margin-left:-15px; margin-top:-15px; display:none;z-index:99999;">
+                <img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+            </div>
+            <button  style="display:none" id="more" data='1' datatype="1" class="btn00">加载更多</button>
+	</body>
+</html>
+<script type="text/javascript">
+$(function () {
+            //监听返回按钮返回到指定页面
+    var url= '__SELF__'.replace(/&amp;/ig,'&');  
+    getHistory();
+    window.addEventListener('popstate',function(e){
+        window.location='{:U("user/userinfo")}';
+        //alert(document.title);
+        document.title='个人中心';
+        getHistory();
+    },false);   
+    function getHistory(){
+        var state={
+           title:'',
+           url:url
+        }
+        window.history.pushState(state,'title',url);
+    }
+                //页面滚动的时候绑定事件
+                $(window).bind('scroll',getData);
+            function getData() {
+                totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()) + 1;
+                //浏览器的高度加上滚动条的高度 （页面总高度）
+                if ($(document).height() <= totalheight) {
+                    //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+                    //加载
+                    $("#loadings").fadeIn();
+                    //根据条件获取对应的项目条数
+                    getmore();//使用模板加载更多
+                    //加载完毕          
+                    $("#loadings").fadeOut();
+                }
+            }
+            function getmore(){
+            	var page = parseInt($("#more").attr("data")) + 1;
+                $('#more').attr("data", page);//重置当前页数  
+                $.get("{:U('user/my_money')}", {"p": page}, function (data) {
+                    if (data.data==1) {
+                        $("table").append(data.html);
+                        $(window).unbind('scroll',getData);
+                    }else{
+                    	$("table").append(data.html);
+                    } 
+                })
+            }
+});
+</script>

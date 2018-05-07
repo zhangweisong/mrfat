@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>农户提问详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+	<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+</head>
+<body>
+<div class="right_min">
+	<div class="crumbs_nav">
+		<i class="iconfont icon-shouye"></i>
+		<ul>
+			<li><a href="javascript:void(0);">农户提问详情</a></li>
+		</ul>
+	</div>
+	<div class="min">
+		<div class="message">
+			<div class="message-block message-border-t">
+				<h4 class="message-left_block">农户提问详情</h4>
+			</div>
+			<table class="table" border="" cellspacing="" cellpadding="">
+				<tr>		
+					<th style="font-weight:bold">农户姓名</th>
+					<td>{$orderinfo.realname}</td>
+					<th style="font-weight:bold">问题分类</th>
+					<td>{$orderinfo.type_name}</td>
+				</tr>
+				<tr>
+					<!--<th style="font-weight:bold">审核状态</th>
+					<if condition="$orderinfo['questions_state'] eq 1"><td style="color:green">{$state[$orderinfo['questions_state']]}</td></if>
+					<if condition="$orderinfo['questions_state'] eq 2"><td style="color:red">{$state[$orderinfo['questions_state']]}</td></if>-->
+					<th style="font-weight:bold">是否针对专家</th>
+					<if condition="$orderinfo['questions_aim'] eq 1"><td style="color:green">{$states[$orderinfo['questions_aim']]}</td></if>
+					<if condition="$orderinfo['questions_aim'] eq 2"><td style="color:red">{$states[$orderinfo['questions_aim']]}</td></if>
+					<th style="font-weight:bold">提问时间</th>
+					<td >{$orderinfo.questions_addtime|date="Y-m-d H:i:s",###}</td>							
+				</tr> 
+				<tr>
+					<th style="font-weight:bold">专家姓名</th>
+					<td>
+                        <if condition="$orderinfo['questions_aim'] eq 1">
+                           {$orderinfo.expert_realname}
+                        <else/>
+                            所有专家
+                        </if>
+                    </td>
+					<th style="font-weight:bold">点赞数</th>
+					<td >{$orderinfo.questions_like}</td>
+				</tr>
+				<tr>
+					<th style="font-weight:bold">回答数</th>
+					<td >{$orderinfo.questions_answers}</td>
+					<th style="font-weight:bold" >提问内容</th>
+					<td >{$orderinfo.questions_content}</td>
+				</tr>
+			</table>         			
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src="/foodsking/Public/admin/js/layer/layer.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+        $('.table_box input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        var index = parent.layer.getFrameIndex(window.name);
+        $('#net').on('click', function(){
+            parent.layer.close(index);
+        });
+    });
+</script>

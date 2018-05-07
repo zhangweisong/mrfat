@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>农技培训</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" /> 
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" /> 
+		<style>
+			.tit{
+				background: #3ab849;
+				line-height: 3rem;
+				font-size: 1.12rem;
+				color: #fff;
+				padding-left: 1rem;
+			}
+			.banner{
+				width: 100%;
+				height: 12rem;
+			}
+			.cont{
+				padding: 0 0.64rem;
+				margin-bottom: 2rem;
+			}
+			.cont p{
+				font-size: 1.12rem;
+				line-height: 2rem;
+				padding: 1rem 0;
+			}
+            .cont p input{
+                font-size: 1.12rem;
+				line-height: 2rem;
+                border: 1px solid #f0f0f0;
+                padding: 0 0.5rem;
+                width: 20rem;
+             }
+			.cont p a{
+				color: #ff0000;
+			}
+			.btt{
+				height: 2rem;
+				margin: 1rem 0;
+				width: 8rem;
+				border: none;
+				color: #fff;
+				background: #3ab849;
+				font-size: 1.04rem;
+			}
+			.cont select{
+				width: 22rem;
+				font-size: 1.12rem;
+				line-height: 2rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="header">
+			<a href="###">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>公司介绍</p>
+		</div>
+		<img class="banner" src="{$train.images}" />
+		<p class="tit">公司简介</p>
+		<div class="cont">
+			<p class="xx">电话：{$train.phone}<a href="{:U('train/xqs',array('id'=>$train['id']))}">【公司详情】</a></p>
+			<p class="xx">地址：{$train.address}<a onclick="tiao('{$train.location}')">【查看位置】</a></p>
+            <?php if($count>0): ?>
+            <volist name="notice" id="vo">
+                <p class="xx">公告：{$vo.n_name}<a href="{:U('train/gonggao',array('n_id'=>$vo['n_id']))}">【查看公告】</a></p>
+            </volist>
+            <?php endif;?>  
+		</div>
+		<p class="tit">报名信息</p>
+		<div class="cont">
+			<p class="xx">姓名：<input type="text" placeholder="请输入姓名" id="names" maxlength="20" /></p>
+			<p class="xx">手机号：<input type="tel" maxlength="11" onkeyup="this.value=this.value.replace(/\D/gi,&quot;&quot;)" placeholder="请输入手机号" id="phone" /></p> 
+			<p class="xx">地址：<input type="text" placeholder="请输入地址" id="address" maxlength="60" /></p>
+			<div class="flexb xx">
+				<p>职位:</p>
+				<select name="job_id" id="job_id" >
+                    <option value="">--请选择职位--</option>
+                    <volist name="arr" id="vo">
+					<option value="{$vo.id}" >{$vo.name}</option> 
+                    </volist>
+				</select>
+			</div>
+			<button class="btnn" onclick="tijiao()">确定</button>
+		</div>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-3.1.1.min.js" ></script>
+        <script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script> 
+	</body>
+<script>
+    function tijiao(){
+        var traid= {$train.id}; 
+        var names=$.trim($('#names').val()); 
+        var phone=$.trim($('#phone').val());
+        var address=$.trim($('#address').val());
+        var job_id=$('#job_id').val();
+        if(names==""){ 
+            layer.msg('请输入姓名！',{icon:5,time:1000});
+            $("#names").focus();
+			return false;
+		}   
+		if(phone==""){
+            layer.msg('请输入手机号！',{icon:5,time:1000}); 
+            $("#phone").focus();
+			return false;
+		} 
+        if(address==""){
+            layer.msg('请输入地址！',{icon:5,time:1000}); 
+            $("#address").focus();
+			return false;
+		}  
+        if(job_id==""){
+            layer.msg('请输入职位！',{icon:5,time:1000}); 
+            $("#job_id").focus();
+			return false;
+		} 
+		$.getJSON("{:U('train/add')}&job_id="+job_id+"&traid="+traid+"&names="+names+"&phone="+phone+"&address="+address, function (res) { 
+			data = res.data; 
+			if(data==1){ 
+                layer.msg('报名成功！',{icon:6,time:1000}, function () {
+                    window.location = "{:U('train/index')}";
+                });
+			}else{ 
+                layer.msg('报名失败！',{icon:5,time:1000}), function () {
+                    window.location = "{:U('train/index')}"; 
+                } 
+			}
+		}); 
+    }
+    
+    function tiao(loca){
+        window.location.href="http://uri.amap.com/marker?position="+loca;
+    }
+</script>
+</html>

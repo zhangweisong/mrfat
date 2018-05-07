@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>图书结算</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="renderer" content="webkit">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/user/css/mian.css"/>
+        <script src="__PUBLIC__/user/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script>
+        	(function (doc, win) {
+				var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',         
+				recalc = function () {
+				  var clientWidth = docEl.clientWidth;
+				  if (!clientWidth) return;
+				  docEl.style.fontSize = 25 * (clientWidth / 720) + 'px';
+				};
+				  if (!doc.addEventListener) return;
+				  win.addEventListener(resizeEvt, recalc, false);
+				  doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+        </script>
+	</head>
+	<body>
+    <style>
+        .xuanzedizhi_box{width:100%;} 
+        <?php if(count($address)<1):?>
+        	.kong{text-align:center; font-size:16px; color:#363636; padding-top:2.5rem;}
+            .xuanzedizhi_box{height:8rem;} 
+        <?php else:?> 
+           .xuanzedizhi_box{height:auto}
+           .kong{text-align:center; font-size:16px; color:#363636; padding-top:2.5rem;margin-bottom: 2rem;} 
+        <?php endif;?>
+        
+    </style>
+		<div class="jiesuan_box">
+			<div class="peisong">
+				<span>配送方式</span>
+				<ul>
+					<li>
+						<em><input type="radio" checked="checked" name="peisong" value="" /></em>
+						<i>快递</i>
+					</li>
+				</ul>
+			</div>
+			<div class="dizhi">
+				<ul>
+					<li onclick="dizhiShow()" class="top">
+						<!--用户地址--> 
+                        <?php if($addr['username']==""):?>
+                            <h2 class="hh">请选择收货地址</h2>
+                        <?php endif;?>
+						<h4>
+							<span id="username">{$addr.username}</span>
+							<i id="phone">{$addr.phone}</i>
+						</h4>
+						<p style="clear:both;padding-right:10px;" id="add_ess">{$addr.address}</p>
+						<strong></strong>
+                        
+					</li>
+				</ul>
+			</div>
+			<div class="shangpin_list"> 
+                <volist name="orderlist" id="vo">
+				<dl class="c">
+					<dt><img src="{$vo.img}"/></dt>
+					<dd>
+						<h4>{$vo.book_name}</h4>
+						<p>
+							<span>￥:{$vo.book_price}</span>
+							<i>￥{$vo.book_oldprice}</i>
+							<em>X{$vo.book_num}</em>
+						</p>
+					</dd>
+				</dl>
+                </volist> 
+				<div class="liuyan">
+					<span>给卖家留言：</span>
+					<em>
+						<input type="text" id="border_remark"  value="" maxlength=50/>
+					</em>
+				</div>
+				<div class="text">
+					<span>快递：￥10.00元</span>
+					<p>共计{$num}件商品，<em>合计￥{$money}元(含快递)</em></p>
+                    <input id="totals" value="{$money+10}" type="hidden">
+				</div>
+				<div class="baoxian">
+					<span><img src="__PUBLIC__/user/images/renshou_img.jpg"/></span>
+					<p>温馨提示：本订单享受中国人寿保险保障，请放心付款</p>
+				</div>
+			</div>
+			<div class="zhifufangshi">
+				<ul>
+					<li>
+						<i><img src="__PUBLIC__/user/images/weixin.png"/></i>
+						<span>微信支付</span>
+						<em><input type="radio" name="zhifu" value="1" checked/></em>
+					</li>
+					<li>
+						<i><img src="__PUBLIC__/user/images/yinlian.png"/></i>
+						<span>银联卡支付</span>
+						<em><input type="radio" name="zhifu" value="2" /></em>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="qvfukuan">
+			<span id="heji">合计：{$money}</span>
+			<strong onclick="pay()">去付款</strong>
+		</div>
+		<!--选择地址-->
+		<div class="zhezhao"></div>
+		<div class="xuanzedizhi_box">
+			<div class="xuanzedizhi">
+				<span onclick="dizhiHide()" class="guanbi"></span> 
+				<ul> 
+                    <?php if(count($address)<1):?>
+                    <p class="kong" onclick="tiao()">您暂无收货地址，去添加！</p>
+                    <?php else:?>
+                    <volist name="address" id="vo">
+					<li>
+                    	<div class="top">
+                        	<h4>
+                            	<i>{$vo.username}</i>
+                                <span>{$vo.phone}</span>
+                            </h4>
+                            <p>{$vo.addr}</p>
+                            <?php if($vo['a_default']==1):?>
+                            <input type="radio" name="dizhi" checked />
+                            <?php else:?>
+                            <input type="radio" name="dizhi" />
+                            <?php endif;?>
+                        </div>
+					</li>
+                    </volist>
+                    <p class="kong" onclick="tiao()">去添加其他收货地址！</p>
+                    <?php endif;?>
+                    	
+				</ul>
+                
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript"> 
+	$(function(){
+		$(".xuanzedizhi ul li .top").click(function(){ 
+			$(this).find('input').prop("checked","checked");
+			$(this).parents().siblings().removeProp("checked",false);
+			var _text_i=$(this).find('h4 i').text();
+			var _text_span=$(this).find('h4 span').text();
+			var _text_p=$(this).find('p').html();
+            $('.hh').text("");
+			$('.dizhi .top h4 span').text(_text_i);
+			$('.dizhi .top h4 i').text(_text_span);
+			$('.dizhi .top p').html(_text_p);
+			$('.xuanzedizhi_box').animate({
+				bottom:'-100%'
+			});
+			zhezhaoHide();
+		});
+
+	})
+	function dizhiShow(){ 
+		zhezhaoShow();
+		$('.xuanzedizhi_box').animate({
+			bottom:'0'
+		})			
+	}	
+	function dizhiHide(){
+		$('.xuanzedizhi_box').animate({
+			bottom:'-100%'
+		});
+		zhezhaoHide();				
+	}
+     
+
+	function zhezhaoShow(){
+		$('.zhezhao').fadeTo(200,1);
+	}
+	function zhezhaoHide(){
+		$('.zhezhao').fadeOut(300);
+	}
+
+</script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script>
+<script>
+    //订单号
+    var border_id = {$border_id}; 
+    function pay(){
+        //收货地址phone
+        var address = $("#add_ess").text();
+        //收货电话
+        var phone = $("#phone").text(); 
+        //收货人
+        var username = $("#username").text();  
+        if(phone==""){
+            layer.msg('请选择收货地址',{icon:5,time:1000});
+            return false;
+        }
+        //发货备注
+        var border_remark = $("#border_remark").val();
+        //付款方式
+        var paytype=$("input[name='zhifu']:checked").val();
+        if(paytype==1){  
+            window.location.href="{:U('book/paymoney')}&border_id="+border_id+"&paytype="+paytype+"&address="+address+"&phone="+phone+"&username="+username+"&border_remark="+border_remark;  
+        }else{
+            layer.msg('暂未开通！',{icon:5,time:1000});
+        }
+        
+    }
+    
+    function tiao(){
+        window.location="{:U('user/add_address')}&flag=1&bookorder="+border_id;
+    }
+</script>
+ 
+ 

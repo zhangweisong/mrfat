@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>积分兑换</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="css/public.css" />
+		<link rel="stylesheet" href="css/common.css" />
+		<style>
+			.cont{
+				padding: 0 0.64rem;
+			}
+			.list{
+				width: 49%;
+				border: 1px solid #f5f5f5;
+				margin: 0.5rem 0;
+				margin-right:0.1rem;
+			}
+			.list img{
+				width: 100%;
+				height: 12.52rem;
+			}
+			.list p:nth-of-type(1){
+				font-size: 1.2rem;
+				color: #363636;
+				line-height: 2.4rem;
+				padding: 0 0.5rem;
+			}
+			.list p:nth-of-type(2){
+				font-size: 1.12rem;
+				color: #ef404c;
+				line-height: 2.4rem;
+				padding: 0 0.5rem;
+			}
+			.list button{
+				width: 9.44rem;
+				height: 2.4rem;
+				border: none;
+				background: #3ab849;
+				color: #FFFFFF;
+				font-size: 1.12rem;
+				display: block;
+				margin: 0.5rem auto;
+				border-radius: 0.4rem;
+			}
+			button.link{
+				background: #bdbdbd;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="header">
+			<a href="javascript:history.go(-1)">
+				<img src="images/left.png" />
+			</a>
+			<p>积分兑换</p>
+		</div>
+		<div class="cont flexbb">
+			<div class="list">
+				<img onclick="window.location.href='jifenshangpingxq.html'" src="images/dian.png" />
+				<p class="omit1">史丹利复合肥一袋</p>
+				<p>积分：10000</p>
+				<button onclick="window.location.href='duihuanchenggong.html'">立即兑换</button>
+			</div>
+			<div class="list">
+				<img src="images/dian.png" />
+				<p class="omit1">史丹利复合肥一袋</p>
+				<p>积分：10000</p>
+				<button class="link">积分不足</button>
+			</div>
+			<div class="list">
+				<img src="images/dian.png" />
+				<p class="omit1">史丹利复合肥一袋</p>
+				<p>积分：10000</p>
+				<button>立即兑换</button>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/screenSize.js" ></script>
+	</body>
+
+</html>

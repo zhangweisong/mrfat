@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>商家信息</title>
+        <!--说明文字编码-->
+        <meta http-equiv="Content-type" content="text/html" charset="utf-8">
+        <!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+        <!--控制状态栏显示样式-->
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!--解决uc字体变大问题-->
+        <meta name="wap-font-scale" content="no">
+        <!--手机号码不被显示为拨号链接-->
+        <meta content="telephone=no" name="format-detection" />
+        <!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        <link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+        <link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+        <link rel="stylesheet" href="__PUBLIC__/agcy/css/shangjiaxinxi.css" />
+        <script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-1.10.2.min.js"></script> 
+        <link rel="stylesheet" href="__PUBLIC__/user/js/mui/mui.min.css">
+        <link rel="stylesheet" href="__PUBLIC__/user/js/mui/mui-custom.css">
+    </head>
+    <style>
+        body{background:#fff;}
+        /*多图上传样式*/
+        .toollist_pic{clear: both;width: 100%;text-align: center;margin-right: 10px; margin-top:10px;}
+        .toollist_pic li{float: left;list-style:none; clear: initial; width:100px;height:100px; overflow:hidden;position: relative;}
+        .toollist_pic li a{display:block; width:100%; height:100%;}
+        .toollist_pic li img{width:100px;height:100px;} 
+        .form-item {margin-bottom: 15px;clear: both;min-height: 35px;}
+        .form-label {float: left;display: block;font-weight: 400;height: 30px;line-height: 30px;padding-right: 15px;font-size: 14px;
+        }  
+        .toollist_pic li{margin-right:10px; margin-bottom:10px;} 
+
+        .txt{
+            width: 73%;
+            height: 10rem;
+            resize: none;
+            display: block;
+            border: 1px solid #dfdfdf;
+            border-radius: 0.4rem;
+            line-height: 180%;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+        }
+    </style>  
+    <body>
+        <div class="header">
+            <a href="{:U('index/index')}">
+                <img src="__PUBLIC__/agcy/images/left.png" />
+            </a>
+            <p>商家信息</p>
+        </div>
+        <ul class="cont">
+            <li>
+                <p style="color:black;">店铺名称：</p>
+                <p style="color:black;">{$agcy.agcy_name}</p>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <p style="color:black;">店铺地址：</p>
+                <p style="color:black;">{$agcy.agcy_address}</p>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <p style="color:black;">负责人：</p>
+                <p style="color:black;">{$agcy.agcy_manager}</p>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <p style="color:black;">电话：</p>
+                <p style="color:black;">{$agcy.agcy_tel}</p>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <p style="color:black;">店铺公告：</p>
+                <div class="you">
+                    <textarea class="txt" readonly id="agcy_slogan"  placeholder="请输入店铺公告" maxlength="200" style="color:black;">{$agcy.agcy_slogan}</textarea>
+                </div> 
+                <div class="clear"></div>
+            </li> 
+        </ul>
+        <div class="cards">   
+            <div class="form-item" style="margin-left:12px;">
+                <label class="form-label">门店照片</label> 
+                <div class="form-text form-input-block w50">
+                    <ul class="toollist_pic c" id="toollist_pic">
+                        <?php if($agcy['agcy_face_images']):?>
+                        <?php foreach(explode("|",$agcy['agcy_face_images']) AS $k=>$v):?> 
+                        <li><img src="{$v}" data-preview-src="" data-preview-group="1" /></li>
+                        <?php endforeach;?>
+                        <?php endif;?>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-item" style="margin-left:12px;">
+                <label class="form-label">营业执照</label> 
+                <div class="form-text form-input-block w50">
+                    <ul class="toollist_pic c" id="toollist_pic4">
+                        <?php if($agcy['agcy_logo']):?> 
+                        <li><img src="{$v}" data-preview-src="" data-preview-group="1" /></li>
+                        <?php endif;?>
+                    </ul>
+                </div>
+            </div> 
+            <div class="form-item" style="margin-left:12px;">
+                <label class="form-label">法人身份证</label> 
+                <div class="form-text form-input-block w50">
+                    <ul class="toollist_pic c" id="toollist_pic4">
+                        <?php if($agcy['agcy_license_images']):?>
+                        <?php foreach(explode("|",$agcy['agcy_license_images']) AS $k=>$v):?>
+                        <li><img src="{$v}" data-preview-src="" data-preview-group="1" /></li>
+                        <?php endforeach;?>
+                        <?php endif;?>
+                    </ul>
+                </div>
+            </div> 
+        </div> 
+        <script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+        <script src="__PUBLIC__/user/js/mui/mui.min.js"></script>
+        <script src="__PUBLIC__/user/js/mui/mui.zoom.js"></script>
+        <script src="__PUBLIC__/user/js/mui/mui.previewimage.js"></script>
+    </body>
+
+</html>
+<script>
+    mui.previewImage();
+    mui('body').on('tap', 'a', function () {
+        window.top.location.href = this.href;
+    });
+    window.onload = function () {
+        $.each($(".img"), function () {
+            if ($(this).find('span').length == 1) {
+                $(this).find('span').css({
+                    'width': '60%'
+                })
+            }
+        });
+
+    }
+</script>

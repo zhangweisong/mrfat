@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>订货商城</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/dinghuoshangcheng.css" />
+        <style>
+        .red p{
+            color:red;
+        }
+        </style>
+	</head>
+
+	<body>
+		<div class="header">
+			<a href="{:U('ordermanagement/goodstypes')}">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>订货商城</p>
+		</div>
+		<div class="top flex">
+			<input type="text" id="sousuo" placeholder="搜索商品或厂家" />
+			<button onclick="sousuo()" >搜索</button>
+			<a href="{:U('ordermanagement/goodstypes')}">选择分类</a>
+		</div>
+		<div class="cont">
+			<div class="tit flex">
+				<a href="###"  class="red" datas="1">
+					<p>综合排序</p>
+				</a>
+				<a href="###" class="flex" datas="2">
+					<p>销量</p>
+					<!--<img src="__PUBLIC__/agcy/images/a1.png" />-->
+				</a>
+				<a href="###" class="flex" datas="3">
+					<p>价格</p>
+					<!--<img src="__PUBLIC__/agcy/images/a1.png" />-->
+				</a>
+                <input type="hidden" id="ss" value="1"/>
+			</div>
+			<!--注：不是代理商只能看不能下单，代理商只能在自己代理的产品中下单-->
+			<!--需要判断该经销商代理了那几个产品，然后优先展示已经代理的产品-->
+            <div class="contt" id="content">
+                <volist name="goodslist" id="goodslist">
+                    <div class="list">
+                        <img src="{$goodslist.fgoods_images}" />
+                        <p class="omit1">{$goodslist.fgoods_name}</p>
+                        <p>价格：{$goodslist.fgoods_tonprice}元/吨</p>
+                        <p>销量：{$goodslist.fgoods_sale}</p>
+                        <p class="omit1">厂家：{$goodslist.factoryname}</p>
+                        <button onclick="xiangqing({$goodslist.fgoods_id},{$goodslist.flag})">查看详情</button>
+                        <if condition="$goodslist['flag'] eq 2">
+                            <button style="background:green;"> 已代理 </button>
+                        <elseif condition="$goodslist['flag'] eq 1"/>
+                            <button style="background:#999;"> 申请中 </button>
+                        <else/>
+                            <button onclick="daili({$goodslist.fgoods_id},{$goodslist.factory_id})">去代理</button>
+                        </if>
+                    </div>
+                </volist>
+            </div>
+            <div class="meiyouneirong" style="display:none;margin-top:10%;">
+                <i><img src="__PUBLIC__/agcy/images/li_wdxx_img.png"/></i>
+                <p>还没有任何订货商品</p>
+            </div>
+            <!--加载更多-->
+            <div class="li_myxx_zt" id="li_myxx_zt" style="display:none">
+                <p>亲，没有数据了~</p>
+                <input id="select_" value="moren" type="hidden" />	
+            </div>  
+            <div id="loadings" style="width:24px;height:24px;position:fixed;left:58%;top:50%;margin-top:-43px;margin-left:-43px;display:none;z-index:99999;">
+                <img src="__PUBLIC__/agcy/images/5-130H2191536.gif">
+            </div>
+		</div>
+        <style>
+            .li_myxx_zt{height: 30px; line-height: 30px; background:#f5f5f5;}
+            .li_myxx_zt p{ text-align:center; font-size:12px; color:#cacaca;}
+        </style>
+    </body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-3.1.1.min.js" ></script>
+<script src="__PUBLIC__/agcy/js/baiduTemplate.js"></script>
+<script id="listinfos" type="text/html">
+	<% if(data.length>0) { %>
+        <%for(var i=0;i < data.length;i++){ %>
+            <div class="list">
+                <img src="<%=data[i].fgoods_images%>" />
+                <p class="omit1"><%=data[i].fgoods_name%></p>
+                <p>价格：<%=data[i].fgoods_tonprice%>元/吨</p>
+                <p>销量：<%=data[i].fgoods_sale%></p>
+                <p class="omit1">厂家：<%=data[i].factoryname%></p>
+                <button onclick="xiangqing(<%=data[i].fgoods_id%>,<%=data[i].flag%>)">查看详情</button>
+                <% if(data[i].flag==2) { %>
+                    <p> 已代理 <p>
+                 <%}else if(data[i].flag==1){%>   
+                    <p> 申请中 <p>
+                <%}else{%>
+                    <button onclick="daili(<%=data[i].fgoods_id%>,<%=data[i].factory_id%>)">去代理</button>
+                <%}%>
+            </div>
+        <%}%>
+	<%}%>
+</script> 
+<script>
+    var goodslen={$goodslen};
+    if(goodslen==0){
+     $('.meiyouneirong').show();
+     $('.li_myxx_zt').hide();
+    }
+    var page=1;
+    var f_classify_id={$f_classify_id};
+    var f_classify_fatherid={$f_classify_fatherid};
+
+    $(".tit a").click(function(){
+        $(this).addClass("red").siblings("a").removeClass("red");
+        var datas=$(this).attr('datas');
+        $("#ss").val(datas);
+        //alert($("#ss").val());
+        //筛选数据
+        getdata(datas);
+        
+    });
+    //1综合排序，2销量，3价格。
+    function getdata(datas){
+       page=1;
+       $.get("{:U('ordermanagement/paixu')}&p="+page+"&datas="+datas+"&f_classify_fatherid="+f_classify_fatherid+"&f_classify_id="+f_classify_id,function(data){
+            //console.log(data);
+            $('#content').html('');   
+            $('#li_myxx_zt').hide();
+            $('#meiyouneirong').hide();
+            if(data.status>0){  					
+                var list = data;
+                var bt=baidu.template;
+                var html=bt('listinfos',list);
+                $('#content').html(html);    
+            }else{
+                    $(".meiyouneirong").show();
+            }
+       });
+       
+       
+    }
+            
+//滚动加载  
+    $(window).scroll(function () {
+        getData();
+    });
+    var totalheight = 0;     //定义一个总的高度变量
+    function getData() {
+         totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop()); 
+         //浏览器的高度加上滚动条的高度 （页面总高度）  
+        if ($(document).height() <= totalheight) {          
+            //当文档的高度小于或者等于总的高度的时候，开始动态加载数据（当前文档的位置）
+            //加载
+            $("#loadings").fadeIn(); 
+            //根据条件获取对应的项目条数
+            getmore();//使用模板加载更多
+            //加载完毕              
+            $("#loadings").fadeOut(); 
+        }
+    } 
+
+    //加载更多
+	function getmore(){
+		page+=1;
+        var dates=$("#ss").val(); 		
+		$.get("{:U('ordermanagement/paixu')}&p="+page+"&datas="+dates+"&f_classify_fatherid="+f_classify_fatherid+"&f_classify_id="+f_classify_id,function(data){
+            $('#li_myxx_zt').hide();
+            $('#meiyouneirong').hide();
+            //alert(page);
+            //console.log(data);
+            if(data.status>0){  					
+               var list = data;
+                var bt=baidu.template;
+                var html=bt('listinfos',list);
+                $('#content').append(html);    
+            }else{
+                //alert('我是有底线的~');
+                $('#li_myxx_zt').show();
+            }           
+		});	
+	}
+    //搜索
+    function sousuo(){
+    var keywords=$('#sousuo').val();
+    $.get("{:U('ordermanagement/sousuo')}&keywords="+keywords+"&f_classify_fatherid="+f_classify_fatherid+"&f_classify_id="+f_classify_id,function(data){
+            //console.log(data);
+            $('#content').html('');    
+            $('#li_myxx_zt').hide();
+            $('#meiyouneirong').hide();
+            if(data.status>0){  					
+                var list = data;
+                var bt=baidu.template;
+                var html=bt('listinfos',list);
+                $('#content').html(html);  
+                $('#li_myxx_zt').hide();
+                $(".meiyouneirong").hide();                
+            }else{   
+                    $(".meiyouneirong").show();
+            }
+        
+       });
+    
+    }
+    
+    //跳转详情
+    function xiangqing(fgoods_id,flag){
+          //alert(fgoods_id+"=="+flag);
+        window.location.href="{:U('ordermanagement/xiangqing')}&fgoods_id="+fgoods_id+"&flag="+flag+"&f_classify_id="+f_classify_id+"&f_classify_fatherid="+f_classify_fatherid;
+    }
+    //去代理
+    function daili(fgoods_id,factory_id){
+        //alert(fgoods_id+"=="+factory_id);
+        window.location.href="{:U('ordermanagement/agreement')}&fgoods_id="+fgoods_id+"&factory_id="+factory_id+"&f_classify_id="+f_classify_id+"&f_classify_fatherid="+f_classify_fatherid;
+    }
+</script>

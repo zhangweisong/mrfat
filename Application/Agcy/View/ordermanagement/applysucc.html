@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>提交成功</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<style>
+			.cont{
+				padding: 0 0.64rem;
+			}
+			.cont img{
+				height: 5rem;
+				margin: 5rem auto 0;
+				display: block;
+			}
+			.cont p:nth-of-type(1){
+				font-size: 1.36rem;
+				text-align: center;
+				padding-top: 1.8rem;
+			}
+			.cont p:nth-of-type(2){
+				width: 17.8rem;
+				margin: 0 auto;
+				display: block;
+				font-size: 0.96rem;
+				padding-top: 2.6rem;
+				color: #363636;
+				line-height: 150%;
+				margin-bottom: 3rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="header">
+			<a href="{:U('ordermanagement/ordershop',array('f_classify_id'=>$f_classify_id,'f_classify_fatherid'=>$f_classify_fatherid))}">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>提交成功</p>
+		</div>
+		<div class="cont">
+			<img src="__PUBLIC__/agcy/images/true.png" />
+			<p>提交成功</p>
+			<p>你申请的代理商提交成功，平台会在1-2个
+			工作日内进行审核并反馈给你，
+			谢谢你的支持。</p>
+		</div>
+		<button class="btnn" onclick="tijiao()">确定</button>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+	</body>
+</html>
+<script>
+    var f_classify_id={$f_classify_id};
+    var f_classify_fatherid={$f_classify_fatherid};
+    function tijiao(){
+        window.location.href="{:U('ordermanagement/ordershop')}&f_classify_id="+f_classify_id+"&f_classify_fatherid="+f_classify_fatherid;
+    }
+</script>

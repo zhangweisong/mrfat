@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>订单详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+	<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+</head>
+<body>
+<div class="right_min">
+	<div class="crumbs_nav">
+		<i class="iconfont icon-shouye"></i>
+		<ul>
+			<li><a href="javascript:void(0);">订单详情</a></li>
+		</ul>
+	</div>
+	<div class="min">
+		<div class="message">
+			<div class="message-block message-border-t">
+				<h4 class="message-left_block">订单详情</h4>
+			</div>
+			<table class="table" border="" cellspacing="" cellpadding="">
+				<tr>
+					<th style="font-weight:bold;">订单号</th>
+					<td colspan="5">{$bookorder.border_number}</td>
+				</tr>
+				<tr>	 
+					<th style="font-weight:bold">订单金额</th>
+					<td>{$bookorder.border_money}</td>
+					<th style="font-weight:bold">订单状态</th> 
+					<if condition="$bookorder['border_state'] eq 1"><td style="color:red">{$state[$bookorder['border_state']]}</td></if>
+					<if condition="$bookorder['border_state'] eq 2"><td style="color:green">{$state[$bookorder['border_state']]}</td></if>
+					<if condition="$bookorder['border_state'] eq 3"><td >{$state[$bookorder['border_state']]}</td></if>
+					<th style="font-weight:bold">支付方式</th>
+					<td>
+					 {$pay_type[$bookorder['border_type']]}
+					</td> 
+				</tr>
+				<tr>
+					
+					<th style="font-weight:bold">订单时间</th>
+					<td><?php echo date('Y-m-d H:i:s',$bookorder['border_addtime']);?></td>
+					<th style="font-weight:bold">发货时间</th>
+					<td>
+					<?php echo date('Y-m-d H:i:s',$bookorder['border_gotime']);?></td>
+					<th style="font-weight:bold">下单人</th>
+					<td>{$bookorder.realname}</td>
+										
+								
+				</tr> 
+				<tr>
+					<th style="font-weight:bold">农户电话</th>
+					<td>{$bookorder.phone}</td>
+					<th style="font-weight:bold">收货人姓名</th>
+					<td>{$bookorder.baddr_name}</td>
+					<th style="font-weight:bold">收货人电话</th>
+					<td>{$bookorder.baddr_phone}</td>
+					
+					
+				</tr>  
+                <tr> 
+					<th style="font-weight:bold">详细收货地址</th>
+					<td>{$bookorder.baddr_address}</td>  
+                    <th style="font-weight:bold">订单备注(购买人)</th>
+					<td>{$bookorder.order_remark}</td>
+					<th style="font-weight:bold">订单备注(后台操作发货)</th>
+					<td>{$bookorder.border_towremark}</td> 
+				</tr> 
+			</table>         			
+            <div style="width:30px; height:30px;"></div>
+			<div class="message-block message-border-t">
+					<h4 class="message-left_block">商品信息</h4>  
+			</div>
+
+            <div class="table_box">
+                <table class="table" border="" cellspacing="" cellpadding="">
+                    <thead>
+                        <tr>
+							<th>编号</th>     
+                            <th>图书名称</th>                           
+                            <th>购买数量</th>
+                            <th>购买单价</th>                                   
+                        </tr>   
+                    </thead>
+                    <tbody>
+                        <volist name="goods" id="v">
+                            <tr> 
+								<td>{$v.blist_id}</td>
+                                <td>{$v.book_name}</td>
+                                <td>{$v.book_num}</td>
+                                <td>{$v.book_price}</td>                     
+                            </tr>
+                        </volist>
+                    </tbody>
+                </table>
+			</div>
+          
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src="/foodsking/Public/admin/js/layer/layer.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".right_min").height($(window).height());
+        $('.table_box input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        var index = parent.layer.getFrameIndex(window.name);
+        $('#net').on('click', function(){
+            parent.layer.close(index);
+        });
+    });
+</script>

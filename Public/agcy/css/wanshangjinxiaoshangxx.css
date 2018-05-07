@@ -1,0 +1,77 @@
+.cont {
+	padding: 0 0.64rem;
+	 
+}
+
+.cont li {
+	padding: 0.75rem;
+	border-bottom: 1px dashed #ebebeb;
+}
+
+.cont li p {
+	line-height: 2rem;
+	font-size: 1.12rem;
+	float: left;
+}
+.cont li p:nth-of-type(2) {
+	line-height: 2rem;
+    font-size: 1.12rem;
+     
+}
+.cont>li>input {
+	line-height: 2rem;
+	font-size: 1.12rem;
+	margin-left: 6rem;
+	position: absolute;
+	left: 1rem;
+	border: none;
+}
+
+.zt p {
+	line-height: 2rem;
+	font-size: 1.12rem;
+	margin-left: 1rem;
+}
+
+.zt input {
+	width: 1.6rem;
+	height: 1.6rem;
+	background: url(../images/fales.png) center no-repeat;
+	background-size: cover;
+	margin-top: 0.2rem;
+}
+
+.zt input[type="radio"] {
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.zt input[type="radio"]:checked {
+	background: url(../images/icon-true.png) center no-repeat;
+	background-size: cover;
+}
+.cards{
+	padding:0.64rem;
+}
+.list{
+	margin-bottom: 1rem;
+	position: relative;
+	height: 10.5rem;
+}
+.list p:nth-of-type(1){
+	font-size: 1.12rem;
+	color: #363636;
+	float: left;
+}
+.list p:nth-of-type(2){
+	font-size: 1.12rem;
+	color: #b3b3b3;
+	position: absolute;
+	left: 7rem;
+	top: 9rem;
+}
+.list img{
+	height: 8.32rem;
+	position: absolute;
+	left: 7rem;
+}

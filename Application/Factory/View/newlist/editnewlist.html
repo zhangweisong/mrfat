@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>编辑新闻 </title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" />
+        <script type="text/javascript" src="__PUBLIC__/kindeditor/kindeditor-min.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/kindeditor/lang/zh-CN.js"></script>
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+        <script type="text/javascript" src="__PUBLIC__/admin/js/stringOperate.js"></script>
+        <script type="text/javascript">
+            var editor;
+            KindEditor.ready(function (K) {
+                editor = K.create('textarea[id="content"]', {
+                    uploadJson: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}',
+                    fileManagerJson: '{:U(\'kindeditor/file_manager_json\')}',
+                    allowFileManager: true,
+                    urlType: 'domain',
+                    afterCreate: function () {
+                        this.sync();
+                    },
+                    afterBlur: function () {
+                        this.sync();
+                    }
+                });
+
+                //多图
+                var uploadbutton = K.uploadbutton({
+                    button: K('#uploadButton')[0],
+                    fieldName: 'imgFile',
+                    url: '{:U(\'kindeditor/upload_json\',array(\'dir\'=>image))}',
+                    afterUpload: function (data) {
+                        if (data.error === 0) {
+                            var url = K.formatUrl(data.url, 'domain');
+                            K('#imagemore').val(url);
+                            add_album_img(url);
+                        } else {
+                            alert(data.message);
+                        }
+                    },
+                    afterError: function (str) {
+                        alert('自定义错误信息: ' + str);
+                    }
+                });
+                uploadbutton.fileBox.change(function (e) {
+                    uploadbutton.submit();
+                });
+            });
+
+           
+
+            //图片插件
+            function add_album_img(imgurl) {
+
+                var val = StringOperate.add($("#image").val(), imgurl);
+                $("#image").val(val);
+                $("#toollist_pic").append("<li onclick=\"del_album_img(\'" + imgurl + "\',this);\"><a><img src='" + imgurl + "'><i class=\"fa fa-times-circle\"></i></a></li>");
+                $('#imagemore').val("");
+            }
+            function del_album_img(imgurl, obj) {
+                var val = StringOperate.remove($("#image").val(), imgurl);
+                $("#image").val(val);
+                $(obj).remove();//删除元素
+            }
+           
+        </script>
+        <style>
+            /*多图上传样式*/
+            .toollist_pic{clear: both;width: 100%;text-align: center;margin-right: 10px; margin-top:10px;}
+            .toollist_pic li{float: left;list-style:none; clear: initial; width:100px;height:100px; overflow:hidden;position: relative;}
+            .toollist_pic li a{display:block; width:100%; height:100%;}
+            .toollist_pic li img{width:100px;height:100px;}
+            .toollist_pic li i{display:block; position:absolute; top:0; right:0; width:20px; height:20px; background:#2cb184; z-index:888; margin:0;}
+            .toollist_pic li .fa-times-circle{ font-size:20px; color:#fff;}
+            .span{display:inline-block; height:34px; line-height:34px;color: #ff0000;font-size:1.8rem;vertical-align: middle;}      
+            .form-button .ke-inline-block.but{margin-top:0;}
+            .form-button .ke-button-common{display:block;width:100%; height:100%; line-height:38px; background:none;}
+            .form-button .ke-button-common.ke-button{color:#fff; font-size:16px;}
+            .form-button .ke-upload-area.ke-form .ke-upload-file{display:block;width:100% !important; height:100%;     cursor: pointer;}
+        </style>
+
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+					 <li><a href="javascript:void(0);">公司展示</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">新闻列表</a></li>
+                    <li> > </li>
+                    <li><a href="javascript:void(0);">编辑新闻</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <div class="form_box">
+                    <form  name="myform" id="myform" action="{:U('newlist/editnewlist',array('id'=>$content['new_id']))}" method="post" onsubmit="return checkfrom()">
+                        <div class="form-item">
+                            <label class="form-label">标题名称</label>
+                            <div class="form-text form-input-block">
+                                <input type="text" name="info[new_title]" value="{$content.new_title}" placeholder="请输入标题名称" id="title" maxlength="60"/>
+                                <i class="title" style="display:none;color:red;">标题名称不能为空</i>
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label">新闻来源</label>
+                            <div class="form-text form-input-block w50">
+                                <input type="text" name="info[new_source]" value="{$content.new_source}" placeholder="请输入新闻来源" id="source" maxlength="50"/>
+                                <i class="source" style="display:none;color:red;">新闻来源不能为空</i>
+                            </div>
+                        </div>
+
+                        <div class="form-item">
+                            <label class="form-label">封面图</label>
+                            <div class="form-text form-input-inline w40">
+                                <input type="text"  name="info[new_img]" id="image"   readonly value="{$content.new_img}"/>
+                            </div>
+                            <div class="form-button form-input-inline">
+                                <input class="but shenhe mg_t0" type="button" id="uploadButton"  class="chaxun but" value="上传" />
+                                <i class="image" style="display:none;color:red;">请上传封面图</i>
+                                <input name="image" id="imagemore" type="hidden" class="dfinput" value="" readonly />
+                            </div>
+							<div class="form-text form-input-block w50"><i style="font-size:12px"><!--第一张是封面图（图片大小180x193） ， 第二张是内部图片（图片大小720x376）--></i></div>
+                            <div class="form-text form-input-block w50">
+                                <ul class="toollist_pic c" id="toollist_pic">
+								<if condition="$content_image_count neq 0 ">
+                                    <volist name="content_image" id="image">
+                                    <li onclick="del_album_img('{$image}',this)"><a><img src="{$image}"><i class="fa fa-times-circle"></i></a></li>
+                                    </volist>
+								</if>	
+                                </ul>
+                            </div>
+                        </div>
+							<div class="form-item">
+							<label class="form-label">新闻类型</label>
+							<div class="form-select form-input-block">
+								<select id="newtype" name="info[new_type]" > 
+									<option value="">--请选择类型--</option>
+									<volist name="newtype" id="data">
+									<option value="{$key}" <if condition="$key eq $content['new_type']">selected</if>>{$data}</option>
+									</volist>
+								</select>
+								<i class="newtype" style="display:none;color:red;">新闻类型不能为空</i>
+							</div>
+						</div>
+						<div class="form-item">
+                            <label class="form-label">状态</label>
+                            <div class="form-radio form-input-block">
+                                <div class="skin-section">
+                                    <ul>
+                                        <li>
+                                            <input type="radio" name="info[new_isshow]" value="1"  <if condition="1 eq $content.new_isshow ">checked</if> >
+                                            <span>启用</span>
+                                        </li>
+                                        <li>
+                                            <input  type="radio" name="info[new_isshow]" value="2"   <if condition="2 eq $content.new_isshow ">checked</if>>
+                                            <span>禁用</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-item">
+                            <label class="form-label">简介</label>
+                            <div class="form-text form-input-block">
+                                <input type="text" name="info[new_brief]" value="{$content['new_brief']}" placeholder="请输入简介" onKeyUp="checkLength(this);"  id="description" maxlength="150"/>
+                                <i class="description" style="display:none;color:red;">简介不能为空</i>
+								 <i>最多可输入<font id="chLeft"  color=red>150</font>字</i>
+                            </div>
+                        </div> 
+                      
+                        <div class="form-item">
+                            <label class="form-label">内容</label>
+                            <div class="form-textarea form-input-block">
+                                <textarea name="info[new_content]" placeholder="请输入内容" id="content" >{$content['new_content']}</textarea>
+                                <i class="content" style="display:none;color:red;">内容不能为空</i>
+                            </div>
+                        </div>
+                   					
+                        <div class="form-item">
+                            <div class="form-button form-input-block">
+                                <input class="chaxun but" type="submit" id="tijiao" value="提交"/>
+                             
+								<button class="but chongzhi" type="button" onclick="location.href='{:U('newlist/index')}'">返回</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+//提交时验证
+	function checkfrom() {
+		var title = $.trim(document.getElementById("title").value);
+        if (title == '') {
+            $(".title").show();
+            $('#title').focus();
+            return false;
+        }
+        $(".title").hide();
+
+		
+		var source = $.trim(document.getElementById("source").value); 
+        if (source == '') {
+            $(".source").show();
+            $('#source').focus();
+            return false;
+        }
+        $(".source").hide(); 
+      
+        var image = $.trim(document.getElementById("image").value);
+        if (image == '') {
+            $(".image").show();
+            $('#image').focus();
+            return false;
+        }
+        $(".image").hide();
+		var newtype = $.trim(document.getElementById("newtype").value);
+        if (newtype == '') {
+            $(".newtype").show();
+            $('#newtype').focus();
+            return false;
+        }
+        $(".newtype").hide();
+		
+        var description = $.trim(document.getElementById("description").value);
+        if (description == '') {
+            $(".description").show();
+            $('#description').focus();
+            return false;
+        }
+        $(".description").hide();
+		
+		var content = $.trim(document.getElementById("content").value);
+        if (content == '') {
+            $(".content").show();
+            $('#content').focus();
+            return false;
+        }
+        $(".content").hide();
+        
+	document.getElementById("tijiao").disabled=true;
+    }
+    $(function () {
+        $(".right_min").height($(window).height());
+
+        $('.skin-section input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });      
+    });
+	//截取字符长度
+	function checkLength(which) { 
+		<!-- Begin 
+		var maxChars = 150;  
+		if (which.value.length > maxChars)  
+		which.value = which.value.substring(0,maxChars);  
+		var curr = maxChars - which.value.length;  
+		document.getElementById("chLeft").innerHTML = curr.toString();  
+		// End -->
+	} 
+</script>

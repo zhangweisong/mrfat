@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>申请提现</title>
+		<!--说明文字编码-->
+		<meta http-equiv="Content-type" content="text/html" charset="utf-8">
+		<!--针对 IE8 版本的一个特殊文件头标记，用于为 IE8 指定不同的页面渲染模式-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!--设备物理宽度等于等于页面宽度,页面初始缩放1:1,禁止用户调整缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+		<!--控制状态栏显示样式-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--解决uc字体变大问题-->
+		<meta name="wap-font-scale" content="no">
+		<!--手机号码不被显示为拨号链接-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--页面缓存时间的最大值是0秒，目的是不让页面缓存，每次访问必须到服务器读取-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/public.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/common.css" />
+		<link rel="stylesheet" href="__PUBLIC__/agcy/css/shenqingtixian.css" />
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/jquery-1.10.2.min.js"></script>
+	</head>
+
+	<body>
+		<div class="header">
+			<a href="javascript:history.go(-1)">
+				<img src="__PUBLIC__/agcy/images/left.png" />
+			</a>
+			<p>申请提现</p>
+		</div>
+		<div class="money">
+			<p>提现金额</p> 
+			<p>￥：</p>
+			<p>温馨提示：最低提现金额100元，24小时内到账，手续费为{$pop.set_value}%。</p>
+			<input type="tel" maxlength="12" id="agcy_pop_money"  onkeyup="clearNoNum(this)" />
+		</div>
+		<ul class="cont">
+			<li>
+				<p>银行卡户主姓名：</p>
+				<input type="text" id="agcy_pop_name" maxlength="10" />
+			</li>
+			<li>
+				<p>开户行名称：</p>
+				<input type="text" id="agcy_pop_account" maxlength="12" />
+			</li>
+			<li>
+				<p>银行卡卡号：</p>
+				<input type="tel"  id="agcy_pop_code" onkeyup="if(isNaN(value))execCommand('undo')" maxlength="19" />
+			</li> 
+			<li>
+				<p>银行预留手机号：</p>
+				<input type="tel"  id="agcy_pop_phone" onkeyup="if(isNaN(value))execCommand('undo')" maxlength="11" />
+			</li>
+			<li>
+				<p>身份证号：</p>
+				<input type="tel" id="agcy_pop_idcard"  maxlength="18" />
+			</li>
+			 <li>
+				<p>申请备注：</p> 
+				<input type="text" id="agcy_pop_remarks"  maxlength="30" />
+			</li>
+		</ul>
+		<button class="btnn" onclick="tijiao()">提交</button>
+		<script type="text/javascript" src="__PUBLIC__/agcy/js/screenSize.js" ></script>
+        <script type="text/javascript" src="__PUBLIC__/layer/layer.js" ></script> 
+	</body> 
+</html>
+<script>
+    function clearNoNum(obj){ 
+        obj.value = obj.value.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符  
+        obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个. 清除多余的  
+        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
+    }
+
+
+	var agcy_money=parseFloat({$agcy.agcy_money});
+	var agcy_id={$agcy.agcy_id};
+	function tijiao(){ 
+		var agcy_pop_money = parseFloat($("#agcy_pop_money").val()); 
+		if(agcy_pop_money=="" || isNaN(agcy_pop_money)){ 
+            layer.msg('请输入提现金额！',{icon:5,time:1000});
+			$('#agcy_pop_money').focus();
+			return false;
+		} 
+		
+		if(agcy_pop_money<100){ 
+            layer.msg('提现金额最低为100元！',{icon:5,time:1000});
+			$('#agcy_pop_money').focus();
+			return false;
+		}
+		
+		if(agcy_pop_money>agcy_money){ 
+            layer.msg('余额不足！',{icon:5,time:1000});
+			$('#agcy_pop_money').focus();
+			return false;
+		}
+		
+		var agcy_pop_name = $.trim($("#agcy_pop_name").val()); 
+		if(agcy_pop_name==""){
+            layer.msg('请输入银行卡户主姓名！',{icon:5,time:1000}); 
+			$('#agcy_pop_name').focus();
+			return false;
+		}
+		
+		var agcy_pop_account = $.trim($("#agcy_pop_account").val()); 
+		if(agcy_pop_account==""){ 
+            layer.msg('请输入开户行名称！',{icon:5,time:1000}); 
+			$('#agcy_pop_account').focus();
+			return false;
+		}
+		
+		var agcy_pop_code = $.trim($("#agcy_pop_code").val()); 
+		if(agcy_pop_code==""){
+            layer.msg('请输入银行卡卡号！',{icon:5,time:1000});  
+			$('#agcy_pop_code').focus();
+			return false;
+		}
+		
+		var pattern = /^([1-9]{1})(\d{14}|\d{18})$/;
+		if(!pattern.test(agcy_pop_code)){
+            layer.msg('请输入正确的银行卡卡号！',{icon:5,time:1000});   
+			$('#agcy_pop_code').focus();
+			return false;
+		}
+		
+		var agcy_pop_phone = $.trim($("#agcy_pop_phone").val()); 
+		if(agcy_pop_phone==""){ 
+            layer.msg('请输入银行预留手机号！',{icon:5,time:1000});   
+			$('#agcy_pop_phone').focus();
+			return false;
+		}
+		
+		
+		var phone = /^1\d{10}$/;
+		if(!phone.test(agcy_pop_phone)){
+            layer.msg('请输入正确的手机号！',{icon:5,time:1000});   
+			$('#agcy_pop_phone').focus();
+			return false;
+		}
+		
+		var agcy_pop_idcard = $.trim($("#agcy_pop_idcard").val()); 
+		if(agcy_pop_idcard==""){
+            layer.msg('请输入身份证号！',{icon:5,time:1000});  
+			$('#agcy_pop_idcard').focus();
+			return false;
+		}
+		
+		var isidcard=/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+		if(!isidcard.test(agcy_pop_idcard)){ 
+            layer.msg('请输入正确的身份证号！',{icon:5,time:1000});  
+			$('#agcy_pop_idcard').focus();
+			return false;
+		}  
+		
+		var agcy_pop_remarks = $("#agcy_pop_remarks").val(); 
+		if(agcy_pop_remarks==""){
+            layer.msg('请输入申请备注！',{icon:5,time:1000});   
+			$('#agcy_pop_remarks').focus();
+			return false;
+		} 
+		
+		var url = "{:U('index/shenqing')}";
+		var data = {"agcy_id": agcy_id,"agcy_pop_money":agcy_pop_money,"agcy_pop_name": agcy_pop_name,"agcy_pop_account": agcy_pop_account,"agcy_pop_code": agcy_pop_code,"agcy_pop_phone": agcy_pop_phone,"agcy_pop_idcard": agcy_pop_idcard,"agcy_pop_remarks": agcy_pop_remarks};
+		var success = function (response) { 
+            $(".btnn").removeAttr("onclick"); 
+			if (response.errno == 1) {  
+                layer.msg('提现申请成功！',{icon:6,time:1000}, function () {
+                    window.location = "{:U('index/index')}";
+                });
+			}else {  
+                layer.msg('提现申请失败！',{icon:5,time:1000}, function () {
+                    window.location = "{:U('index/shenqingjilu')}";
+                });
+			}
+		}
+		$.post(url, data, success, 'json');
+        
+       
+		
+	}
+</script>

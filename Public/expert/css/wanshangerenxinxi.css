@@ -1,0 +1,67 @@
+.title{
+	padding: 1.32rem 0.64rem 0;
+}
+.title p{
+	font-size: 1.12rem;
+	line-height: 2.4rem;
+	color: #363636;
+	float: left;
+}
+.title input{
+	height: 2.35rem;
+	border: 1px solid #dcdcdc;
+	font-size: 1.12rem;
+	padding: 0 0.5rem;
+	width: 24rem;
+	box-sizing: border-box;
+}
+.title select{
+	height: 2.35rem;
+	border: 1px solid #dcdcdc;
+	font-size: 1.12rem;
+	padding: 0 0.5rem;
+	width: 24rem;
+}
+.title textarea{
+	resize: none;
+	border: 1px solid #dcdcdc;
+	line-height: 160%;
+	font-size: 1.12rem;
+	padding: 0 0.5rem;
+	width: 24rem;
+	height: 10rem;
+	box-sizing: border-box;
+}
+.picture{
+	padding: 1.32rem 0.64rem 0; 
+	margin-bottom: 1rem;
+}
+.picture p:first-of-type{
+	font-size: 1.12rem;
+	line-height: 2.4rem;
+	color: #363636;
+	float: left;
+}
+.picture img:first-of-type{
+	width: 100%;
+	height: 7.32rem; 
+	top: 1.32rem;
+	left: 4.32rem;
+}
+
+.picture p:nth-of-type(2){
+	font-size: 1rem;
+	line-height: 1.4rem;
+	color: #a1a1a1;
+	position: absolute;
+	top: 2rem;
+	right: 8rem;
+}
+.picture p:nth-of-type(3){
+	font-size: 1rem;
+	line-height: 1.4rem;
+	color: #a1a1a1;
+	position: absolute;
+	bottom: 0;
+	left: 4.5rem;
+}

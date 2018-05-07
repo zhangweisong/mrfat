@@ -1,0 +1,32 @@
+.cont{
+	border-top: 1px solid #FFFFFF;
+	background: #3ab849;
+	height: 9.2rem;
+}
+.cont div{
+	width: 50%;
+}
+.cont div p{
+	text-align: center;
+}
+.cont div p:nth-of-type(1){
+	color: #FFFFFF;
+	font-size: 1.88rem;
+	padding-top: 1.84rem;
+}
+.cont div p:nth-of-type(2){
+	color: #FFFFFF;
+	font-size: 0.96rem;
+	padding-top: 1.68rem;
+}
+.cont div button{
+	color: #3ab849;
+	width: 6.12rem;
+	height: 1.6rem;
+	font-size: 0.96rem;
+	border: none;
+	background: #FFFFFF;
+	border-radius: 0.4rem;
+	display: block;
+	margin: 0.5rem auto 0;
+}

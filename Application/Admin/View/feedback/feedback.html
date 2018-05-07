@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>添加新闻 </title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" />        
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>             
+    </head>
+    <body>
+	<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="javascript:void(0);">意见反馈</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <div class="message">			
+			 <div class="form_box">
+                    <form  name="myform" id="myform" action="{:U('feedback/feedback')}" method="post" onsubmit="return checkfrom()">
+                       <in
+                        <div class="form-item">
+						 <input  type="hidden" name="feedback_id" value="{$feedback_id}"/>
+                            <label class="form-label">回复内容</label>
+                            <div class="form-textarea form-input-block">
+                                <textarea name="feedback" placeholder="请输入内容" id="content"  ></textarea>
+                                <i class="content" style="display:none;color:red;">内容不能为空</i>
+								 
+                            </div>
+                        </div>
+                       				
+                        <div class="form-item">
+                            <div class="form-button form-input-block">
+                                <input class="chaxun but" type="submit" id="tijiao" onclick="return confirm('确定提交?')" value="提交"/>
+                             								
+                            </div>
+                        </div>
+                    </form>
+                </div>
+        </div>
+    </div>
+</div>
+       
+    </body>
+</html>
+<script>
+//提交时验证
+    function checkfrom() {
+		var content = document.getElementById("content").value;
+        if (content == '') {
+            $(".content").show();
+            $('#content').focus();
+            return false;
+        }
+        $(".content").hide();
+	} 
+</script>
+<if condition="$status  eq 2">
+    <script type="text/javascript" src="__PUBLIC__/admin/js/layer/layer.js"></script>
+    <script>
+        var index = parent.layer.getFrameIndex(window.name); //
+        parent.layer.close(index);  // 关闭layer
+        parent.location.reload();
+    </script>
+</if>

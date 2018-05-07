@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>培训通告</title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+		<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+		<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+	</head>
+	<body>
+		<div class="right_min">
+			<div class="crumbs_nav">
+				<i class="iconfont icon-shouye"></i>
+				<ul>
+					<li><a href="{:U('index/welcome')}">首页</a></li>
+					<li> > </li>
+					<li><a href="javascript:void(0);">三农服务</a></li>
+					<li> > </li>
+					<li><a href="{:U('notice/index')}">培训通告</a></li>
+				</ul>
+			</div>
+			<div class="min">
+				<div class="tianjia">
+					<a class="tianjia_but" href="{:U('notice/addnotice')}">
+						<i class="fa fa-plus"></i>
+						添加培训通告
+					</a>
+				</div>
+				<div class="table_box">
+					<table class="table" border="" cellspacing="" cellpadding="">
+						<colgroup>
+							<col width="100">
+							<col width="100">
+							<col width="100">
+							<col width="100">
+							<col width="100">
+							<col>
+						</colgroup>                        
+						<thead>      
+							<tr>
+                                <th>培训机构名称</th>
+                                <th>通告名称</th>
+                                <th>通告状态</th>
+                                <th>培训通告内容</th>
+                                <th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach($notice as $k=>$v):?>
+							<tr>
+								<td>{$v.name}</td>
+								<td>{$v.n_name}</td>
+								<td>
+                                <label class="switch-btn circle-style" style="margin: 0 auto;">
+                                    <input class="checked-switch" type="checkbox" onchange="checkedswitchs(this,{$v.n_id},'n_flag')"
+                                    <if condition="$v['n_flag'] eq 1">checked</if> />
+                                    <span class="text-switch" data-yes="启用" data-no="禁用"></span>
+                                    <span class="toggle-btn"></span> 
+                                </label>
+                                </td>
+								<td>{$v.n_content}</td>
+								<td>
+								<a href="{:U('notice/editnotice',array('n_id'=>$v['n_id']))}" class="but chaxun">
+								<i class="fa fa-edit"></i>编辑</a>
+                                <a href="{:U('notice/delnotice',array('n_id'=>$v['n_id']))}" class="but chaxun" onclick="{if(confirm('确认删除？')){
+                                return true;}return false;}"><i class="fa fa-trash-o""></i>删除</a>
+								</td>
+							</tr>
+							<?php endforeach;?>
+						</tbody>
+					</table>
+				</div>				
+				{$pageshow}
+			</div>
+		</div>
+	</body>
+</html>
+
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script src="__PUBLIC__/layer/layer.js"></script> 
+<script type="text/javascript">
+	$(function(){
+		$('input, textarea').placeholder();
+	});
+    //显示开关1开启；2关闭
+	function checkedswitchs(obj,n_id,field){
+		if($(obj).is(':checked')){	
+            //true
+			$.getJSON("{:U('notice/ajaxable_on')}&n_id="+n_id+"&field="+field,function(){
+			});
+		}else{
+        	//false 
+			$.getJSON("{:U('notice/ajaxable_off')}&n_id="+n_id+"&field="+field,function(){
+			});
+			
+		}
+	}
+</script>

@@ -1,0 +1,58 @@
+.cont{
+	background: #3ab849;
+	height: 6.52rem;
+	padding: 0.8rem 0;
+	border-top: 1px solid #FFFFFF;
+}
+.cont>div{
+	width: 49%;
+}
+.cont>div:first-of-type{
+	border-right: 1px solid #FFFFFF;
+}
+.cont>div:first-of-type p:first-of-type{
+	text-align: center;
+	color: #FFFFFF;
+	font-size: 1.8rem;
+	font-weight: 900;
+	padding-top: 1rem;
+}
+.cont>div:first-of-type p:last-of-type{
+	text-align: center;
+	color: #FFFFFF;
+	font-size: 0.96rem;
+	padding-top: 1.72rem;
+}
+.cont>div:last-of-type button{
+	width: 11.32rem;
+	height: 2.6rem;
+	background: #FFFFFF;
+	color: #3ab849;
+	border: none;
+	border-radius: 0.4rem;
+	display: block;
+	margin: 2rem auto 0;
+	font-size: 1.12rem;
+}
+.ll{
+	margin-top: 2.4rem;
+	padding: 0 0.64rem;
+}
+.ll li{
+	border-bottom: 1px solid #F5F5F5;
+	
+}
+.ll li p{
+	line-height: 4rem;
+	font-size: 1.2rem;
+	color: #363636;
+}
+.ll li:nth-of-type(2) p{
+	float: left;
+}
+.ll li img{
+	float: right;
+	height: 1.6rem;
+	margin-right: 1rem;
+	margin-top: 1.2rem;
+}

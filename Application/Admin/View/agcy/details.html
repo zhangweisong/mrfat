@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>经销商详情</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+		<link rel="stylesheet" href="__PUBLIC__/tupian/css/lightbox.css">
+    </head>
+    <body >
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="javascript:void(0);">查看详情({$agcy.agcy_name})</a></li>
+                </ul>
+            </div>
+            <div class="min">
+                <div class="message">
+                    <div class="message-block message-border-t">
+                        <h4 class="message-left_block">店铺详情</h4>
+                    </div>
+                    <div class="table_box">
+                        <table class="table" border="" cellspacing="" cellpadding="">
+                            <tr>
+                                <th style="font-weight:bold">店铺名称</th>
+                                <td>{$agcy.agcy_name}</td>
+                                <th style="font-weight:bold">区域</th>
+                                <td>{$agcy.p_name}-{$agcy.c_name}-{$agcy.a_name}</td>
+                                <th style="font-weight:bold">营业执照</th>
+                                <td>
+                            <if condition="$agcy['agcy_logo'] neq '' ">
+                                <img style="width:50px;height:50px;" src="{$agcy.agcy_logo}"> 
+                            </if>
+                            <if condition="$agcy['agcy_logo'] eq '' ">
+                                -- 
+                            </if>
+
+                            </td>
+                            </tr>
+
+                            <tr>
+                                <th style="font-weight:bold">联系人</th>
+                                <td>{$agcy.agcy_manager}</td>
+                                <th style="font-weight:bold">联系电话</th>
+                                <td>{$agcy.agcy_tel}</td>
+                                <th style="font-weight:bold">账号状态</th>
+                                <if condition="$agcy['agcy_state'] eq 1" >
+                                <td>开启</td>
+                                <else/>
+                                <td>关闭</td>
+                                </if>
+                            </tr>
+                            <tr>
+                                <th style="font-weight:bold">账号</th>
+                                <td>{$agcy.agcy_username}</td>
+                                <th style="font-weight:bold">店铺地址</th>
+                                <td>{$agcy.agcy_address}</td>
+                                <th style="font-weight:bold">注册时间</th>
+                                <td>{$agcy.agcy_addtime}</td>
+                            </tr> 
+							<!--  <tr>
+                                <th style="font-weight:bold">店铺URL</th>
+                                <td colspan='5'>{$Think.CONFIG.SITE_WEB_URL}{:U("home/shangjia/xiangqing",array('agcy_id'=>$agcy['agcy_id']))}</td>
+                            </tr> --> 
+                            <tr> 
+                                <th style="font-weight:bold;">法人身份证</th>
+                                <td>
+                                    <if condition="count($arr)  eq 0 ">
+                                        --						
+                                    </if>
+                                    <if condition="count($arr)  neq 0 ">
+                                        <volist name="arr" id="data">
+                                            <div style="float:left;">
+                                            <a class="example-image-link" href="{$data}" data-lightbox="example-1" >
+                                                <img class="example-image" style="width:50px;height:50px;" src="{$data}"/>
+                                            </a>  
+                                            </div>
+                                        </volist>
+                                    </if>
+                                </td>
+                                <th style="font-weight:bold;">门店照片</th>
+                                <td>
+                                    <if condition="count($arr_1)  eq 0 ">
+                                        --						
+                                    </if>
+                                    <if condition="count($arr_1)  neq 0 ">
+                                        <volist name="arr_1" id="data">
+                                            <div style="float:left;">
+                                            <a class="example-image-link" href="{$data}" data-lightbox="example-1" >
+                                                <img class="example-image" style="width:50px;height:50px;" src="{$data}"/>
+                                            </a>  
+                                            </div>
+                                        </volist>
+                                    </if>
+                                </td>
+                                <th style="font-weight:bold;">二维码</th>
+                                <td> 
+                                    <div >
+                                        <?php
+                                            $URL=C('WEB_URL')."index.php/user/index/index/agcy_id/$agcy_id"; 
+                                        ?>
+                                        <a class="example-image-link" href="http://qr.liantu.com/api.php?text=<?php echo $URL;?>" data-lightbox="example-1" > 
+                                            <img class="example-image" style="width:50px;height:50px;" src="http://qr.liantu.com/api.php?text=<?php echo $URL;?>"/>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="message">
+                    <div class="message-block message-border-t">
+                        <h4 class="message-left_block">银行卡信息</h4>
+                    </div>
+                    <div class="table_box">
+                        <table class="table" border="" cellspacing="" cellpadding=""> 
+                            <tr> 
+                                <th style="font-weight:bold">开户行</th>
+                                <td>{$agcy.agcy_bank_name}</td>
+                                <th style="font-weight:bold">银行卡号</th>
+                                <td>{$agcy.agcy_bank_card}</td>
+                            </tr> 
+                            <tr> 
+                                <th style="font-weight:bold">银行预留电话</th>
+                                <td>{$agcy.agcy_bank_mobile}</td>
+                                <th style="font-weight:bold">经销商余额(元)</th>
+                                <td>{$agcy.agcy_money}</td>
+                            </tr> 
+                            <tr> 
+                                <th style="font-weight:bold">银行户主姓名</th>
+                                <td>{$agcy.agcy_bank_username}</td>
+                                <th style="font-weight:bold">身份证</th>
+                                <td>{$agcy.agcy_idcard}</td>
+                            </tr> 
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </body>
+</html>
+<script src="__PUBLIC__/tupian/js/lightbox-plus-jquery.min.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+
+        $('.form-checkbox input,.form-radio input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        $('input').on('ifChecked', function (event) {
+            //alert($(this).val());
+        });
+        $(".checkbox-title dd i").click(function () {
+            $(this).toggleClass("fa-flip-vertical");
+            $(this).parents().siblings(".skin-section").slideToggle(500);
+        });
+
+
+
+    });
+</script>
+
+
+
+
+

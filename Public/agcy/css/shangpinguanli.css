@@ -1,0 +1,132 @@
+.btnss{
+	padding: 0 0.64rem;
+}
+.btnss button{
+	width:48%;
+	border: none;
+	border-radius: 0.4rem;
+	margin: 0.5rem 0;
+	position: relative;
+	height: 3.52rem;
+}
+.btnss button img{
+	position: absolute;
+	height: 1.8rem;
+	left: 2.2rem;
+	top: 0.8rem;
+}
+.btnss button p{
+	color: #FFFFFF;
+	font-size: 1.36rem;
+	padding-left: 2.5rem;
+}
+.btnss button:nth-of-type(1){
+	background: #5595ff;
+	margin-right:1.1rem;
+}
+.btnss button:nth-of-type(2){
+	background: #1cd7ff;
+}
+.btnss button:nth-of-type(3){
+	background: #ffa155;
+	margin-right:1.1rem;
+}
+.btnss button:nth-of-type(4){
+	background: #e555ff;
+}
+.search{
+	padding: 0 0.64rem;
+	
+	border-bottom: 0.6rem solid #f0f0f0;
+}
+.sear{
+	border: 1px solid #dcdcdc;
+	border-radius: 0.4rem;
+	width: 19.6rem;
+	height: 2.88rem;
+	margin: 1rem 0;
+	margin-right: 0.5rem;
+}
+.sear input{
+	line-height: 2.88rem;
+	border: none;
+	font-size: 1.2rem;
+	padding-left: 0.5rem;
+	background: none;
+	width: 90%;
+}
+.sear img{
+	height: 1.68rem;
+	margin-top: 0.6rem;
+}
+.search button{
+	background: #3ab849;
+	color: #FFFFFF;
+	font-size: 1.2rem;
+	border: none;
+	height:2.88rem;
+	width: 6.28rem;
+	border-radius: 0.4rem;
+	margin: 1rem 0;
+}
+.cont{
+	padding: 0 0.64rem 1rem;
+}
+.tit{
+	font-size: 1.04rem;
+	line-height: 3.12rem;
+	border-bottom:1px solid #f0f0f0 ;
+}
+.list{
+	height: 7.2rem;
+	position: relative;
+	padding-top: 0.8rem;
+	border-bottom:1px solid #f0f0f0 ;
+}
+.list:last-of-type{
+	border-bottom: none;
+}
+.tu{
+	height: 6.28rem;
+	width: 6.08rem;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	position: relative;
+}
+.tu img{
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 2.52rem;
+}
+.list>p:nth-of-type(1){
+	position: absolute;
+	font-size: 1.12rem;
+	color: #363636;
+	top: 1.5rem;
+	left: 7rem;
+	line-height: 140%;
+}
+.list>p:nth-of-type(2){
+	position: absolute;
+	font-size: 1.12rem;
+	color: #363636;
+	top: 5.5rem;
+	left: 7rem;
+}
+.btns{
+	width: 11.2rem;
+	position: absolute;
+	right: 0;
+	top: 5.2rem;
+}
+.btns button{
+	width: 4.88rem;
+	height: 1.8rem;
+	background: #3ab849;
+	border: none;
+	font-size: 1.04rem;
+	color: #FFFFFF;
+	border-radius: 0.4rem;
+    margin-left:0.3rem;
+}

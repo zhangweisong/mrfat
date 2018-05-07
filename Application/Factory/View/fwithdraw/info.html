@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>厂家提现详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+	<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+</head>
+<body >
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="javascript:void(0);">厂家提现详情</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <div class="message">
+			<div class="message-block message-border-t">
+				<h4 class="message-left_block">厂家提现详情</h4>
+			</div>
+			<div class="table_box">
+				<table class="table" border="" cellspacing="" cellpadding="">
+					<tr>
+                        <th style="font-weight:bold">厂家名称</th>
+                        <td>{$fwithdraw.factoryname}</td>
+                        <th style="font-weight:bold">申请提现金额</th>
+                        <td>{$fwithdraw.fwithdraw_amount}</td>
+					</tr>
+                    <tr>
+                        <th style="font-weight:bold">银行开户主姓名</th>
+                        <td>{$fwithdraw.fwithdraw_bank_usrname}</td>
+                        <th style="font-weight:bold">银行卡卡号</th>
+                        <td>{$fwithdraw.fwithdraw_bank_account}</td>
+					</tr>
+                    <tr>
+                        <th style="font-weight:bold">银行卡名称</th>
+                        <td>{$fwithdraw.fwithdraw_bank_bankname}</td>
+                        <th style="font-weight:bold">预留手机号</th>
+                        <td>{$fwithdraw.fwithdraw_bank_bankname}</td>
+					</tr>
+                    <tr>
+                        <th style="font-weight:bold">预留户主身份证号</th>
+                        <td>{$fwithdraw.fwithdraw_bank_userid}</td>
+                        <th style="font-weight:bold">状态</th>
+                        <td>
+                            <if condition="$fwithdraw['fwithdraw_flag'] eq 1">
+								<font >申请</font>
+								<elseif condition="$fwithdraw['fwithdraw_flag'] eq 2"/>
+								<font style="color:green;">通过</font>
+                                <else/>
+                                <font style="color:red;">驳回</font>
+							</if>
+                        </td>
+					</tr>
+					<tr>
+						<th style="font-weight:bold">申请备注</th>
+                        <td>{$fwithdraw.fwithdraw_remark}</td>
+                        <th style="font-weight:bold">申请提现时间</th>
+						<td>{$fwithdraw.fwithdraw_addtime|date='Y-m-d H:i:s',###}</td>
+					</tr>
+                    <!--<tr>
+						<th style="font-weight:bold">打款日期</th>
+						<td colspan="3" style="text-align: left; padding-left: 80px;">
+                            <if condition="$popinfo.pop_backtime eq 0">
+                                ---
+                                <else/>
+                                {$popinfo.pop_backtime|date='Y-m-d H:i:s',###}
+                            </if>
+
+                        </td>
+					</tr>-->
+					<if condition="$fwithdraw['fwithdraw_flag'] gt 1">
+                    <tr>
+                        <th style="font-weight:bold">审核人</th>
+                        <td>{$fwithdraw.admimname}</td>
+						<th style="font-weight:bold">审核时间</th>
+                        <td>{$fwithdraw.fwithdraw_bank_checktime|date='Y-m-d H:i:s',###}</td>
+					</tr>
+                    <tr>
+						<th style="font-weight:bold">审核备注</th>
+                        <td colspan="3"  style="text-align: left; padding-left: 80px;">{$fwithdraw.fwithdraw_bank_remark}</td>
+					</tr>
+					</if>
+				</table>
+			</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+
+        $('.form-checkbox input,.form-radio input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        $('input').on('ifChecked', function(event){
+            //alert($(this).val());
+        });
+        $(".checkbox-title dd i").click(function(){
+            $(this).toggleClass("fa-flip-vertical");
+            $(this).parents().siblings(".skin-section").slideToggle(500);
+        });
+
+
+
+    });
+</script>
+
+
+
+
+

@@ -1,0 +1,115 @@
+body{
+	background: #f5f5f5;
+}
+.top{
+	width: 100%;
+	background: #ffffff;
+	height:8.8rem ;
+	position: relative;
+	margin-bottom: 2px;
+}
+.top img:nth-of-type(1){
+	width: 7.2rem;
+	height: 6.4rem;
+	position: absolute;
+	top: 0.96rem;
+	left: 0.6rem;
+}
+.top img:nth-of-type(2){
+	height: 0.92rem;
+	position: absolute;
+	top: 3.68rem;
+	left: 8.24rem;
+}
+.top img:nth-of-type(3){
+	height: 0.96rem;
+	position: absolute;
+	top: 6rem;
+	left: 8.24rem;
+}
+.top p:nth-of-type(1){
+	font-size: 1.2rem;
+	font-weight: 800;
+	color: #363636;
+	position: absolute;
+	top: 1.2rem;
+	left: 8.24rem;
+}
+.top p:nth-of-type(2){
+	font-size: 1.04rem;
+	color: #707070;
+	position: absolute;
+	top: 3.6rem;
+	left: 9.48rem;
+}
+.top p:nth-of-type(3){
+	font-size: 1.04rem;
+	color: #707070;
+	position: absolute;
+	top: 6rem;
+	left: 9.48rem;
+}
+.top button{
+	width: 3.92rem;
+	height: 1.28rem;
+	background: #ff413c;
+	color: #FFFFFF;
+	font-size: 0.88rem;
+	position: absolute;
+	bottom: 1.6rem;
+	right: 0.6rem;
+	border: none;
+	border-radius: 0.4rem;
+}
+.center{
+	margin-bottom: 1.4rem;
+}
+.center div{
+	background: #FFFFFF;
+	width: 49.9%;
+	height: 5.36rem;
+	position: relative;
+}
+.center div img{
+	height: 2.32rem;
+	position: relative;
+	top: 1.44rem;
+	left: 1.6rem;
+}
+.center div p{
+	margin-left: 4rem;
+	text-align: center;
+}
+.center div p:nth-of-type(1){
+	font-size: 0.96rem;
+	color: #363636;
+	position: absolute;
+	top: 1.08rem;
+	width: 10.36rem;
+}
+.center div p:nth-of-type(2){
+	font-size: 0.96rem;
+	color: #363636;
+	padding-top: 0.96rem;
+	font-weight: 800;
+}
+.menu{
+	margin-bottom: 1rem;
+}
+.menu a{
+	display: block;
+	width: 33%;
+	background: #FFFFFF;
+	margin-bottom: 2px;
+	height: 8rem;
+	margin-right:1px;
+}
+.menu a img{
+	display: block;
+	margin: 1.2rem auto 1.36rem;
+	height: 3rem;
+}
+.menu a p{
+	font-size: 1.2rem;
+	text-align: center;
+}

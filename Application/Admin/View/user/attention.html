@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>返佣记录</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+    <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="{:U('index/welcome')}">首页</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">农户管理</a></li>
+            <li> > </li>
+            <li><a href="javascript:void(0);">农户关注列表</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <!--查询-->
+        <div class="query">
+            <form  name="seachform" id="seachform"  action="{:U('user/attention',array('user_id'=>$user_id))}"  method="post" class="form" >
+                <div class="form_input mg_trb">
+                    <label class="text">快速检索</label>
+                    <input type="text" name="info[keyword]" id="keyword" value="{$keyword}"  placeholder="请输入姓名/商家名称"  maxlength="11"/>
+                </div>
+                <div class="form_input mg_trb form-date">
+                    <label class="text">关注时间</label>
+                    <input type="text" class="laydate-icon layer-date" name="info[starttime]"  value="{$starttime}"  id="start" placeholder="开始时间" readonly/>
+                    <input type="text" class="laydate-icon layer-date" name="info[endtime]"  value="{$endtime}"  id="end" placeholder="结束时间" readonly/>
+                </div>
+                <div class="button mg_trb" onclick="location.href='{:U('user/attention',array('user_id'=>$user_id))}'">
+                    <i class="fa fa-refresh ico"></i>
+                    <input type="button" value="刷新" class="but chongzhi" />
+                </div>
+                <div class="button mg_trb chaxun">
+                    <i class="fa fa-search ico"></i>
+                    <input type="submit" value="查询" class="but"  style="    position: absolute; background: none;z-index: 2;"/>
+                </div>
+            </form>
+        </div>
+
+        <div class="table_box">
+            <table class="table" border="" cellspacing="" cellpadding="">
+                <colgroup>
+                    <col width="10">
+                    <col width="50">
+                    <col width="50">
+                    <col width="50">
+                    <col width="50">
+                    <col width="100">
+                    <col width="50">
+                    <col width="170">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>编号</th> 
+                    <th>商家名称</th>
+                    <th>关注时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="attention" id="income">
+                    <tr>
+                        <td>{$income.attention_id}</td> 
+                        <td>{$income.agcy_name}</td>
+                        <td>{$income.attention_addtime|date='Y-m-d H:i:s',###}</td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </div>
+        {$pageshow}
+    </div>
+</div>
+</body>
+</html>
+<script src="__PUBLIC__/admin/js/laydate/laydate.js"></script>
+<script>
+    //laydate({elem: "#hello", event: "focus"});
+    var start = {
+        elem: "#start",
+        format: "YYYY-MM-DD",
+        min: "2000-01-01",
+        max: "2100-01-01",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            end.min = datas;
+            end.start = datas
+        }
+    };
+    var end = {
+        elem: "#end",
+        format: "YYYY-MM-DD",
+        min: "2000-01-01",
+        max: "2100-01-01",
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+            start.max = datas
+        }
+    };
+    laydate(start);
+    laydate(end);
+</script>
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $('input, textarea').placeholder();
+    });
+</script>

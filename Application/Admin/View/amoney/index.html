@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>农资贷款金额列表</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+        <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css"> 
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/switch-buttons.css">
+        <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script> 
+    </head>
+    <body>
+        <div class="right_min">
+            <div class="crumbs_nav">
+                <i class="iconfont icon-shouye"></i>
+                <ul>
+                    <li><a href="{:U('index/welcome')}">首页</a></li>
+                    <li> > </li>
+                    <li><a href="###">经销商管理</a></li> 
+                    <li> > </li>
+                    <li><a href="{:U('amoney/index')}">农资贷款金额列表</a></li>
+                </ul>
+            </div>
+
+            <div class="min"> 
+                <div class="tianjia">
+                    <a class="tianjia_but" href="{:U('amoney/add')}">
+                        <i class="fa fa-plus"></i>
+                        新增
+                    </a>
+                </div>
+                <div class="table_box">
+                    <table class="table" border="" cellspacing="" cellpadding=""> 
+                        <thead>
+                            <tr>
+                                <th>编号</th>  
+                                <th>贷款金额</th> 
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="listinfo" id="content">
+                            <tr>
+                                <td>{$content.id}</td>   
+                                <td>{$content.money}</td>   
+                                <td> 
+                                    <a href="{:U('amoney/edit',array('id'=>$content['id']))}"  class="but chaxun">
+                                        <i class="fa fa-edit"></i>
+                                        编辑
+                                    </a>
+                                    <a href="{:U('amoney/delete',array('id'=>$content['id']))}" onclick="{
+                                                if (confirm('确认删除?')) {
+                                                    return true;
+                                                }
+                                                return false;
+                                            }"  class="but chongzhi">
+                                        <i class="fa fa-trash-o"></i>
+                                        删除
+                                    </a>  
+                                </td>
+                            </tr> 
+                        </volist>
+                        </tbody>
+                    </table>
+                </div>
+                {$pageshow}
+            </div>
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $(".right_min").height($(window).height());
+    });
+    //二级分类 
+    function get_erji(obj) {
+        $("#erji").html("<option value='0' >--请选择--</option> ");
+        var yiji_id = $(obj).val()
+        if (yiji_id == 0)
+            return;
+        $.getJSON("{:U('book/get_erji')}&yiji_id=" + yiji_id, function (data) {
+            var html = "";
+            for (var i = 0; i < data.length; i++) {
+                html += "<option value=" + data[i].classify_id + ">" + data[i].classify_name + "</option>";
+            }
+            $("#erji").append(html);
+        });
+    }
+</script>  
+<script src="__PUBLIC__/admin/js/placeholder.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function () {
+        $('input, textarea').placeholder();
+    });</script>
+<script type="text/javascript">
+    $(function () {
+        $(".right_min").height($(window).height());
+    });
+    //显示开关1显示；2隐藏
+    function checkedswitchs(obj, book_id, field) {
+        if ($(obj).is(':checked')) {	//true
+            console.log("显示" + book_id);
+            $.getJSON("{:U('book/ajaxable_on')}&book_id=" + book_id + "&field=" + field, function () {
+            });
+        } else {	//false
+            console.log("隐藏" + book_id);
+            $.getJSON("{:U('book/ajaxable_off')}&book_id=" + book_id + "&field=" + field, function () {
+            });
+        }
+    }
+</script>
+<script src="__PUBLIC__/admin/js/layer/layer.js"></script>
+<script>
+    $(".right_min").height($(window).height());
+    var body_w = $(".right_min").width() - 100;
+    var body_h = $(".right_min").height() - 50;
+    function xiangqing(a) {
+        layer.open({
+            type: 2,
+            title: false,
+            skin: "layui-layer-molv",
+            shade: [0.5, '#000000'],
+            scrollbar: false,
+            maxmin: false,
+            shadeClose: false, //点击遮罩关闭层
+            area: [body_w + "px", body_h + "px"],
+            content: '{:U("book/info")}&book_id=' + a
+        });
+    }
+
+</script>

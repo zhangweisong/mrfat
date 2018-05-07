@@ -1,0 +1,100 @@
+.cont1{
+	padding: 0.64rem;
+	border-bottom: 0.6rem solid #f0f0f0;
+}
+.head{
+	height: 3rem;
+}
+.head img{
+	float: left;
+	height: 1.2rem;
+	margin-top:0.9rem ;
+}
+.head p{
+	line-height: 3rem;
+	font-size: 1.36rem;
+	margin-left: 2rem;
+}
+.cont1>p{
+	font-size: 1.12rem;
+	line-height: 2.72rem;
+}
+.cont2{
+	padding: 0.64rem;
+	border-bottom: 0.6rem solid #f0f0f0;
+}
+.list{
+	height: 8rem;
+	position: relative;
+	border-bottom: #dfdfdf 1px solid;
+}
+.list img{
+	position: absolute;
+	width: 6.08rem;
+	height: 6.28rem;
+	left: 0;
+	top: 0.88rem;
+}
+.list p:nth-of-type(1){
+	position: absolute;
+	color: #363636;
+	font-size: 1.2rem;
+	top: 0.1rem;
+	left: 7.64rem;
+	line-height: 200%;
+}
+.list p:nth-of-type(2){
+	position: absolute;
+	color: #363636;
+	font-size: 1.2rem;
+	top: 2.5rem;
+	left: 7.64rem;
+	line-height: 200%;
+	width: 68%;
+}
+.list p:nth-of-type(3) span{
+	float:right;
+}
+.list p:nth-of-type(3){
+    color: #b3b3b3;
+    font-size: 1.1rem;
+    margin-left: 7.64rem;
+    padding-top: 5.5rem;
+}
+.cont2>p{
+	color: #ff0000;
+	font-size: 1.12rem;
+	line-height: 2.28rem;
+	text-align: right;
+}
+.cont3{
+	padding: 0.64rem;
+}
+.cont3 p{
+	font-size: 1.12rem;
+	line-height: 2.24rem;
+}
+.cont3 textarea{
+    width:94%;
+    display:block;
+    margin:0.5rem auto;
+    padding:0.5rem;
+    line-height:160%;
+    font-size:1.12rem;
+    resize:none;
+    border:1px solid #999999;
+    border-radius:0.4rem;
+}
+.cont3 button{
+	font-size: 1.12rem;
+	line-height: 2.24rem;
+	width: 8.28rem;
+	height: 2.4rem;
+	border-radius: 0.3rem;
+	background: #3ab849;
+	color: #FFFFFF;
+	display: block;
+	border: none;
+	float: right;
+	
+}

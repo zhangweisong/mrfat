@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>答案库详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/html5.css"/>
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/iconfont.css">
+	<link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/font/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/index.css"/>
+	<script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/icheck/square/green.css">
+    <link rel="stylesheet" href="__PUBLIC__/tupian/css/lightbox.css">
+</head>
+<body >
+<div class="right_min">
+    <div class="crumbs_nav">
+        <i class="iconfont icon-shouye"></i>
+        <ul>
+            <li><a href="javascript:void(0);">查看详情</a></li>
+        </ul>
+    </div>
+    <div class="min">
+        <div class="message">
+			<div class="message-block message-border-t">
+				<h4 class="message-left_block">答案库详情</h4>
+			</div>
+			<div class="table_box">
+				<table class="table" border="" cellspacing="" cellpadding="">
+                    <tr>
+                        <th style="font-weight:bold">专家姓名</th>
+                        <td>{$problembase.realname}</td>
+                        <th style="font-weight:bold;width:150px;">头像</th>
+                        <td>
+                            <a class="example-image-link" href="{$problembase.image}" data-lightbox="example-1">
+                                <img class="example-image" style="width:30px;height:30px;"src="{$problembase.image}">
+                            </a>    
+                        </td>
+					</tr>
+					
+					 <tr>
+                         <th style="font-weight:bold">问题类型</th>
+                         <td>{$expert_types[$problembase['problembase_type_id']]}</td>
+                         <th style="font-weight:bold">发布时间</th>
+                         <td >{$problembase.problembase_addtime|date='Y-m-d H:i:s',###}</td>
+
+                    </tr>
+					<tr>
+                        <th style="font-weight:bold">常见问题</th>
+                        <td colspan="3">{$problembase.problembase_question}</td>
+                    </tr>
+                    <tr>
+                        <th style="font-weight:bold">问题答案</th>
+                        <td colspan="3">{$problembase.problembase_answers}</td>
+                    </tr>
+					
+				</table>
+			</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="__PUBLIC__/tupian/js/lightbox-plus-jquery.min.js"></script>
+<script src="__PUBLIC__/admin/js/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        $('.form-checkbox input,.form-radio input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+            })
+        $('input').on('ifChecked', function(event){
+            //alert($(this).val());
+        });
+        $(".checkbox-title dd i").click(function(){
+            $(this).toggleClass("fa-flip-vertical");
+            $(this).parents().siblings(".skin-section").slideToggle(500);
+        });
+    });
+</script>
+
+
+
+
+
